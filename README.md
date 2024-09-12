@@ -1,7 +1,8 @@
 # POLO-SOEN341_Project_F24
 Peer Assessment Website
 
-Description of the project:
+# Description of the project:
+In work
 
 # Members:
 
