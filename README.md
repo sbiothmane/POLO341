@@ -5,7 +5,7 @@ Description of the project:
 
 # Members:
 
-⋅⋅1. **Alvin Biju:** 40278182
+⋅⋅1.**Alvin Biju:** 40278182
 
 **Othmane Sbi:** 40249134
 
