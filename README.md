@@ -5,7 +5,7 @@ Description of the project:
 
 # Members:
 
-**Alvin Biju:** 40278182
+**1. **Alvin Biju:** 40278182
 
 **Othmane Sbi:** 40249134
 
@@ -13,6 +13,6 @@ Description of the project:
 
 **Samy Belmihoub:** 40251504
 
-**Youssef Youssef** 40285384
+**Youssef Youssef:** 40285384
 
 **John Kaspar:** 40285931
