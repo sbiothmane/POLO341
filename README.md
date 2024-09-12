@@ -9,3 +9,4 @@ Description of the project:
 **William White:** 40135771
 **Samy Belmihoub:** 40135771
 **Youssef Youssef** 40285384
+**John Kaspar:** 40285931
