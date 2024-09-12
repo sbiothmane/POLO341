@@ -7,3 +7,4 @@ Description of the project:
 **Alvin Biju:** 40278182
 **Othmane Sbi:** 40249134
 **William White:** 40135771
+**Samy Belmihoub:** 40135771
