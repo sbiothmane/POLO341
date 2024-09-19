@@ -14,6 +14,6 @@ Youssef Youssef: 40285384
 John Kaspar: 40285931
 
 What was discussed: How to implement the project. What is the project. What is the strengths and weakness of the teammates so that tasks can be properly implemented.
-How to seperate the tasks and how to properly write user stories. It was decided that each teammate will review the fundamentals of git/github along witj web development tools such as HTML, CSS, Javascript, etc.
+How to seperate the tasks and how to properly write user stories. It was decided that each teammate will review the fundamentals of git/github along with web development tools such as HTML, CSS, Javascript, etc.
 
 What was done: We created the Readme file and setup the github repository.
