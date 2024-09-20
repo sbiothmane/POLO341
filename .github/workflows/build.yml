@@ -1,0 +1,40 @@
+name: Build and Test Website
+
+# Trigger the action when a pull request is opened or updated
+on:
+  pull_request:
+    branches:
+      - main  # Or specify the target branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Specify your Node.js version
+
+      # Navigate to the correct directory where the project files are located
+      - name: Change directory to project folder
+        run: cd 'Sprint 1/version1'
+
+      # Install dependencies (e.g., using npm or yarn)
+      - name: Install dependencies
+        run: |
+          cd 'Sprint 1/version1'  # Make sure to navigate into the directory
+          npm install
+
+      # Run the build command
+      - name: Build the project
+        run: |
+          cd 'Sprint 1/version1'
+          npm run build  
+
+      
