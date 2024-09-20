@@ -24,6 +24,6 @@ jobs:
 
     - name: Build
       run: |
-        cd Sprint\ 1/version1
+        cd 'Sprint 1/version1'
         npm install
         grunt
