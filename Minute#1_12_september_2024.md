@@ -4,6 +4,7 @@ Duration: 2 hours (16:15  - 17-55)
 Meeting mode: IN PERSON, CONCORDIA UNIVERSITY(SJ-X LAB ROOM)
 
 Team members present : 
+
 Alvin Biju: 40278182
 
 Othmane Sbi: 40249134
