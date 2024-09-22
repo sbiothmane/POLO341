@@ -21,7 +21,7 @@ John Kaspar: 40285931
 - Content of the project
 - Team formation
 - Discussing frontend and backend frameworks and programming language
-- 
+  
 # What was discussed: 
 How to implement the project. What is the project. What is the strengths and weakness of the teammates so that tasks can be properly implemented.
 How to seperate the tasks and how to properly write user stories. It was decided that each teammate will review the fundamentals of git/github along with web development tools such as HTML, CSS, Javascript, etc.
