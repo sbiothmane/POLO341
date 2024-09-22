@@ -1,32 +1,30 @@
-"use client"
+// app/login/page.js
+"use client";
 
 import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
+    const res = await signIn('credentials', {
+      redirect: false,
+      username,
+      password,
     });
 
-    const data = await res.json();
-
-    if (data.success) {
-      window.location.href = '/dashboard';
+    if (res.ok) {
+      // Redirect to dashboard or home page
+      router.push('/dashboard');
     } else {
-      setError(data.message);
+      setError('Invalid credentials');
     }
   };
 
