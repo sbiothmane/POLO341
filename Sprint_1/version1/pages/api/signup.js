@@ -6,7 +6,7 @@ export default async function handler(req, res) {
       const { username, password, role, id, name } = req.body;
   
   
-      const csvLine = `${username},${password},${role},${id},${name}\n`; // csv line text
+      const csvLine = `\n${username},${password},${role},${id},${name}\n`; // csv line text
   
      
       const filePath = path.join(process.cwd(), 'data', 'users.csv'); // path for csv file
