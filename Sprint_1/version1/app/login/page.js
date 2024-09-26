@@ -29,6 +29,7 @@ export default function Login() {
   };
 
   return (
+    <div>
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
@@ -71,5 +72,6 @@ export default function Login() {
         {error && <p className="mt-4 text-center text-red-600">{error}</p>}
       </div>
     </div>
+         <p>Don't have an account? <a href="/signup" className="text-blue-500">Signup</a></p></div>
   );
 }
