@@ -38,6 +38,8 @@ async function updateUsersArray() {
       });
   });
 }
-
-updateUsersArray(); // Call the function to update the users array
+if (users.length === 0) {
+  await updateUsersArray();
+}
+// Call the function to update the users array
 export {users, updateUsersArray}; // Export the users array
