@@ -1,4 +1,4 @@
-#Sprint_planning google sheets : 
+# Sprint_planning google sheets : 
 https://docs.google.com/spreadsheets/d/1xLrcB4kmvTsDEpPq_jaMNroHuVZtpWZd-KmdEPQSI6U/edit?usp=sharing
 
 The problem is to implement 3 core feature of User Authentification and Team management.
