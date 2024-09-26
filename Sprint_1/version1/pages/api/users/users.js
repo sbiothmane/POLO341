@@ -11,7 +11,7 @@ async function updateUsersArray() {
 
     // Define the path to the CSV file
     const filePath = path.join(process.cwd(), 'data', 'users.csv');
-    console.log(filePath);
+    
 
     // Read the CSV file
     fs.createReadStream(filePath)

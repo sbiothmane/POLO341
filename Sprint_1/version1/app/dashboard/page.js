@@ -46,7 +46,7 @@ export default function UserProfile() {
     }
 
     if (loading) {
-        return <p className="text-blue-500">Loading user info...</p>;
+        return <p className="text-blue-500"></p>;
     }
 
     if (error) {

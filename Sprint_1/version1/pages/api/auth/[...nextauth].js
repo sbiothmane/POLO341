@@ -18,11 +18,9 @@ export default NextAuth({
       },
       authorize: async (credentials) => {
         // Ensure users array is up to date
-        console.log(credentials);
         if (users.length === 0) {
           await updateUsersArray();
         }
-        console.log(users);
         const user = users.find(
           (user) =>
             user.username === credentials.username &&
