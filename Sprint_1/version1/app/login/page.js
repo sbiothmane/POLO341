@@ -1,4 +1,3 @@
-// app/login/page.js
 "use client";
 
 import { useState } from 'react';
@@ -29,11 +28,10 @@ export default function Login() {
   };
 
   return (
-    <div>
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-3xl font-semibold text-gray-800 text-center mb-6">Login</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">
               Username
@@ -44,7 +42,7 @@ export default function Login() {
               placeholder="Enter your username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="mt-2 block w-full p-2 border border-gray-300 rounded-md shadow-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
           </div>
@@ -58,7 +56,7 @@ export default function Login() {
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="mt-2 block w-full p-2 border border-gray-300 rounded-md shadow-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
           </div>
@@ -70,8 +68,10 @@ export default function Login() {
           </button>
         </form>
         {error && <p className="mt-4 text-center text-red-600">{error}</p>}
+        <p className="mt-6 text-center text-gray-600">
+          Don't have an account? <a href="/signup" className="text-blue-500 hover:underline">Signup</a>
+        </p>
       </div>
     </div>
-         <p>Don't have an account? <a href="/signup" className="text-blue-500">Signup</a></p></div>
   );
 }

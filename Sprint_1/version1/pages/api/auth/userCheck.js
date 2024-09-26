@@ -1,7 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import users from '../users/users';
 
 export default async function handler(req, res) {
+  console.log(users);
   if (req.method === 'POST') {
     const { username } = req.body;
 
