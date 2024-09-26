@@ -27,7 +27,7 @@ function Signup() {
   }, [username]);
 
   const checkUsername = async () => {
-    setCheckingUsername(true); // Show "Checking availability..."
+    setCheckingUsername(true); // Show checking availabilities
     setUsernameAvailable(null); // Reset availability during the check
 
     try {
@@ -46,7 +46,7 @@ function Signup() {
     } finally {
       setTimeout(() => {
         setCheckingUsername(false); // Hide checking indicator after 1 second
-      }, 1000); // Ensures "Checking availability..." is shown for 1 second
+      }, 1000); // Ensures checking availabilities message is shown for 1 second
     }
   };
 
