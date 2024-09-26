@@ -1,3 +1,6 @@
+#Sprint_planning google sheets : 
+https://docs.google.com/spreadsheets/d/1xLrcB4kmvTsDEpPq_jaMNroHuVZtpWZd-KmdEPQSI6U/edit?usp=sharing
+
 The problem is to implement 3 core feature of User Authentification and Team management.
 
 The three core feature are : Implement Student and Instructor login system (with roles). Functionality for instructors to create teams and assign students to specific groups. (For example, importing a course roaster from a CSV file). Ensure teams are visible to both students and instructors.
