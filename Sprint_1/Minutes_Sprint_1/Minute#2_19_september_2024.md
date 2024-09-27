@@ -52,7 +52,7 @@
   
 # Next meeting (if scheduled)
 
- September 19, 2024,  (16:15 - 17-55), Concordia Hall building
+ September 22, 2024, Online through Discord
   
 # Adjournement
 
