@@ -3,7 +3,7 @@
 
 - POLO
 - REGULAR (AT THE LAB IN-PERSON)
-- September 12, 2024,  (16:15 - 17-55), Concordia Hall building (SJ-X LAB ROOM AT 819)
+- September 12, 2024,  (16:15 - 17:55), Concordia Hall building (SJ-X LAB ROOM AT 819)
   
 # Attendees
 
@@ -53,6 +53,6 @@
   
 # Adjournement
 
-17-55
+17:55
 
 
