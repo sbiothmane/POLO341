@@ -1,4 +1,7 @@
-# Meeting 3 (14:00  - 16:00)
+# Meeting 3 
+
+# Heading 
+(14:00  - 16:00)
 Date: September 22, 2024
 Duration: 2 hours (14:00  - 16:00)
 Meeting mode: Online through Discord
