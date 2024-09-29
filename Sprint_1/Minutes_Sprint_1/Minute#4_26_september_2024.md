@@ -36,7 +36,7 @@
   
 # Votes
 
-- 
+- Finalized look of Sprint 1, visuals of the site and github repository
   
 # Reports
 
