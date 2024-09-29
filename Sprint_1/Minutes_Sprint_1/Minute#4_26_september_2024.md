@@ -26,7 +26,7 @@
   
 # Approval of Previous Minutes
 
-- 
+- Synchronization of front-end and back-end systems
   
 # Agenda Items
 
@@ -55,8 +55,3 @@
 # Adjournement
 
 17:55
-
-# What was done: 
-Reorganization of the files. Creating a plan for the two other features.
-
-
