@@ -18,13 +18,18 @@ async function updateUsersArray() {
       .pipe(csv())
       .on('data', (row) => {
         // Push each row (user) into the tempUsers array
-        
+        console.log(row.username);
+        console.log(row.password);
+        console.log(row.id);
+        console.log(row.name);
+        console.log(row.role);
         tempUsers.push({
           username: row.username,
           password: row.password,
           id: row.id,
           name: row.name,
           role: row.role,
+         
         });
       })
       .on('end', () => {
@@ -43,3 +48,4 @@ if (users.length === 0) {
 }
 // Call the function to update the users array
 export {users, updateUsersArray}; // Export the users array
+export default {users}; 

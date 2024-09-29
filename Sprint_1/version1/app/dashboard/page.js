@@ -2,6 +2,7 @@
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Signout from '../components/Signout';
+import Link from 'next/link';
 
 export default function UserProfile() {
     const { data: session } = useSession();
@@ -60,6 +61,9 @@ export default function UserProfile() {
                     <h1 className="text-3xl font-bold text-gray-800 mb-4">Welcome, {user.name}</h1>
                     <p className="text-lg text-gray-600 mb-2">Id: {user.id}</p>
                     <p className="text-lg text-gray-600 mb-6">Role: {user.role}</p>
+                    <Link href="/create_teams" className="bg-green-500 text-white font-semibold py-2 px-4 rounded hover:bg-green-600 transition duration-300 ease-in-out">
+                     Create Teams
+                     </Link><br></br><br></br>
                     <Signout />
                 </div>
             </div>
