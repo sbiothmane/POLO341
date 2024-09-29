@@ -43,3 +43,4 @@ if (users.length === 0) {
 }
 // Call the function to update the users array
 export {users, updateUsersArray}; // Export the users array
+export default {users}; // Export the users array
