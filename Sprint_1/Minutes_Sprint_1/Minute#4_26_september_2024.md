@@ -40,7 +40,9 @@
   
 # Reports
 
-- 
+- Visualization and planification of the other core features: Creation of teams.
+- Rethinking the possible implementation of a different database use
+- Ensure issues are properly dealt with in github
   
 # Open Forum or General discussion
 
