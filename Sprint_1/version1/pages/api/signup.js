@@ -1,16 +1,19 @@
 import fs from 'fs';
 import path from 'path';
+import {users} from './users/users';
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
       const { username, password, role, id, name } = req.body;
   
   
-      const csvLine = `\n${username},${password},${role},${id},${name}\n`; // csv line text
+      const csvLine = `\n${username},${password},${name},${id},${role}\n`; // csv line text
   
      
       const filePath = path.join(process.cwd(), 'data', 'users.csv'); // path for csv file
-  
+      
+      users.push({username: username, password: password, role: role, id: id, name: name});
+      
       try {
         
         fs.mkdirSync(path.dirname(filePath), { recursive: true });
