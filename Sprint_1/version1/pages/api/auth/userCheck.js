@@ -11,17 +11,17 @@ export default async function handler(req, res) {
     const filePath = path.join(process.cwd(), 'data', 'users.csv');
     
     try {
-      // Check if the CSV file exists
+      // Searching for the CSV file 
       if (fs.existsSync(filePath)) {
         const data = fs.readFileSync(filePath, 'utf8');
         
-        // Split the CSV file into rows, ignoring empty lines
+        // Spliting csv file's data into rows (While making sure empty lines aren't included)
         const rows = data.split('\n').filter(row => row.trim() !== '');
         
-        // Check if the username exists in any row (case-insensitive)
+        // Checking username existence along each row of the csv file    
         const usernameTaken = rows.some(row => {
-          const [existingUsername] = row.split(',').map(item => item.trim()); // Trim any extra spaces
-          return existingUsername.toLowerCase() === username.toLowerCase();   // Case-insensitive comparison
+          const [existingUsername] = row.split(',').map(item => item.trim()); // Trimmming extra spaces
+          return existingUsername.toLowerCase() === username.toLowerCase();   // Case-insensitive comparison, ensuring capital letters do not register as different user
         });
         
         if (usernameTaken) {
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
           return res.status(200).json({ available: true });
         }
       } else {
-        // If no users exist, all usernames are available
+        // If such username doesn't exist within database then all usernames are available
         return res.status(200).json({ available: true });
       }
     } catch (error) {
