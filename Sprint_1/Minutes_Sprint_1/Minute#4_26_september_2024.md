@@ -22,7 +22,7 @@
 # Call to Order
 
 - 2 hours
-- 
+- Goal: Finalize Sprint 1, Debugging, Reorganization of Github Minutes, WorkLog
   
 # Approval of Previous Minutes
 
@@ -30,7 +30,9 @@
   
 # Agenda Items
 
-- 
+- Debugging Log-in, ensuring data is saved properly
+- Creating Individual Worklogs
+- Updating Minutes meetings to ensure all requirements are listed and structured
   
 # Votes
 
@@ -42,7 +44,7 @@
   
 # Open Forum or General discussion
 
-- 
+- How to implement the other 2 core features(their frontend and backend). Planification to create the teams feature.
   
 # Next meeting (if scheduled)
 
@@ -51,14 +53,6 @@
 # Adjournement
 
 17:55
-
-
-# Meeting Agenda:
-- Finalize one core feature by improving it and solving errors
-- Work Log
-- Reorganize the file system
-# What was discussed: 
-How to implement the other 2 core features(their frontend and backend). Planification to create the teams feature.
 
 # What was done: 
 Reorganization of the files. Creating a plan for the two other features.
