@@ -15,10 +15,10 @@ export default async function handler(req, res) {
       const studentsData = lines.slice(1).map((line) => {
         const row = line.split(',').map(item => item.trim()); // Trim each item to remove excess whitespace
         // Check if the row has valid data
-        if (row.length >= 4 && row[0] && row[1] && row[2] && row[3]) { // Check for non-empty values
+        if (row.length >= 4 && row[0] && row[1] && row[2] && row[3]&& row[4] === 'student') { // Check for non-empty values
           return {
             username: row[0], 
-            password: row[1],
+            //password: row[1],
             id: row[2],      
             name: row[3],     
           };
