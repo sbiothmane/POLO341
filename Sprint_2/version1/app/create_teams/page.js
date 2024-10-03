@@ -6,6 +6,7 @@ import { useSession} from "next-auth/react";
 
 // StudentTable component
 const StudentTable = ({ students, onStudentClick, selectedStudents }) => {
+  
   return (
     <div className="overflow-y-auto max-h-[400px]">
       
@@ -40,6 +41,7 @@ const App = () => {
   const [clickedStudents, setClickedStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [teamName, setteamName] = useState('');
+  const { data: session } = useSession();
 
   const fetchStudentsData = async () => {
     try {
@@ -58,9 +60,8 @@ const App = () => {
   useEffect(() => {
     fetchStudentsData(); // Fetch students data on component mount
   }, []);
-  const { data: session, status } = useSession();
-  console.log("Session Data:", session);
-  const userName = session.user.name;
+
+  const userName = session? session.user.name : "default";
 
   // Filter students based on the search term
   const filteredStudents = students.filter((student) =>
@@ -91,7 +92,7 @@ const App = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ teamName,teamMembers: teamData,username: session.user.name }), // Send team members in the body
+        body: JSON.stringify({ teamName,teamMembers: teamData,username: userName }), // Send team members in the body
       });
 
       if (!response.ok) {
