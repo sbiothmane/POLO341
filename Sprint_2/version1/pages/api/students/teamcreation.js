@@ -46,8 +46,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { teamName, teamMembers,username } = req.body; // Extract teamName and teamMembers from the request body
 
-    // Create a comma-separated string of team IDs from teamMembers
-    const teamIds = teamMembers.map(member => member.id).join(',');
+    
 
     // Define the path for the CSV file
     const csvFilePath = path.join(process.cwd(), 'data', 'teams.csv');
@@ -59,8 +58,8 @@ export default async function handler(req, res) {
       }
 
       // Append the new team data to the CSV file
-      fs.appendFileSync(csvFilePath, `${teamName},${username},${teamIds}\n`, 'utf8');
-      console.log(`Team created with IDs: ${teamIds} by user: ${username}`);
+      fs.appendFileSync(csvFilePath, `${teamName},${username},${teamMembers}\n`, 'utf8');
+      console.log(`Team created with IDs: ${teamMembers} by user: ${username}`);
 
       // Send a success response
       res.status(200).json({ message: 'Team created and IDs written to CSV successfully!' });

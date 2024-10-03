@@ -80,19 +80,16 @@ const App = () => {
   const handleCreateTeam = async () => {
     
     try {
-      const teamData = clickedStudents.map(student => ({
-        id: student.id,
-        name: student.name,
-    
-      }));
-
+      let tempUsers = [];
+      const teamData = clickedStudents.map(student => tempUsers.push(student.username));
+      const usersStr = tempUsers.join(':')
       // Send the selected students' data to the backend using POST
       const response = await fetch('/api/students/teamcreation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ teamName,teamMembers: teamData,username: userName }), // Send team members in the body
+        body: JSON.stringify({ teamName,usersStr,username: userName }), // Send team members in the body
       });
 
       if (!response.ok) {

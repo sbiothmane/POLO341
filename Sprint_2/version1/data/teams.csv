@@ -1,7 +1,7 @@
-Team alpha,3002023,3002032,30020352,30020255,30052032,30502023
-s,3002032,30020255
-3,3002023,4037822
-g,3002032,30020352,hellochris
-hellochris,yhj,3002032,30020352,30502023
-teamname,hellochris,30502023,30020255,3002032
-Someone,hellochris,30020352,30502023,30020255
+team,instructor,students
+team1,hellochris,user1:user2:user3
+team2,ta1,user4:user5:user6
+team3,ta2,user7:user8:user9
+team4,ta2,user10:user11:user12
+team5,ta3,user13:user14:user15
+team6,ta4,user16:user17:user18

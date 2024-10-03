@@ -1,76 +1,88 @@
-'use client'
+'use client';
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Signout from '../components/Signout';
-import Link from 'next/link';
+import TeamBox from '../components/TeamBox';
 
 export default function UserProfile() {
-    const { data: session } = useSession();
-    const [user, setUser] = useState(null); // To store fetched user data
-    const [loading, setLoading] = useState(true); // Loading state
-    const [error, setError] = useState(null); // Error state
+  const { data: session } = useSession();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [teams, setTeams] = useState(null);
 
-    useEffect(() => {
-        if (session) {
-            const fetchUser = async () => {
-                try {
-                    const username = session.user.name;
+  useEffect(() => {
+    if (session) {
+      const fetchUser = async () => {
+        try {
+          const username = session.user.name;
 
-                    // Make the fetch call
-                    const response = await fetch(`/api/users/userInfo/`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ username: username }),
-                    });
+          const response = await fetch(`/api/users/userInfo/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username }),
+          });
 
-                    if (!response.ok) {
-                        throw new Error("Failed to fetch user info");
-                    }
+          if (!response.ok) throw new Error("Failed to fetch user info");
 
-                    const data = await response.json(); // Parse the JSON response
-                    setUser(data); // Store the user data in state
-                    setLoading(false); // Stop loading
-                } catch (err) {
-                    setError(err.message);
-                    setLoading(false); // Stop loading even on error
-                }
-            };
+          const data = await response.json();
+          setUser(data);
 
-            fetchUser(); // Call the async function
+          if (data.role === "instructor") {
+            const res = await fetch(`/api/teams/teamsInfo?instructor=${session.user.name}`, {
+              method: 'GET',
+              headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (!res.ok) throw new Error("Failed to fetch team info");
+
+            const teamsData = await res.json();
+            setTeams(teamsData);
+          }
+          setLoading(false);
+        } catch (err) {
+          setError(err.message);
+          setLoading(false);
         }
-    }, [session]); // Runs whenever session changes
+      };
 
-    if (!session) {
-        return <p className="text-red-500">You are not signed in.</p>;
+      fetchUser();
     }
+  }, [session]);
 
-    if (loading) {
-        return <p className="text-blue-500"></p>;
-    }
+  if (!session) {
+    return <p className="text-red-500 text-center mt-8">You are not signed in.</p>;
+  }
 
-    if (error) {
-        return <p className="text-red-500">Error: {error}</p>;
-    }
+  if (loading) {
+    return <p className="text-blue-500 text-center mt-8">Loading...</p>;
+  }
 
-    if (user) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-900">
-                <div className="bg-white p-8 rounded-lg shadow-xl max-w-lg w-full">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-4">Welcome, {user.name}</h1>
-                    <p className="text-lg text-gray-600 mb-2">Id: {user.id}</p>
-                    <p className="text-lg text-gray-600 mb-6">Role: {user.role}</p>
-                    {user.role === "instructor" && (
-                        <Link href="/create_teams" className="bg-green-500 text-white font-semibold py-2 px-4 rounded hover:bg-green-600 transition duration-300 ease-in-out">
-                            Create Teams
-                        </Link>
-                    )}<br></br><br></br>
-                    <Signout />
-                </div>
-            </div>
-        );
-    }
+  if (error) {
+    return <p className="text-red-500 text-center mt-8">Error: {error}</p>;
+  }
 
-    return <p className="text-red-500">No user data found.</p>;
+  if (user) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-10">
+        <div className="mb-10 text-center">
+          <h1 className="text-5xl font-bold text-gray-800">Welcome, {user.name}</h1>
+          <p className="text-xl text-gray-600">ID: {user.id}</p>
+          <p className="text-xl text-gray-600">Role: {user.role}</p>
+        </div>
+
+        {user.role === "instructor" && teams ? (
+          <TeamBox teams={teams} />
+        ) : (
+          <p className="text-center text-gray-600">You do not have access to team data.</p>
+        )}
+
+        <div className="mt-10 flex justify-center">
+          <Signout />
+        </div>
+      </div>
+    );
+  }
+
+  return <p className="text-red-500 text-center mt-8">No user data found.</p>;
 }
