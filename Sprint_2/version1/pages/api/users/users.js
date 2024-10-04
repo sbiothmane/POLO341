@@ -18,11 +18,6 @@ async function updateUsersArray() {
       .pipe(csv())
       .on('data', (row) => {
         // Push each row (user) into the tempUsers array
-        console.log(row.username);
-        console.log(row.password);
-        console.log(row.id);
-        console.log(row.name);
-        console.log(row.role);
         tempUsers.push({
           username: row.username,
           password: row.password,
@@ -36,6 +31,7 @@ async function updateUsersArray() {
         // Update the global users array once parsing is complete
         users = tempUsers;
         resolve(users); // Resolve the promise with the updated users array
+        
       })
       .on('error', (err) => {
         console.error('Error reading CSV file:', err);

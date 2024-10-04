@@ -1,8 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { getSession } from 'next-auth/react';
-import { useSession} from "next-auth/react";
-
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation'; // Import useRouter for redirection
 
 // StudentTable component
 const StudentTable = ({ students, onStudentClick, selectedStudents }) => {
@@ -41,7 +40,9 @@ const App = () => {
   const [clickedStudents, setClickedStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [teamName, setteamName] = useState('');
+  const [statusMessage, setStatusMessage] = useState(null); // State to handle success/error messages
   const { data: session } = useSession();
+  const router = useRouter(); // Initialize useRouter
 
   const fetchStudentsData = async () => {
     try {
@@ -50,10 +51,9 @@ const App = () => {
         throw new Error('Failed to fetch students');
       }
       const studentsData = await response.json(); // Parse the JSON response
-      console.log(studentsData);
       setStudents(studentsData); // Set the students state
     } catch (error) {
-      console.error('Error fetching students data:', error);
+      setStatusMessage({ type: 'error', message: 'Error fetching students data' });
     }
   };
 
@@ -61,13 +61,13 @@ const App = () => {
     fetchStudentsData(); // Fetch students data on component mount
   }, []);
 
-  const userName = session? session.user.name : "default";
+  const userName = session ? session.user.name : "default";
 
   // Filter students based on the search term
   const filteredStudents = students.filter((student) =>
     student.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
- 
+
   const handleStudentClick = (student) => {
     // Limit the selected students to 6 and toggle their selection
     if (clickedStudents.some(s => s.id === student.id)) {
@@ -76,36 +76,40 @@ const App = () => {
       setClickedStudents([...clickedStudents, student]); 
     }
   };
-  
-  const handleCreateTeam = async () => {
-    
-    try {
-      const teamData = clickedStudents.map(student => ({
-        id: student.id,
-        name: student.name,
-    
-      }));
 
+  const handleCreateTeam = async () => {
+    try {
+      let tempUsers = [];
+      const teamData = clickedStudents.map(student => tempUsers.push(student.name));
+      const usersStr = tempUsers.join(':');
+      let team = { name: teamName, students: usersStr, username: userName };
+  
       // Send the selected students' data to the backend using POST
       const response = await fetch('/api/students/teamcreation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ teamName,teamMembers: teamData,username: userName }), // Send team members in the body
+        body: JSON.stringify({ name: teamName, students: usersStr, username: userName }), // Send team members in the body
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to create team');
       }
-
+  
       const result = await response.json(); // Get the response from the backend
-      alert('Team created successfully!');
+      setStatusMessage({ type: 'success', message: 'Team created successfully!' }); // Show success message
+  
+      // Redirect to the dashboard and force a page reload after a short delay
+      setTimeout(() => {
+        window.location.href = '/dashboard'; // Redirect and refresh the dashboard
+      }, 2000);
+  
     } catch (error) {
-      console.error('Error creating team:', error);
-      alert('Failed to create the team.');
+      setStatusMessage({ type: 'error', message: 'Failed to create the team.' });
     }
   };
+  
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -136,23 +140,27 @@ const App = () => {
         <div className="w-1/2">
           <h2 className="text-xl font-bold text-center mb-4 text-gray-800">Clicked Students</h2>
           
-          {
-  (clickedStudents.length > 1 && teamName !== "") ? (
-    <button
-      onClick={handleCreateTeam}
-      className="w-full mb-4 px-4 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600"
-    >
-      Create Team
-    </button>
-  ) : (
-    <p className="text-center text-gray-600">
-      {clickedStudents.length < 2 && teamName === "" ? 
-        "Not enough students chosen and team name not written." :
-        (clickedStudents.length < 2 ? "Not enough students chosen." : "Team name not written.")
-      }
-    </p>
-  )
-}
+          {statusMessage && (
+            <div className={`text-center mb-4 ${statusMessage.type === 'error' ? 'text-red-500' : 'text-green-500'}`}>
+              {statusMessage.message}
+            </div>
+          )}
+
+          {(clickedStudents.length > 1 && teamName !== "") ? (
+            <button
+              onClick={handleCreateTeam}
+              className="w-full mb-4 px-4 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600"
+            >
+              Create Team
+            </button>
+          ) : (
+            <p className="text-center text-gray-600">
+              {clickedStudents.length < 2 && teamName === "" ? 
+                "Not enough students chosen and team name not written." :
+                (clickedStudents.length < 2 ? "Not enough students chosen." : "Team name not written.")
+              }
+            </p>
+          )}
           {clickedStudents.length > 0 ? (
             <StudentTable students={clickedStudents} onStudentClick={handleStudentClick} selectedStudents={clickedStudents} />
           ) : (
