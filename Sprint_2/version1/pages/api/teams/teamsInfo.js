@@ -9,12 +9,24 @@ export default async (req, res) => {
         if (req.query.instructor) {
             const instructor = req.query.instructor;
             if (teamsByInstructor[instructor]) {
-                res.status(200).json(teamsByInstructor[instructor]);
+                // Add instructor name to each team
+                const teamsWithInstructor = teamsByInstructor[instructor].map(team => ({
+                    ...team,
+                    instructor: instructor, // Include instructor in each team
+                }));
+                res.status(200).json(teamsWithInstructor);
             } else {
                 res.status(404).end(`Instructor ${instructor} not found`);
             }
         } else {
-            res.status(200).json(teamsByInstructor);
+            // If no instructor is specified, return all teams with their respective instructor names
+            const allTeams = Object.entries(teamsByInstructor).flatMap(([instructor, teams]) =>
+                teams.map(team => ({
+                    ...team,
+                    instructor: instructor, // Include instructor in each team
+                }))
+            );
+            res.status(200).json(allTeams);
         }
     }
-}
+};

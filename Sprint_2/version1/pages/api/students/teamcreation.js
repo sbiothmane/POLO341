@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { useSession} from "next-auth/react";
 import { useState, useEffect } from "react";
+import { teamsByInstructor, updateTeamsArray, addTeam } from '../teams/teams.js';
 
 
 
@@ -44,9 +45,9 @@ export default async function handler(req, res) {
 }*/
   
   if (req.method === 'POST') {
-    const { teamName, teamMembers,username } = req.body; // Extract teamName and teamMembers from the request body
+    const { name, students, username } = req.body; // Extract teamName and teamMembers from the request body
 
-    
+    console.log(teamsByInstructor);
 
     // Define the path for the CSV file
     const csvFilePath = path.join(process.cwd(), 'data', 'teams.csv');
@@ -54,13 +55,13 @@ export default async function handler(req, res) {
     try {
       // Check if the CSV file exists; if not, create it with headers
       if (!fs.existsSync(csvFilePath)) {
-        fs.writeFileSync(csvFilePath, 'Username,Team Name,Team IDs\n'); // Add Team Name as a header
+        fs.writeFileSync(csvFilePath, 'team,instructor,students\n'); // Add Team Name as a header
       }
 
       // Append the new team data to the CSV file
-      fs.appendFileSync(csvFilePath, `${teamName},${username},${teamMembers}\n`, 'utf8');
-      console.log(`Team created with IDs: ${teamMembers} by user: ${username}`);
-
+      fs.appendFileSync(csvFilePath, `${name},${username},${students}\n`, 'utf8');
+      console.log(`Team ${name} created with IDs: ${students} by user: ${username}`);
+      addTeam(username, name, students); // Add the new team to the teamsByInstructor object
       // Send a success response
       res.status(200).json({ message: 'Team created and IDs written to CSV successfully!' });
     } catch (error) {

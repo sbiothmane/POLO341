@@ -1,15 +1,16 @@
 'use client';
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
+import Link from 'next/link';
 import Signout from '../components/Signout';
 import TeamBox from '../components/TeamBox';
+import { FaIdBadge, FaUserTie } from 'react-icons/fa';
 
 export default function UserProfile() {
   const { data: session } = useSession();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [teams, setTeams] = useState(null);
 
   useEffect(() => {
     if (session) {
@@ -27,18 +28,6 @@ export default function UserProfile() {
 
           const data = await response.json();
           setUser(data);
-
-          if (data.role === "instructor") {
-            const res = await fetch(`/api/teams/teamsInfo?instructor=${session.user.name}`, {
-              method: 'GET',
-              headers: { 'Content-Type': 'application/json' },
-            });
-
-            if (!res.ok) throw new Error("Failed to fetch team info");
-
-            const teamsData = await res.json();
-            setTeams(teamsData);
-          }
           setLoading(false);
         } catch (err) {
           setError(err.message);
@@ -64,22 +53,74 @@ export default function UserProfile() {
 
   if (user) {
     return (
-      <div className="min-h-screen bg-gray-100 p-10">
-        <div className="mb-10 text-center">
-          <h1 className="text-5xl font-bold text-gray-800">Welcome, {user.name}</h1>
-          <p className="text-xl text-gray-600">ID: {user.id}</p>
-          <p className="text-xl text-gray-600">Role: {user.role}</p>
-        </div>
+      <div className="min-h-screen bg-gray-50">
+        {/* Navbar */}
+        <header className="bg-white shadow">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16 items-center">
+              <Link href="/">
+                <div className="text-2xl font-bold text-blue-600 hover:text-blue-800 transition duration-300">
+                Peer Assessment System
+                </div>
+              </Link>
+              <div className="flex items-center space-x-4">
+                <span className="text-gray-600">{user.name}</span>
+                <Signout />
+              </div>
+            </div>
+          </div>
+        </header>
 
-        {user.role === "instructor" && teams ? (
-          <TeamBox teams={teams} />
-        ) : (
-          <p className="text-center text-gray-600">You do not have access to team data.</p>
-        )}
+        {/* Main Content */}
+        <main className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
+          {/* Welcome Section */}
+          <div className="bg-white shadow rounded-lg p-6 mb-10">
+            <div className="md:flex md:items-center md:justify-between">
+              {/* Left: Welcome Text and User Info */}
+              <div>
+                <h1 className="text-3xl font-bold text-gray-800">Welcome, {user.name}</h1>
+                <div className="mt-4 text-gray-600">
+                  <div className="flex items-center mb-2">
+                    <FaIdBadge className="text-gray-500 mr-2" />
+                    <span className="font-medium"></span> {user.id}
+                  </div>
+                  <div className="flex items-center">
+                    <FaUserTie className="text-gray-500 mr-2" />
+                    <span className="font-medium"></span> {user.role}
+                  </div>
+                </div>
+              </div>
 
-        <div className="mt-10 flex justify-center">
-          <Signout />
-        </div>
+              {/* Right: Create Team Button */}
+              {user.role === "Instructor" && (
+                <div className="mt-6 md:mt-0">
+                  <Link href="/create_teams">
+                    <div className="inline-block bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out">
+                      Create Team
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Teams Section */}
+          <div className="space-y-10">
+            {/* Instructor's Teams */}
+            {user.role === "Instructor" && (
+              <div>
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4"></h2>
+                <TeamBox instructor={user.username} />
+              </div>
+            )}
+
+            {/* All Teams */}
+            <div>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4"></h2>
+              <TeamBox />
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
