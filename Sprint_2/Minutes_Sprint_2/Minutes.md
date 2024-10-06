@@ -3,7 +3,7 @@
 
 - POLO
 - REGULAR (AT THE LAB IN-PERSON)
-- September 12, 2024,  (16:15 - 17:55), Concordia Hall building (SJ-X LAB ROOM AT 819)
+- October 3rd, 2024,  (16:15 - 17:55), Concordia Hall building (SJ-X LAB ROOM AT 843)
   
 # Attendees
 
@@ -22,7 +22,7 @@
 # Call to Order
 
 - 2 hours
-- Create a team and start working on tasks
+- Sprint 2 planning and finalizing final features of sprint 1
   
 # Approval of Previous Minutes
 
@@ -30,9 +30,25 @@
   
 # Agenda Items
 
-- Content of the project
-- Team formation
-- Discussing frontend and backend frameworks and programming language
+- Complete user stories for sprint 2
+- Task breakdown 
+- Discussed the development of the project
+put down all tasks for user stories
+split our team into 2 groups mixed hardware software
+each team will work on a side of the project
+student group and teacher group
+made a design of the pages
+discussed the logic and structure for the next steps
+spoke of future fixes for the code (csv file add a bool team to the user info...)
+
+split tasks:
+Dashboard, all teams, user's team, view: Will
+Back-end, create teams, Fetching data, visuals: Othmane
+Button configuration for creating teams, table configuration, back-end: Alvin
+Front-end, Teams visuals, professor and student side: Samy
+Back-end, Creation of teams: John
+Front-end & Back-end: Youssef 
+
   
 # Votes
 
@@ -40,7 +56,9 @@
   
 # Reports
 
-- We created the Readme file and setup the github repository.
+- User stories for sprint 2 were created (incomplete)
+- Tasks and issues created (incomplete)
+- Acceptance tests defined (incomplete)
   
 # Open Forum or General discussion
 
@@ -49,10 +67,11 @@
   
 # Next meeting (if scheduled)
 
- September 19, 2024,  (16:15 - 17-55), Concordia Hall building
+ October 7, 2024,  (20:00 - 22-00), Online meeting
   
 # Adjournement
 
 17:55
+
 
 
