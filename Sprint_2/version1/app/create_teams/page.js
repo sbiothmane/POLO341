@@ -83,7 +83,7 @@ const App = () => {
       
       // Create the team object with username, team name, and students
       let teamse = { name: teamName, students: usersStr, username: session?.user?.name || 'defaultUser' }; // Assuming session object has user name
-
+      console.log(teamse);
       // Send the selected students' data to the backend using POST
       const response = await fetch('/api/students/teamcreation', {
         method: 'POST',
@@ -92,12 +92,17 @@ const App = () => {
         },
         body: JSON.stringify(teamse), // Send the team object
       });
-
+      const result = await response.json();
       if (!response.ok) {
-        throw new Error('Failed to create team');
+         // Get the response from the backend
+        let message = result.message || 'Failed to create team';
+        throw new Error(message);
       }
+      
+     // Get the response from the backend
+      console.log(result);
 
-      const result = await response.json(); // Get the response from the backend
+
       setStatusMessage({ type: 'success', message: 'Team created successfully!' }); // Show success message
 
       // Redirect to the dashboard and force a page reload after a short delay
@@ -106,9 +111,10 @@ const App = () => {
       }, 2000);
       
       
+      
 
     } catch (error) {
-      setStatusMessage({ type: 'error', message: 'Failed to create the team.' });
+      setStatusMessage({ type: 'error', message: error.message || 'Failed to create the team.'});
     }
   };
 

@@ -7,7 +7,7 @@ import { teamsByInstructor, updateTeamsArray, addTeam } from '../teams/teams.js'
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { name, students, username } = req.body;
-
+    console.log(`Creating team ${name} with IDs: ${students} by user: ${username}`);
     const csvFilePath = path.join(process.cwd(), 'data', 'teams.csv');
 
     try {
