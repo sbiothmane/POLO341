@@ -21,8 +21,8 @@
 
 # Call to Order
 
-- 2 hours
 - Sprint 2 planning and finalizing final features of sprint 1
+- Who made the call : No one
   
 # Approval of Previous Minutes
 
@@ -64,9 +64,16 @@
 
  October 6, 2024,  (03:00 - 05:00), Online meeting
   
-# Adjournement
 
+# Adjournement
+Who moved it and seconded the meeting ?
 17:55
+
+# Secretary
+Samy Belmihoub
+
+# Scrum Master
+Youssef Youssef
 
 
 
