@@ -21,8 +21,9 @@
 
 # Call to Order
 
-- 2 hours
+
 - Sprint 2 planning and Tasks breakdown
+- Who made the call: Alvin
   
 # Approval of Previous Minutes
 
@@ -69,8 +70,15 @@ Front-end & Back-end: Youssef
  October 3, 2024,  (16:15 - 17:45), during lab, at Concordia Hall building (SJ-X LAB ROOM AT 843)
   
 # Adjournement
-
+Who moved it and seconded the meeting ?
 22:00
+
+# Secretary
+Samy Belmihoub
+
+# Scrum Master
+Youssef Youssef
+
 
 
 
