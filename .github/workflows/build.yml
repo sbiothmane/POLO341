@@ -5,6 +5,9 @@ on:
   pull_request:
     branches:
       - main  # Or specify the target branch
+  push:
+    branches:
+      - main  # Or specify the target branch
 
 jobs:
   build:
