@@ -12,27 +12,29 @@ async function updateTeamsArray() {
         fs.createReadStream(filePath)
             .pipe(csv())
             .on('data', (row) => {
-                const instructor = row.instructor.trim();  // Trim whitespace from instructor
-                const team = row.team.trim();  // Trim whitespace from team
-                const students = row.students.split(':').map((member) => member.trim());  // Trim students and split by colon
+                if (row.instructor && row.team && row.students) {
+                    const instructor = row.instructor.trim();  // Trim whitespace from instructor
+                    const team = row.team.trim();  // Trim whitespace from team
+                    const students = row.students.split(':').map((member) => member.trim());  // Trim students and split by colon
 
-                console.log(`Processing row: instructor = ${instructor}, team = ${team}, students = ${students}`);
+                    console.log(`Processing row: instructor = ${instructor}, team = ${team}, students = ${students}`);
 
-                // Initialize the instructor's entry if not present
-                if (!teamsByInstructor[instructor]) {
-                    teamsByInstructor[instructor] = [];
-                }
+                    // Initialize the instructor's entry if not present
+                    if (!teamsByInstructor[instructor]) {
+                        teamsByInstructor[instructor] = [];
+                    }
 
-                // Check if the team already exists for the instructor to avoid duplicates
-                const existingTeam = teamsByInstructor[instructor].find(t => t.team === team);
-                if (existingTeam) {
-                    console.log(`Duplicate team detected for instructor ${instructor}: ${team}`);
-                } else {
-                    // Add the new team if it doesn't already exist
-                    teamsByInstructor[instructor].push({
-                        team: team,
-                        students: students,
-                    });
+                    // Check if the team already exists for the instructor to avoid duplicates
+                    const existingTeam = teamsByInstructor[instructor].find(t => t.team === team);
+                    if (existingTeam) {
+                        console.log(`Duplicate team detected for instructor ${instructor}: ${team}`);
+                    } else {
+                        // Add the new team if it doesn't already exist
+                        teamsByInstructor[instructor].push({
+                            team: team,
+                            students: students,
+                        });
+                    }
                 }
             })
             .on('end', () => {

@@ -25,7 +25,7 @@ export default function Team({ team, instructor }) {
         className={`relative overflow-hidden transition-max-height duration-300 ease-in-out ${isHovered ? 'max-h-screen' : 'max-h-6'}`}
       >
         <div className={`text-gray-600 ${isHovered ? 'whitespace-normal' : 'whitespace-nowrap overflow-hidden text-ellipsis'}`}>
-          {team.students.map((student) => (
+          {team?.students?.map((student) => (
             <p key={student} className={`inline-flex items-center mr-3 mb-2`}>
               <FaUser className="text-gray-500 mr-1" />
               <span className="text-sm">{student}</span>
