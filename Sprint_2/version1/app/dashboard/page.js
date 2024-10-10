@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Signout from '../components/Signout';
 import TeamBox from '../components/TeamBox';
 import { FaIdBadge, FaUserTie } from 'react-icons/fa';
+import NavBar from '../components/NavBar';
 
 export default function UserProfile() {
   const { data: session } = useSession();
@@ -54,23 +55,7 @@ export default function UserProfile() {
   if (user) {
     return (
       <div className="min-h-screen bg-gray-50">
-        {/* Navbar */}
-        <header className="bg-white shadow">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16 items-center">
-              <Link href="/">
-                <div className="text-2xl font-bold text-blue-600 hover:text-blue-800 transition duration-300">
-                Peer Assessment System
-                </div>
-              </Link>
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-600">{user.name}</span>
-                <Signout />
-              </div>
-            </div>
-          </div>
-        </header>
-
+        <NavBar />
         {/* Main Content */}
         <main className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
           {/* Welcome Section */}
