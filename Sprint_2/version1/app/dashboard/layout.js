@@ -4,6 +4,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Loading from '../components/Loading';
 
 export default function DashboardLayout({ children }) {
   const { data: session, status } = useSession();
@@ -15,7 +16,9 @@ export default function DashboardLayout({ children }) {
   }, [session, status, router]);
 
   if (status === 'loading') {
-    return <p>Loading...</p>;
+    setTimeout(() => {
+      return <Loading />;
+    }, 1000);
   }
 
   return <>{children}</>;
