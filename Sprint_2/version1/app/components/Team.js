@@ -14,7 +14,7 @@ export default function Team({ team, instructor }) {
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-xl font-bold text-gray-800 flex items-center">
           <FaChalkboardTeacher className="mr-2 text-blue-500" />
-          {team.team}
+          {team.name}
         </h1>
         <span className="bg-blue-100 text-blue-600 text-sm font-semibold px-3 py-1 rounded-lg">
           Instructor: {instructor}
@@ -27,7 +27,7 @@ export default function Team({ team, instructor }) {
       >
         <div className={`text-gray-600 ${isHovered ? 'whitespace-normal' : 'whitespace-nowrap overflow-hidden text-ellipsis'}`}>
           {team?.students?.map((student) => (
-            <Link href={`/evaluate/${team.team}/${student}`} key={student}>
+            <Link href={`/evaluate/${team.name}/${student}`} key={student}>
               <div className={`inline-flex items-center mr-3 mb-2 cursor-pointer hover:text-blue-500 hover:bg-blue-50 rounded-md p-1 transition-colors duration-200`}>
                 <FaUser className="text-gray-500 mr-1" />
                 <span className="text-sm">{student}</span>

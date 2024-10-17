@@ -1,52 +1,44 @@
-import fs from 'fs';
-import path from 'path';
-import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
-import { teamsByInstructor, updateTeamsArray, addTeam } from '../teams/teams.js';
+import { db } from '../../../lib/firebase'; // Firebase config
+import { collection, addDoc } from 'firebase/firestore'; // Firestore methods
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { name, students, username } = req.body;
-    console.log(`Creating team ${name} with IDs: ${students} by user: ${username}`);
-    const csvFilePath = path.join(process.cwd(), 'data', 'teams.csv');
+    if (req.method !== 'POST') {
+        res.setHeader('Allow', ['POST']);
+        return res.status(405).json({ message: `Method ${req.method} not allowed` });
+    }
+
+    const { instructor, teamName, students } = req.body;
+
+    // Validate that the required fields are provided
+    if (!instructor || !teamName || !Array.isArray(students) || students.length === 0) {
+        return res.status(400).json({
+            message: 'Instructor, team name, and an array of students are required',
+        });
+    }
+
+    console.log('Creating team:', teamName, 'with instructor:', instructor, 'and students:', students);
 
     try {
-      if (!fs.existsSync(csvFilePath)) {
-        fs.writeFileSync(csvFilePath, 'team,instructor,students\n');
-      }
+        // Reference to the teams collection in Firestore
+        const teamsCollection = collection(db, 'teams');
+        
+        // Create a new team document in Firestore
+        const teamDoc = await addDoc(teamsCollection, {
+            name: teamName,
+            instructor: instructor, // Store instructor's username
+            students: students, // Array of student usernames
+        });
 
-      const fileContent = fs.readFileSync(csvFilePath, 'utf8');
-      const lines = fileContent.trim().split('\n').slice(1);
-
-      const existingUsernames = new Set();
-
-      lines.forEach(line => {
-        const [teamName, instructorUsername, teamMembers] = line.split(',');
-        if (instructorUsername === username) {
-          const members = teamMembers.split(':');
-          members.forEach(member => existingUsernames.add(member.trim()));
-        }
-      });
-
-      const newStudents = students.split(':');
-
-      const duplicates = newStudents.filter(student => existingUsernames.has(student.trim()));
-
-      if (duplicates.length > 0) {
-        return res.status(400).json({ message: `The following usernames are already assigned: ${duplicates.join(', ')}` });
-      }
-
-      fs.appendFileSync(csvFilePath, `${name},${username},${students}\n`, 'utf8');
-      console.log(`Team ${name} created with IDs: ${students} by user: ${username}`);
-      addTeam(username, name, students);
-
-      res.status(200).json({ message: 'Team created and IDs written to CSV successfully!' });
+        // Send a success response with the team document ID
+        res.status(201).json({
+            message: 'Team created successfully',
+            teamId: teamDoc.id,
+        });
     } catch (error) {
-      console.error('Error writing to CSV:', error);
-      res.status(500).json({ message: 'Failed to write team IDs to CSV' });
+        console.error('Error creating team:', error);
+        res.status(500).json({
+            message: 'Internal Server Error',
+            error: error.message,
+        });
     }
-  } else {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
 }

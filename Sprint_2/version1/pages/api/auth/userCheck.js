@@ -1,40 +1,45 @@
-import fs from 'fs';
-import path from 'path';
-import users from '../users/users';
+// pages/api/check-availability.js
+
+import { db } from '../../../lib/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export default async function handler(req, res) {
-  console.log(users);
   if (req.method === 'POST') {
-    const { username } = req.body;
+    const { username, id } = req.body;
 
-    // Path to the CSV file
-    const filePath = path.join(process.cwd(), 'data', 'users.csv');
-    
     try {
-      // Check if the CSV file exists
-      if (fs.existsSync(filePath)) {
-        const data = fs.readFileSync(filePath, 'utf8');
-        
-        // Split the CSV file into rows, ignoring empty lines
-        const rows = data.split('\n').filter(row => row.trim() !== '');
-        
-        // Check if the username exists in any row (case-insensitive)
-        const usernameTaken = rows.some(row => {
-          const [existingUsername] = row.split(',').map(item => item.trim()); // Trim any extra spaces
-          return existingUsername.toLowerCase() === username.toLowerCase();   // Case-insensitive comparison
+      // Reference to the 'users' collection
+      const usersRef = collection(db, 'users');
+
+      // Create queries to check for existing username and ID
+      const usernameQuery = query(usersRef, where('username', '==', username));
+      const idQuery = query(usersRef, where('id', '==', id));
+
+      // Execute the queries
+      const [usernameSnapshot, idSnapshot] = await Promise.all([
+        getDocs(usernameQuery),
+        getDocs(idQuery),
+      ]);
+
+      // Check if username or ID already exists
+      const isUsernameTaken = !usernameSnapshot.empty;
+      const isIdTaken = !idSnapshot.empty;
+
+      if (isUsernameTaken || isIdTaken) {
+        return res.status(200).json({
+          available: false,
+          usernameAvailable: !isUsernameTaken,
+          idAvailable: !isIdTaken,
         });
-        
-        if (usernameTaken) {
-          return res.status(200).json({ available: false });
-        } else {
-          return res.status(200).json({ available: true });
-        }
       } else {
-        // If no users exist, all usernames are available
-        return res.status(200).json({ available: true });
+        return res.status(200).json({
+          available: true,
+          usernameAvailable: true,
+          idAvailable: true,
+        });
       }
     } catch (error) {
-      console.error('Error reading CSV file:', error); // Log full error stack for debugging
+      console.error('Error checking availability:', error);
       return res.status(500).json({ message: 'Internal Server Error' });
     }
   } else {

@@ -1,24 +1,36 @@
-import fs from 'fs';
-import path from 'path';
-import {users} from '../users/users'
-
-
+import { db } from '../../../lib/firebase'; // Firestore config
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 export default async function handler(req, res) {
-  if (req.method === 'GET') {
-    try {
-      // Construct the path to the CSV file
-      //const studentsData = users.map((user) => user.password = "");
-      let studentsData = users.map((user) => {return {id: user.id, name: user.name, role: user.role}});
-      studentsData = studentsData.filter((student) => student.role === "Student");
-      res.status(200).json(studentsData); // Return JSON response
-    } catch (error) {
-      console.error('Error reading CSV file:', error);
-      res.status(500).json({ error: 'Failed to read data' });
-    }
-  } else {
-    // Handle any other HTTP methods
+  if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+    return res.status(405).json({ message: `Method ${req.method} not allowed` });
+  }
+
+  try {
+    // Reference to the users collection in Firestore
+    const usersCollection = collection(db, 'users');
+
+    // Query to get only users with the role 'student'
+    const q = query(usersCollection, where('role', '==', 'student'));
+
+    // Fetch the documents
+    const querySnapshot = await getDocs(q);
+
+    // Extract the name and id for each student
+    const students = querySnapshot.docs.map(doc => ({
+      id: doc.data().id, // Assuming 'id' field exists in each user document
+      name: doc.data().name, // Assuming 'name' field exists in each user document
+      username: doc.data().username, // Assuming 'username' field exists in each user document
+    }));
+
+    // Respond with the list of students
+    res.status(200).json(students);
+  } catch (error) {
+    console.error('Error fetching students:', error);
+    res.status(500).json({
+      message: 'Failed to fetch students',
+      error: error.message,
+    });
   }
 }

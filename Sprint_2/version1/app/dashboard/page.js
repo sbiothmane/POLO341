@@ -1,58 +1,28 @@
 'use client';
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
 import Link from 'next/link';
-import Signout from '../components/Signout';
-import TeamBox from '../components/TeamBox';
 import { FaIdBadge, FaUserTie } from 'react-icons/fa';
 import NavBar from '../components/NavBar';
+import TeamBox from '../components/TeamBox';
+import Loading from '../components/Loading';
 
 export default function UserProfile() {
-  const { data: session } = useSession();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data: session, status } = useSession();
 
-  useEffect(() => {
-    if (session) {
-      const fetchUser = async () => {
-        try {
-          const username = session.user.name;
+  if (status === 'loading') {
+    return <Loading/>;
+  }
 
-          const response = await fetch(`/api/users/userInfo/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username }),
-          });
-
-          if (!response.ok) throw new Error("Failed to fetch user info");
-
-          const data = await response.json();
-          setUser(data);
-          setLoading(false);
-        } catch (err) {
-          setError(err.message);
-          setLoading(false);
-        }
-      };
-
-      fetchUser();
-    }
-  }, [session]);
-
-  if (!session) {
+  if (status === 'unauthenticated') {
     return <p className="text-red-500 text-center mt-8">You are not signed in.</p>;
   }
 
-  if (loading) {
-    return <p className="text-blue-500 text-center mt-8">Loading...</p>;
-  }
-
-  if (error) {
-    return <p className="text-red-500 text-center mt-8">Error: {error}</p>;
-  }
-
-  if (user) {
+  if (session) {
+    const id = session.user.id;
+    const name = session.user.name;
+    const role = session.user.role;
+    const username = session.user.username;
+    console.log(session.user);
     return (
       <div className="min-h-screen bg-gray-50">
         <NavBar />
@@ -63,21 +33,21 @@ export default function UserProfile() {
             <div className="md:flex md:items-center md:justify-between">
               {/* Left: Welcome Text and User Info */}
               <div>
-                <h1 className="text-3xl font-bold text-gray-800">Welcome, {user.name}</h1>
+                <h1 className="text-3xl font-bold text-gray-800">Welcome, {name}</h1>
                 <div className="mt-4 text-gray-600">
                   <div className="flex items-center mb-2">
                     <FaIdBadge className="text-gray-500 mr-2" />
-                    <span className="font-medium"></span> {user.id}
+                    <span className="font-medium">ID:</span> {id}
                   </div>
                   <div className="flex items-center">
                     <FaUserTie className="text-gray-500 mr-2" />
-                    <span className="font-medium"></span> {user.role}
+                    <span className="font-medium">Role:</span> {role}
                   </div>
                 </div>
               </div>
 
               {/* Right: Create Team Button */}
-              {user.role === "Instructor" && (
+              {role === "instructor" && (
                 <div className="mt-6 md:mt-0">
                   <Link href="/create_teams">
                     <div className="inline-block bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out">
@@ -92,10 +62,10 @@ export default function UserProfile() {
           {/* Teams Section */}
           <div className="space-y-10">
             {/* Instructor's Teams */}
-            {user.role === "Instructor" && (
+            {role === "instructor" && (
               <div>
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4"></h2>
-                <TeamBox instructor={user.username} />
+                <TeamBox instructor={username} />
               </div>
             )}
 

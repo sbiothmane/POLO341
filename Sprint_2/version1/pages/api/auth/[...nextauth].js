@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import csv from 'csv-parser';
-import fs from 'fs';
-import path from 'path';
-import { users, updateUsersArray } from '../users/users';
+import bcrypt from 'bcryptjs'; // Use bcryptjs
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../../lib/firebase';
+import { createFakeStudents } from '../makeFakeStudents'; 
 
 export default NextAuth({
   providers: [
@@ -14,54 +14,76 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       authorize: async (credentials) => {
-        // Log received credentials for debugging
-        console.log('Authorize credentials:', credentials);
+        const { username, password } = credentials;
+        
+        console.log('Credentials, username:', username);
+        console.log('Credentials, password:', password);  
+        try {
+          // Reference to the user document
+          const userDocRef = doc(db, 'users', username);
+          const userDocSnap = await getDoc(userDocRef);
+          
+          if (!userDocSnap.exists()) {
+            console.log('User not found');
+            return null;
+          }
 
-        // Ensure users array is up to date
-        if (users.length === 0) {
-          await updateUsersArray();
-          console.log('Users array updated:', users); // Log users after update
-        }
-        console.log('Users array:', users); // Log users array for debugging
-        const user = users.find(
-          (user) =>
-            user.username === credentials.username &&
-            user.password === credentials.password
-        );
+          const userData = userDocSnap.data();
 
-        if (user) {
-          console.log('User found:', user); // Log found user for debugging
-          return { id: user.username, name: user.username };
-        } else {
-          console.log('Invalid credentials'); // Log invalid credentials
+          // Compare the entered password with the hashed password in Firestore
+          const isPasswordValid = await bcrypt.compare(password, userData.password);
+          console.log('hashed password', await bcrypt.hash(password, 10))
+          console.log ('userData.password', userData.password)  
+          if (!isPasswordValid) {
+            console.log('Invalid password');
+            return null;
+          }
+
+          // Return user object (you can include other user data as needed)
+          return {
+            id: userData.id,
+            name: userData.name,
+            username: userData.username,
+            role: userData.role,
+          };
+        } catch (error) {
+          console.error('Error during authentication:', error);
           return null;
         }
       },
     }),
   ],
   session: {
-    strategy: 'jwt', // Ensure we're using JWT-based sessions
-    maxAge: 60 * 60, // Set JWT expiration time (1 hour)
+    strategy: 'jwt',
+    maxAge: 60 * 60, // Session expiration time (1 hour)
   },
   jwt: {
-    secret: process.env.NEXTAUTH_SECRET, // Ensure secret is set in .env
-    maxAge: 60 * 60, // JWT lifetime (1 hour)
+    secret: process.env.NEXTAUTH_SECRET, // Ensure this is set in your .env file
+    maxAge: 60 * 60, // JWT expiration time (1 hour)
   },
   pages: {
-    signIn: '/login', // Path to your custom login page
+    signIn: '/login', // Your custom login page path
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.username = user.username;
+        token.name = user.name;
+        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.id; // Pass user ID in session
+      if (token) {
+        session.user.id = token.id;
+        session.user.username = token.username;
+        session.user.name = token.name;
+        session.user.role = token.role;
+      }
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET, // Ensure the secret is set in the environment
-  debug: true, // Enable debug logs to identify the issue more easily
+  secret: process.env.NEXTAUTH_SECRET, // Ensure this is set in your .env file
+  debug: true, // Enable debug logs
 });
