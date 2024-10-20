@@ -36,13 +36,26 @@ const StudentTable = ({ students, onStudentClick, selectedStudents }) => {
 
 const App = () => {
   const [students, setStudents] = useState([]); 
-  const [clickedStudents, setClickedStudents] = useState([]);
+  const [clickedStudents, setClickedStudents] = useState([]); 
   const [searchTerm, setSearchTerm] = useState('');
   const [teamName, setTeamName] = useState('');
   const [statusMessage, setStatusMessage] = useState(null);
-  const [isFileUploaded, setIsFileUploaded] = useState(false); 
+  const [isFileUploaded, setIsFileUploaded] = useState(false);
+  const [isTeamNameValid, setIsTeamNameValid] = useState(true); // New state for team name validation
   const { data: session } = useSession();
   const router = useRouter();
+
+  // Regex to check for URL-safe characters (alphanumeric, hyphen, underscore)
+  const teamNameRegex = /^[a-zA-Z0-9-_]+$/;
+
+  // Validate team name whenever it changes
+  useEffect(() => {
+    if (teamName === '' || teamNameRegex.test(teamName)) {
+      setIsTeamNameValid(true);
+    } else {
+      setIsTeamNameValid(false);
+    }
+  }, [teamName]);
 
   // Fetch default students from Firestore on mount
   useEffect(() => {
@@ -50,7 +63,7 @@ const App = () => {
       try {
         const response = await fetch('/api/students/students'); // Update to the actual API route
         if (!response.ok) throw new Error("Failed to fetch students");
-        
+
         const data = await response.json();
         setStudents(data); // Set students fetched from Firestore
       } catch (error) {
@@ -92,7 +105,7 @@ const App = () => {
     try {
       // Prepare the selected students' data
       const selectedStudentUsernames = clickedStudents.map(student => student.username);
-      
+
       // Create the team object with instructor username, team name, and students
       const teamData = {
         instructor: session?.user?.username || 'defaultUser', // Assuming the session holds the instructor's username
@@ -113,7 +126,7 @@ const App = () => {
 
       const result = await response.json();
       if (!response.ok) {
-         // Get the response from the backend
+        // Get the response from the backend
         let message = result.message || 'Failed to create team';
         throw new Error(message);
       }
@@ -157,11 +170,14 @@ const App = () => {
               />
               <input
                 type="text"
-                className="w-full mb-4 px-4 py-2 border rounded-lg shadow-md text-black"
-                placeholder="Write Team Name..."
+                className={`w-full mb-4 px-4 py-2 border rounded-lg shadow-md text-black ${isTeamNameValid ? '' : 'border-red-500'}`}
+                placeholder="Write Team Name (URL-safe)..."
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
               />
+              {!isTeamNameValid && (
+                <p className="text-red-500 text-sm mb-4">Team name contains invalid characters. Use only letters, numbers, dashes (-), and underscores (_).</p>
+              )}
               <StudentTable students={students.filter(student => student.name.toLowerCase().includes(searchTerm.toLowerCase()))} onStudentClick={handleStudentClick} selectedStudents={clickedStudents} />
             </div>
           )}
@@ -169,14 +185,14 @@ const App = () => {
           {/* Right Side: Clicked Students */}
           <div className="w-2/5">
             <h2 className="text-xl font-bold text-center mb-4 text-gray-800">Clicked Students</h2>
-            
+
             {statusMessage && (
               <div className={`text-center mb-4 ${statusMessage.type === 'error' ? 'text-red-500' : 'text-green-500'}`}>
                 {statusMessage.message}
               </div>
             )}
 
-            {(clickedStudents.length > 1 && teamName !== "") ? (
+            {(clickedStudents.length > 1 && teamName !== "" && isTeamNameValid) ? (
               <button
                 onClick={handleCreateTeam}
                 className="w-full mb-4 px-4 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600"
@@ -187,8 +203,7 @@ const App = () => {
               <p className="text-center text-gray-600">
                 {clickedStudents.length < 2 && teamName === "" ? 
                   "Not enough students chosen and team name not written." :
-                  (clickedStudents.length < 2 ? "Not enough students chosen." : "Team name not written.")
-                }
+                  (clickedStudents.length < 2 ? "Not enough students chosen." : "Team name not written or invalid.")}
               </p>
             )}
             {clickedStudents.length > 0 ? (

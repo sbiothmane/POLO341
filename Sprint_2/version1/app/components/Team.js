@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 export default function Team({ team, instructor, role }) {
   const [isHovered, setIsHovered] = useState(false);
+  console.log('Team:', team);
 
   return (
     <div 
