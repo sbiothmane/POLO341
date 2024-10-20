@@ -1,5 +1,5 @@
 import { db } from '../../../lib/firebase'; // Firebase config
-import { collection, addDoc } from 'firebase/firestore'; // Firestore methods
+import { collection, addDoc, doc } from 'firebase/firestore'; // Firestore methods
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -19,14 +19,17 @@ export default async function handler(req, res) {
     console.log('Creating team:', teamName, 'with instructor:', instructor, 'and students:', students);
 
     try {
-        // Reference to the teams collection in Firestore
+        // Step 1: Convert the students array to references using the usernames as document IDs
+        const studentRefs = students.map(username => doc(db, 'users', username)); // Directly reference users by document ID (username)
+
+        // Step 2: Reference to the teams collection in Firestore
         const teamsCollection = collection(db, 'teams');
         
-        // Create a new team document in Firestore
+        // Step 3: Create a new team document in Firestore with student references
         const teamDoc = await addDoc(teamsCollection, {
             name: teamName,
             instructor: instructor, // Store instructor's username
-            students: students, // Array of student usernames
+            students: studentRefs,  // Array of student document references
         });
 
         // Send a success response with the team document ID

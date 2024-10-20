@@ -2,7 +2,7 @@ import { FaChalkboardTeacher, FaUser } from 'react-icons/fa';
 import { useState } from 'react';
 import Link from 'next/link';
 
-export default function Team({ team, instructor }) {
+export default function Team({ team, instructor, role }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -27,12 +27,19 @@ export default function Team({ team, instructor }) {
       >
         <div className={`text-gray-600 ${isHovered ? 'whitespace-normal' : 'whitespace-nowrap overflow-hidden text-ellipsis'}`}>
           {team?.students?.map((student) => (
-            <Link href={`/evaluate/${team.name}/${student}`} key={student}>
-              <div className={`inline-flex items-center mr-3 mb-2 cursor-pointer hover:text-blue-500 hover:bg-blue-50 rounded-md p-1 transition-colors duration-200`}>
+            role === 'student' ? (
+              <Link href={`/evaluate/${team.name}/${student}`} key={student}>
+                <div className={`inline-flex items-center mr-3 mb-2 cursor-pointer hover:text-blue-500 hover:bg-blue-50 rounded-md p-1 transition-colors duration-200`}>
+                  <FaUser className="text-gray-500 mr-1" />
+                  <span className="text-sm">{student}</span>
+                </div>
+              </Link>
+            ) : (
+              <div className={`inline-flex items-center mr-3 mb-2 rounded-md p-1 transition-colors duration-200 ${isHovered ? 'hover:bg-gray-100' : ''}`} key={student}>
                 <FaUser className="text-gray-500 mr-1" />
                 <span className="text-sm">{student}</span>
               </div>
-            </Link>
+            )
           ))}
         </div>
         {!isHovered && (

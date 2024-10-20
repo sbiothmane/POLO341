@@ -1,40 +1,78 @@
-
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation'; // Use from 'next/navigation'
 import NavBar from '../../../components/NavBar';
 
 export default function EvaluateStudent({ params }) {
     const { team, student } = params;
     const { data: session } = useSession();
-    if (!session) {
-        window.location.href = '/login';
-        return (<div>Not Logged In</div>);
-    }
+    const router = useRouter(); // Initialize the router
 
-    // State variables for Conceptual Contribution
+    // State variables for ratings and comments
     const [ratingConceptual, setRatingConceptual] = useState(0);
     const [hoverRatingConceptual, setHoverRatingConceptual] = useState(0);
     const [commentConceptual, setCommentConceptual] = useState('');
 
-    // State variables for Practical Contribution
     const [ratingPractical, setRatingPractical] = useState(0);
     const [hoverRatingPractical, setHoverRatingPractical] = useState(0);
     const [commentPractical, setCommentPractical] = useState('');
 
-    // State variables for Work Ethic
     const [ratingWorkEthic, setRatingWorkEthic] = useState(0);
     const [hoverRatingWorkEthic, setHoverRatingWorkEthic] = useState(0);
     const [commentWorkEthic, setCommentWorkEthic] = useState('');
 
     const [submissionStatus, setSubmissionStatus] = useState(null);
-
-    // Validation state
+    const [existingRating, setExistingRating] = useState(null);
     const [errors, setErrors] = useState({});
+    const [isDisabled, setIsDisabled] = useState(false); // To disable form fields if rating exists
 
-    const handleSubmit = (e) => {
+    // Fetch the existing rating when the page loads
+    useEffect(() => {
+        if (session) {
+            fetchExistingRating();
+        }
+    }, [session]);
+
+    const fetchExistingRating = async () => {
+        try {
+            const response = await fetch('/api/teams/rating', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    evaluator: session?.user?.username, // Current user
+                    team,
+                    student,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (result.rating) {
+                // Pre-populate the form with the existing rating
+                const { ratings, comments } = result.rating;
+                setRatingConceptual(ratings.conceptualContribution || 0);
+                setCommentConceptual(comments.conceptualContribution || '');
+
+                setRatingPractical(ratings.practicalContribution || 0);
+                setCommentPractical(comments.practicalContribution || '');
+
+                setRatingWorkEthic(ratings.workEthic || 0);
+                setCommentWorkEthic(comments.workEthic || '');
+
+                setExistingRating(result.rating); // Save the existing rating
+                setIsDisabled(true); // Disable the form if the rating already exists
+            }
+        } catch (error) {
+            console.error('Error fetching existing rating:', error);
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Validation logic
@@ -45,15 +83,13 @@ export default function EvaluateStudent({ params }) {
 
         setErrors(newErrors);
 
-        // Check if there are any errors
         if (Object.keys(newErrors).length > 0) {
             setSubmissionStatus('error');
             return;
         }
 
-        // Log the evaluation data to the console
-        console.log({
-            evaluator: session?.user?.email,
+        const evaluationData = {
+            evaluator: session?.user?.username,
             team,
             student,
             ratings: {
@@ -66,24 +102,39 @@ export default function EvaluateStudent({ params }) {
                 practicalContribution: commentPractical,
                 workEthic: commentWorkEthic,
             },
-        });
+        };
 
-        // Simulate a successful submission
-        setSubmissionStatus('success');
-        // Reset the form
+        try {
+            const response = await fetch('/api/teams/evaluate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(evaluationData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                setSubmissionStatus('success');
+                resetForm();
+                router.push('/dashboard'); // Redirect to dashboard after successful submission
+            } else {
+                setSubmissionStatus('error');
+            }
+        } catch (error) {
+            console.error('Error submitting rating:', error);
+            setSubmissionStatus('error');
+        }
+    };
+
+    const resetForm = () => {
         setRatingConceptual(0);
-        setHoverRatingConceptual(0);
         setCommentConceptual('');
-
         setRatingPractical(0);
-        setHoverRatingPractical(0);
         setCommentPractical('');
-
         setRatingWorkEthic(0);
-        setHoverRatingWorkEthic(0);
         setCommentWorkEthic('');
-
-        setErrors({});
     };
 
     return (
@@ -108,12 +159,12 @@ export default function EvaluateStudent({ params }) {
                                         <FaStar
                                             key={`conceptual-${star}`}
                                             className={`cursor-pointer text-3xl transition-colors duration-200 ${(hoverRatingConceptual || ratingConceptual) >= star
-                                                    ? 'text-yellow-400'
-                                                    : 'text-gray-300'
-                                                }`}
-                                            onClick={() => setRatingConceptual(star)}
-                                            onMouseEnter={() => setHoverRatingConceptual(star)}
-                                            onMouseLeave={() => setHoverRatingConceptual(0)}
+                                                ? 'text-yellow-400'
+                                                : 'text-gray-300'
+                                            }`}
+                                            onClick={() => !isDisabled && setRatingConceptual(star)}
+                                            onMouseEnter={() => !isDisabled && setHoverRatingConceptual(star)}
+                                            onMouseLeave={() => !isDisabled && setHoverRatingConceptual(0)}
                                         />
                                     ))}
                                 </div>
@@ -128,6 +179,8 @@ export default function EvaluateStudent({ params }) {
                                 placeholder="Comments on conceptual contribution..."
                                 value={commentConceptual}
                                 onChange={(e) => setCommentConceptual(e.target.value)}
+                                disabled={isDisabled} // Disable the textarea if the rating exists
+                                style={{ color: 'black' }} // Ensure the text is black
                             />
                         </div>
 
@@ -142,12 +195,12 @@ export default function EvaluateStudent({ params }) {
                                         <FaStar
                                             key={`practical-${star}`}
                                             className={`cursor-pointer text-3xl transition-colors duration-200 ${(hoverRatingPractical || ratingPractical) >= star
-                                                    ? 'text-yellow-400'
-                                                    : 'text-gray-300'
-                                                }`}
-                                            onClick={() => setRatingPractical(star)}
-                                            onMouseEnter={() => setHoverRatingPractical(star)}
-                                            onMouseLeave={() => setHoverRatingPractical(0)}
+                                                ? 'text-yellow-400'
+                                                : 'text-gray-300'
+                                            }`}
+                                            onClick={() => !isDisabled && setRatingPractical(star)}
+                                            onMouseEnter={() => !isDisabled && setHoverRatingPractical(star)}
+                                            onMouseLeave={() => !isDisabled && setHoverRatingPractical(0)}
                                         />
                                     ))}
                                 </div>
@@ -162,6 +215,8 @@ export default function EvaluateStudent({ params }) {
                                 placeholder="Comments on practical contribution..."
                                 value={commentPractical}
                                 onChange={(e) => setCommentPractical(e.target.value)}
+                                disabled={isDisabled} // Disable the textarea if the rating exists
+                                style={{ color: 'black' }} // Ensure the text is black
                             />
                         </div>
 
@@ -174,12 +229,12 @@ export default function EvaluateStudent({ params }) {
                                         <FaStar
                                             key={`workethic-${star}`}
                                             className={`cursor-pointer text-3xl transition-colors duration-200 ${(hoverRatingWorkEthic || ratingWorkEthic) >= star
-                                                    ? 'text-yellow-400'
-                                                    : 'text-gray-300'
-                                                }`}
-                                            onClick={() => setRatingWorkEthic(star)}
-                                            onMouseEnter={() => setHoverRatingWorkEthic(star)}
-                                            onMouseLeave={() => setHoverRatingWorkEthic(0)}
+                                                ? 'text-yellow-400'
+                                                : 'text-gray-300'
+                                            }`}
+                                            onClick={() => !isDisabled && setRatingWorkEthic(star)}
+                                            onMouseEnter={() => !isDisabled && setHoverRatingWorkEthic(star)}
+                                            onMouseLeave={() => !isDisabled && setHoverRatingWorkEthic(0)}
                                         />
                                     ))}
                                 </div>
@@ -194,16 +249,20 @@ export default function EvaluateStudent({ params }) {
                                 placeholder="Comments on work ethic..."
                                 value={commentWorkEthic}
                                 onChange={(e) => setCommentWorkEthic(e.target.value)}
+                                disabled={isDisabled} // Disable the textarea if the rating exists
+                                style={{ color: 'black' }} // Ensure the text is black
                             />
                         </div>
 
                         {/* Submit Button */}
-                        <button
-                            type="submit"
-                            className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold py-3 rounded-md hover:from-blue-600 hover:to-indigo-600 transition-colors duration-300"
-                        >
-                            Submit Evaluation
-                        </button>
+                        {!isDisabled && (
+                            <button
+                                type="submit"
+                                className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold py-3 rounded-md hover:from-blue-600 hover:to-indigo-600 transition-colors duration-300"
+                            >
+                                Submit Evaluation
+                            </button>
+                        )}
                     </form>
 
                     {/* Submission Status */}
@@ -212,9 +271,9 @@ export default function EvaluateStudent({ params }) {
                             Evaluation submitted successfully!
                         </p>
                     )}
-                    {submissionStatus === 'error' && Object.keys(errors).length > 0 && (
+                    {submissionStatus === 'error' && (
                         <p className="text-red-500 text-center mt-6 text-lg">
-                            Please provide ratings for all criteria before submitting.
+                            Error submitting evaluation.
                         </p>
                     )}
                 </div>
