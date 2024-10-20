@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import bcrypt from 'bcryptjs'; // Import bcryptjs for hashing
 
 function Signup() {
   const [username, setUsername] = useState('');
@@ -75,13 +74,9 @@ function Signup() {
       return;
     }
 
-    // Hash the password before sending
-    const saltRounds = 10;
-    //const hashedPassword = bcrypt.hashSync(password, saltRounds);
-
     const data = {
       username,
-      password: password,
+      password,
       role,
       id,
       name,
@@ -99,7 +94,6 @@ function Signup() {
       if (response.ok) {
         const result = await response.json();
         setMessage(result.message);
-        alert(result.message);
 
         // Reset form
         setUsername('');
@@ -114,7 +108,6 @@ function Signup() {
       } else {
         const error = await response.json();
         setMessage(error.message);
-        alert(error.message);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -123,8 +116,8 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md transition-transform transform hover:scale-105 hover:shadow-xl">
         <h2 className="text-3xl font-semibold text-gray-800 text-center mb-6">Sign Up</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Username Field */}

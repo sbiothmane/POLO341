@@ -16,7 +16,7 @@ export default function NavBar() {
                 </div>
               </Link>
               <div className="flex items-center space-x-4">
-                <span className="text-gray-600">{user.name}</span>
+                <span className="text-gray-600">{user?.name}</span>
                 <Signout />
               </div>
             </div>

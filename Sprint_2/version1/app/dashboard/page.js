@@ -63,17 +63,25 @@ export default function UserProfile() {
           <div className="space-y-10">
             {/* Instructor's Teams */}
             {role === "instructor" && (
+            <div>
               <div>
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4"></h2>
                 <TeamBox instructor={username} />
               </div>
+              <div>
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4"></h2>
+                < TeamBox />
+              </div>
+          </div>
+            )}
+            {role === "student" && (
+              <div>
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4"></h2>
+                <TeamBox student={username} />
+              </div>
             )}
 
-            {/* All Teams */}
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4"></h2>
-              <TeamBox />
-            </div>
+            
           </div>
         </main>
       </div>
