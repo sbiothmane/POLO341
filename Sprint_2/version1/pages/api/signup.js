@@ -6,9 +6,10 @@ import { db } from '../../lib/firebase';
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { username, password, role, id, name } = req.body;
-
+    
     try {
       // Check if the username or ID already exists
+      username = username.trim().toLowerCase;
       const usersRef = collection(db, 'users');
 
       // Query for existing username
