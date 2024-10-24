@@ -1,4 +1,5 @@
-'use client'
+'use client';
+import React from 'react';  // Import React
 
 import { signOut } from "next-auth/react";
 
