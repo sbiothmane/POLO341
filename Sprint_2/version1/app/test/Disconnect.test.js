@@ -1,1 +1,21 @@
+import React from 'react';  // Import React
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import SignOutButton from './components/Disconnect';
+import { signOut } from 'next-auth/react';
+
+jest.mock('next-auth/react');
+
+describe('SignOutButton', () => {
+  test('renders the sign out button and triggers signOut when clicked', () => {
+    signOut.mockImplementation(() => {});
+
+    render(<SignOutButton />);
+    const button = screen.getByText('Sign Out');
+    expect(button).toBeInTheDocument();
+
+    button.click();
+    expect(signOut).toHaveBeenCalledTimes(1);
+  });
+});
 
