@@ -3,10 +3,10 @@ name: Run Frontend Tests
 on:
   push:
     branches:
-      - jestinclusion
+      - main
   pull_request:
     branches:
-      - jestinclusion
+      - main
 
 jobs:
   test:
