@@ -1,0 +1,40 @@
+name: Run Frontend Tests
+
+on:
+  push:
+    branches:
+      - jestinclusion
+  pull_request:
+    branches:
+      - jestinclusion
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Change directory to project folder
+        run: |
+          cd 'Sprint_2/version1/app'
+        
+      - name: Install dependencies
+        run: |
+          cd 'Sprint_2/version1/app'  # Make sure to navigate into the directory
+          npm install
+
+      - name: Run tests
+        run: |
+          cd 'Sprint_2/version1/app'
+          npm test
