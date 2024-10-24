@@ -1,7 +1,7 @@
 import React from 'react';  // Import React
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SignOutButton from './components/Disconnect.js';
+import SignOutButton from '../components/Disconnect.js';
 import { signOut } from 'next-auth/react';
 
 jest.mock('next-auth/react');
