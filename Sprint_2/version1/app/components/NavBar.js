@@ -1,3 +1,5 @@
+'use client';
+import React from 'react';  // Import React
 import Link from 'next/link';
 import Signout from './Signout';  
 import { useSession } from "next-auth/react";
