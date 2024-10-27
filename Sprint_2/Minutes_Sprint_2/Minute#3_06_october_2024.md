@@ -71,7 +71,7 @@ Front-end & Back-end: Youssef
  October 10, 2024,  (16:15 - 17:45), during lab, at Concordia Hall building (SJ-X LAB ROOM AT 843)
 
 # Adjournement
-Who moved it and seconded the meeting ?
+Othmane moved meeting to
 17:00
 
 # Secretary
