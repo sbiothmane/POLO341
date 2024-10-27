@@ -31,11 +31,16 @@
   
 # Agenda Items
 
-- formatted Acceptance tests
-- Viewed the state of the sprint
+- formatted User stories
 - finished all sprint 2 implementations
 - discussed about next meeting
 
+
+# Discussion about agenda items
+
+- formatted User stories structure (desciption, AT, tasks...)
+- finished all sprint 2 implementations (live coding with team to finish remainig tasks)
+- discussed about next meeting and fixed a date
   
 # Votes
 
