@@ -43,6 +43,27 @@
 - Started the completition to the last feature of sprint 1
 - Started fromating User stories, tasks and Acceptance tests as required
 
+
+# Discussion on Agenda Items
+User Stories for Sprint 2
+
+Finalize user stories for Sprint 2 and assign tasks.
+Lab TA Notes
+
+Unfinished Features: Prioritize and complete pending Sprint 1 features.
+Sprint 2 Breakdown: Organize and assign tasks for Sprint 2.
+Logs: Set up detailed activity logs.
+New Features: Define and plan 2 new features for Sprint 2.
+Acceptance Tests: Add acceptance tests for Sprint 2 features to the repo.
+Sprint 1 Issue Fixes
+
+Resolve high-priority issues from Sprint 1 to ensure stability.
+Last Feature Completion in Sprint 1
+
+Finish and verify the final Sprint 1 feature.
+Formatting
+
+Standardize format for user stories, tasks, and acceptance tests.
   
 # Votes
 
