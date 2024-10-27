@@ -37,8 +37,14 @@
 - Complete Feature 3 before demo 
 - live coding with peers
 
+# Discussion on Agenda Items
+- organisation: 2 folders 1 for front 1 for back (replicates files)
+basically divided our folder sprint 2 into front and backend components
+- Formated Acceptance tests tasks and us on the template
+- Configured Acces to link to videoes
+- live coding with peers on team creation ui
 
-  
+
 # Votes
 
 - No votes took place.
