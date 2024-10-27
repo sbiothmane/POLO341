@@ -40,6 +40,8 @@
 - Discussed the logic and structure for the next steps of the project
 - Spoke of future fixes for the code from sprint 1 (csv file add a bool team to the user info...)
 
+
+#  Discussion on Agenda Items
 splited tasks:
 Dashboard, all teams, user's team, view: Will
 Back-end, create teams, Fetching data, visuals: Othmane
