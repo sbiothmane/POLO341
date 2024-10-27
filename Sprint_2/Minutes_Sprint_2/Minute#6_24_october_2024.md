@@ -37,6 +37,10 @@
 - Completing the required features and duties for Sprint 2
 
 # Discussion about agenda items
+- formatted Acceptance tests (link to appropriate video and user story with desciption were done)
+- Viewed the state of the sprint like completion of tasks, work log of each teammate and more
+- discussed about next meeting date and fixed a date
+
   
 # Votes
 
