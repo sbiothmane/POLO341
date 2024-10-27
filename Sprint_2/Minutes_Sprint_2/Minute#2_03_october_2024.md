@@ -87,7 +87,7 @@ Standardize format for user stories, tasks, and acceptance tests.
   
 
 # Adjournement
-Who moved it and seconded the meeting ?
+Othmane moved meeting to
 17:55
 
 # Secretary
