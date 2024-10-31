@@ -13,10 +13,10 @@ Frontend : (HTML, CSS, JAVASCRIPT,REACT.js),  Backend (NEXT.js)
 
 **Othmane Sbi:** 40249134  (Backend) Scrummaster
 
-**William White:** 40135771  (Frontend)
+**William White:** 40135771  (Frontend) 
 
-**Samy Belmihoub:** 40251504 (Frontend)
+**Samy Belmihoub:** 40251504 (Frontend) 
 
-**Youssef Youssef:** 40285384  (Backend) Scrummaster assistant
+**Youssef Youssef:** 40285384  (Backend) 
 
-**John Kaspar:** 40285931  (Frontend)
+**John Kaspar:** 40285931  (Frontend) 
