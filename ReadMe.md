@@ -17,6 +17,6 @@ Frontend : (HTML, CSS, JAVASCRIPT,REACT.js),  Backend (NEXT.js)
 
 **Samy Belmihoub:** 40251504 (Frontend)
 
-**Youssef Youssef:** 40285384  (Backend)
+**Youssef Youssef:** 40285384  (Backend) Scrummaster assistant
 
 **John Kaspar:** 40285931  (Frontend)
