@@ -1,4 +1,4 @@
-name: Build and Test Website
+name: General CI/CD pipeline test
 
 # Trigger the action when a pull request is opened or updated
 on:
@@ -26,18 +26,18 @@ jobs:
 
       # Navigate to the correct directory where the project files are located
       - name: Change directory to project folder
-        run: cd 'Sprint_2/App'
+        run: cd 'Sprint_3/App'
 
       # Install dependencies (e.g., using npm or yarn)
       - name: Install dependencies
         run: |
-          cd 'Sprint_2/App'  # Make sure to navigate into the directory
+          cd 'Sprint_3/App'  # Make sure to navigate into the directory
           npm install
 
       # Run the build command
       - name: Build the project
         run: |
-          cd 'Sprint_2/App'
+          cd 'Sprint_3/App'
           npm run build  
 
       
