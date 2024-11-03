@@ -1,4 +1,4 @@
-# Meeting Minutes - POLO REGULAR
+# Meeting 1
 
 ## Meeting Details
 **Date:** October 31st, 2024
