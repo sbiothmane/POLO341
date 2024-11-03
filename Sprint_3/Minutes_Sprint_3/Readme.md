@@ -1,73 +1,75 @@
-Meeting 1
-Heading
-POLO
-REGULAR (AT THE LAB IN-PERSON)
-October 3rd, 2024, (16:15 - 17:55), Concordia Hall building (SJ-X LAB ROOM AT 843)
-Attendees
-Alvin Biju: 40278182
+# Meeting Minutes - POLO REGULAR
 
-Othmane Sbi: 40249134
+## Meeting Details
+**Date:** October 3rd, 2024
+**Time:** 16:15 - 17:55
+**Location:** Concordia Hall Building (SJ-X LAB ROOM 843)
 
-William White: 40135771
+## Attendees
+- Alvin Biju (40278182)
+- Othmane Sbi (40249134)
+- William White (40135771)
+- Samy Belmihoub (40251504)
+- Youssef Youssef (40285384)
+- John Kaspar (40285931)
 
-Samy Belmihoub: 40251504
+## Meeting Structure
 
-Youssef Youssef: 40285384
+### Call to Order
+- Sprint 2 planning and finalizing final features of sprint 1
+- Who made the call: No one
 
-John Kaspar: 40285931
+### Approval of Previous Minutes
+- Previous minutes approved
 
-Call to Order
-Sprint 2 planning and finalizing final features of sprint 1
-Who made the call : No one
-Approval of Previous Minutes
-Approved this minute
-Agenda Items
-Complete user stories for sprint 2
+### Agenda Items
+1. Complete user stories for sprint 2
+2. Lab TA Notes:
+   - Features not completed from sprint 1
+   - Sprint 2 planning task breakdown
+   - Detailed logs
+   - 2 features for sprint 2
+   - Add acceptance tests to repo
+   - Started fixing issues from sprint 1
+   - Started completion of last sprint 1 feature
+   - Started formatting user stories, tasks and acceptance tests
 
-Notes from lab ta:
+### Discussion Items
+1. User Stories for Sprint 2
+   - Finalization and task assignment
+2. Sprint 1 Completion
+   - Prioritize unfinished features
+   - Resolve high-priority issues
+   - Complete final feature
+3. Sprint 2 Planning
+   - Task breakdown and organization
+   - Set up detailed logs
+   - Define 2 new features
+   - Add acceptance tests
+4. Formatting Standards
+   - Standardize format for user stories, tasks, and acceptance tests
 
-Features not completed from sprint 1
-Sprint 2 planing task breakdown
-Dedalied logs
-2 features for sprint 2
-Add aceptance tests to our Repo.
-Started fixing issues from sprint 1
+### Votes
+No votes took place
 
-Started the completition to the last feature of sprint 1
+### Reports
+- User stories for sprint 2 created (in progress)
+- Tasks and issues created (in progress)
+- Acceptance tests defined (in progress)
 
-Started fromating User stories, tasks and Acceptance tests as required
+### Open Forum
+- UI update: restricted instructor visibility
+- Progress on user stories and task breakdown
+- Discussion of TA repo notes
 
-Discussion on Agenda Items
-User Stories for Sprint 2
+### Next Meeting
+**Date:** October 6, 2024
+**Time:** 03:00 - 05:00
+**Format:** Online meeting
 
-Finalize user stories for Sprint 2 and assign tasks. Lab TA Notes
+### Meeting Closure
+- Adjourned at 17:55 by Othmane
 
-Unfinished Features: Prioritize and complete pending Sprint 1 features. Sprint 2 Breakdown: Organize and assign tasks for Sprint 2. Logs: Set up detailed activity logs. New Features: Define and plan 2 new features for Sprint 2. Acceptance Tests: Add acceptance tests for Sprint 2 features to the repo. Sprint 1 Issue Fixes
-
-Resolve high-priority issues from Sprint 1 to ensure stability. Last Feature Completion in Sprint 1
-
-Finish and verify the final Sprint 1 feature. Formatting
-
-Standardize format for user stories, tasks, and acceptance tests.
-
-Votes
-No votes took place.
-Reports
-User stories for sprint 2 were created (progress)
-Tasks and issues created (progress)
-Acceptance tests defined (progress)
-Open Forum or General discussion
-Updated the user interface so that only instructor can see them
-Advanced in some user stories and task breakdown
-Discussed about the notes of the ta about our repo
-Next meeting (if scheduled)
-October 6, 2024, (03:00 - 05:00), Online meeting
-
-Adjournement
-Othmane moved meeting to 17:55
-
-Secretary
-Samy Belmihoub
-
-Scrum Master
-Youssef Youssef
+## Meeting Officials
+**Secretary:** Samy Belmihoub
+**Scrum Master:** Youssef Youssef
