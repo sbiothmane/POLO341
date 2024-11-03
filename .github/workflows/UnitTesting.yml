@@ -27,7 +27,7 @@ jobs:
           
       - name: Change directory to project folder
         run: |
-          cd 'Sprint_3/App/app'
+          cd 'Sprint_3/App/app/unit_testing'
         
       - name: Install dependencies
         run: |
