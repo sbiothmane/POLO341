@@ -1,1 +1,41 @@
+name: Run Unit Testing Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Change directory to project folder
+        run: |
+          cd 'Sprint_3/App/app/unit_testing''
+        
+      - name: Install dependencies
+        run: |
+          cd 'Sprint_3/App/app/unit_testing''  # Make sure to navigate into the directory
+          npm install
+
+      - name: Run tests
+        run: |
+          cd 'Sprint_3/App/app/unit_testing'
+          npm test
 
