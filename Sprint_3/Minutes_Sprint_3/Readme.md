@@ -1,7 +1,7 @@
 # Meeting Minutes - POLO REGULAR
 
 ## Meeting Details
-**Date:** October 3rd, 2024
+**Date:** October 31st, 2024
 **Time:** 16:15 - 17:55
 **Location:** Concordia Hall Building (SJ-X LAB ROOM 843)
 
@@ -16,35 +16,35 @@
 ## Meeting Structure
 
 ### Call to Order
-- Sprint 2 planning and finalizing final features of sprint 1
+- Sprint 3 planning and finalizing final features of sprint 2
 - Who made the call: No one
 
 ### Approval of Previous Minutes
 - Previous minutes approved
 
 ### Agenda Items
-1. Complete user stories for sprint 2
+1. Complete user stories for sprint 3
 2. Lab TA Notes:
-   - Features not completed from sprint 1
-   - Sprint 2 planning task breakdown
+   - Features not completed from sprint 2
+   - Sprint 3 planning task breakdown
    - Detailed logs
-   - 2 features for sprint 2
+   - 1 features for sprint 3
    - Add acceptance tests to repo
-   - Started fixing issues from sprint 1
-   - Started completion of last sprint 1 feature
+   - Started fixing issues from sprint 2
+   - Started completion of last sprint 2 feature
    - Started formatting user stories, tasks and acceptance tests
 
 ### Discussion Items
-1. User Stories for Sprint 2
+1. User Stories for Sprint 3
    - Finalization and task assignment
-2. Sprint 1 Completion
+2. Sprint 2 Completion
    - Prioritize unfinished features
    - Resolve high-priority issues
    - Complete final feature
-3. Sprint 2 Planning
+3. Sprint 3 Planning
    - Task breakdown and organization
    - Set up detailed logs
-   - Define 2 new features
+   - Define 1 new feature
    - Add acceptance tests
 4. Formatting Standards
    - Standardize format for user stories, tasks, and acceptance tests
@@ -53,8 +53,8 @@
 No votes took place
 
 ### Reports
-- User stories for sprint 2 created (in progress)
-- Tasks and issues created (in progress)
+- User stories for sprint 3 created (complete)
+- Tasks and issues created (complete)
 - Acceptance tests defined (in progress)
 
 ### Open Forum
@@ -63,13 +63,13 @@ No votes took place
 - Discussion of TA repo notes
 
 ### Next Meeting
-**Date:** October 6, 2024
-**Time:** 03:00 - 05:00
+**Date:** Novemver 3rd 2024
+**Time:** 16:30 - 17:55
 **Format:** Online meeting
 
 ### Meeting Closure
 - Adjourned at 17:55 by Othmane
 
 ## Meeting Officials
-**Secretary:** Samy Belmihoub
-**Scrum Master:** Youssef Youssef
+**Secretary:** John Kaspar
+**Scrum Master:** William White
