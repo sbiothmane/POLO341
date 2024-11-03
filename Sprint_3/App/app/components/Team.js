@@ -12,6 +12,8 @@ export default function Team({ team, instructor, role }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+
+<Link href={`/team/${team.name}`}>
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-xl font-bold text-gray-800 flex items-center">
           <FaChalkboardTeacher className="mr-2 text-blue-500" />
@@ -21,6 +23,8 @@ export default function Team({ team, instructor, role }) {
           Instructor: {instructor}
         </span>
       </div>
+</Link>
+  
 
       {/* Students list */}
       <div
