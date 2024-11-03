@@ -1,4 +1,4 @@
-name: General CI/CD pipeline test
+name: Run Backend Test
 
 # Trigger the action when a pull request is opened or updated
 on:
