@@ -27,11 +27,11 @@ jobs:
           
       - name: Change directory to project folder
         run: |
-          cd 'Sprint_3/App/app''
+          cd 'Sprint_3/App/app'
         
       - name: Install dependencies
         run: |
-          cd 'Sprint_3/App/app''  # Make sure to navigate into the directory
+          cd 'Sprint_3/App/app'  # Make sure to navigate into the directory
           npm install
 
       - name: Run tests
