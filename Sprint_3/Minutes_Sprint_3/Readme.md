@@ -72,4 +72,5 @@ No votes took place
 
 ## Meeting Officials
 **Secretary:** John Kaspar
+
 **Scrum Master:** William White
