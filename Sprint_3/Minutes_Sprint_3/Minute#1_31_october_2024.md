@@ -1,76 +1,100 @@
 # Meeting 1
+# Heading
 
-## Meeting Details
-**Date:** October 31st, 2024
-**Time:** 16:15 - 17:55
-**Location:** Concordia Hall Building (SJ-X LAB ROOM 843)
+- POLO
+- REGULAR (AT THE LAB IN-PERSON)
+- October 31st, 2024,  (16:15 - 17:55), Concordia Hall building (SJ-X LAB ROOM AT 843)
+  
+# Attendees
 
-## Attendees
-- Alvin Biju (40278182)
-- Othmane Sbi (40249134)
-- William White (40135771)
-- Samy Belmihoub (40251504)
-- Youssef Youssef (40285384)
-- John Kaspar (40285931)
+- Alvin Biju: 40278182
 
-## Meeting Structure
+- Othmane Sbi: 40249134
 
-### Call to Order
+- William White: 40135771
+
+- Samy Belmihoub: 40251504
+
+- Youssef Youssef: 40285384
+
+- John Kaspar: 40285931
+
+# Call to Order
+
 - Sprint 3 planning and finalizing final features of sprint 2
-- Who made the call: No one
+- Who made the call : No one
+  
+# Approval of Previous Minutes
 
-### Approval of Previous Minutes
-- Previous minutes approved
+- Approved this minute
+  
+# Agenda Items
 
-### Agenda Items
-1. Complete user stories for sprint 3
-2. Lab TA Notes:
-   - Features not completed from sprint 2
-   - Sprint 3 planning task breakdown
-   - Detailed logs
-   - 1 features for sprint 3
-   - Add acceptance tests to repo
-   - Started fixing issues from sprint 2
-   - Started completion of last sprint 2 feature
-   - Started formatting user stories, tasks and acceptance tests
+- Complete user stories for sprint 2
+- Notes from lab ta:
 
-### Discussion Items
-1. User Stories for Sprint 3
-   - Finalization and task assignment
-2. Sprint 2 Completion
-   - Prioritize unfinished features
-   - Resolve high-priority issues
-   - Complete final feature
-3. Sprint 3 Planning
-   - Task breakdown and organization
-   - Set up detailed logs
-   - Define 1 new feature
-   - Add acceptance tests
-4. Formatting Standards
-   - Standardize format for user stories, tasks, and acceptance tests
+  - Features not completed from sprint 1
+  - Sprint 2 planing task breakdown
+  - Dedalied logs
+  - 2 features for sprint 2
+  - Add aceptance tests to our Repo.
 
-### Votes
-No votes took place
+- Started fixing issues from sprint 1
+- Started the completition to the last feature of sprint 1
+- Started fromating User stories, tasks and Acceptance tests as required
 
-### Reports
-- User stories for sprint 3 created (complete)
-- Tasks and issues created (complete)
-- Acceptance tests defined (in progress)
 
-### Open Forum
-- UI update: restricted instructor visibility
-- Progress on user stories and task breakdown
-- Discussion of TA repo notes
+# Discussion on Agenda Items
+User Stories for Sprint 2
 
-### Next Meeting
-**Date:** Novemver 3rd 2024
-**Time:** 16:30 - 17:55
-**Format:** Online meeting
+Finalize user stories for Sprint 2 and assign tasks.
+Lab TA Notes
 
-### Meeting Closure
-- Adjourned at 17:55 by Othmane
+Unfinished Features: Prioritize and complete pending Sprint 1 features.
+Sprint 2 Breakdown: Organize and assign tasks for Sprint 2.
+Logs: Set up detailed activity logs.
+New Features: Define and plan 2 new features for Sprint 2.
+Acceptance Tests: Add acceptance tests for Sprint 2 features to the repo.
+Sprint 1 Issue Fixes
 
-## Meeting Officials
-**Secretary:** John Kaspar
+Resolve high-priority issues from Sprint 1 to ensure stability.
+Last Feature Completion in Sprint 1
 
-**Scrum Master:** William White
+Finish and verify the final Sprint 1 feature.
+Formatting
+
+Standardize format for user stories, tasks, and acceptance tests.
+  
+# Votes
+
+- No votes took place.
+  
+# Reports
+
+- User stories for sprint 2 were created (progress)
+- Tasks and issues created (progress)
+- Acceptance tests defined (progress)
+  
+# Open Forum or General discussion
+
+- Updated the user interface so that only instructor can see them
+- Advanced in some user stories and task breakdown
+- Discussed about the notes of the ta about our repo
+  
+# Next meeting (if scheduled)
+
+ October 6, 2024,  (03:00 - 05:00), Online meeting
+  
+
+# Adjournement
+Othmane moved meeting to
+17:55
+
+# Secretary
+Samy Belmihoub
+
+# Scrum Master
+Youssef Youssef
+
+
+
