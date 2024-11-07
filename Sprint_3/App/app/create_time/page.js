@@ -52,7 +52,8 @@ const OfficeHoursPage = () => {
         const filteredSlots = slots.filter(newSlot => 
             !officeHours.some(existingSlot => 
                 existingSlot.start.getTime() === newSlot.start.getTime() || 
-                existingSlot.end.getTime() === newSlot.end.getTime()
+                existingSlot.end.getTime() === newSlot.end.getTime()||
+                existingSlot.start.toLocaleDateString() === newSlot.start.toLocaleDateString()
             )
         );
     
