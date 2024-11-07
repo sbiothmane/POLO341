@@ -19,6 +19,7 @@ const TeamPage = ({ teamName }) => {
                 });
 
                 const result = await response.json();
+                console.log('API Response:', result); // Debug statement
                 if (response.ok) {
                     console.log('Fetched ratings:', result.ratings); // Debug statement
                     setTeamRatings(result.ratings);
@@ -66,19 +67,25 @@ const TeamPage = ({ teamName }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {teamRatings.map((student) => (
-                            <tr key={student.id} className="hover:bg-gray-100 cursor-pointer" onClick={() => handleStudentClick(student)}>
-                                <td className="py-2 border">{student.id}</td>
-                                <td className="py-2 border">{student.name.split(' ')[1]}</td>
-                                <td className="py-2 border">{student.name.split(' ')[0]}</td>
-                                <td className="py-2 border">{student.ratings.cooperation}</td>
-                                <td className="py-2 border">{student.ratings.conceptual}</td>
-                                <td className="py-2 border">{student.ratings.practical}</td>
-                                <td className="py-2 border">{student.ratings.workEthic}</td>
-                                <td className="py-2 border">{averageScore(student)}</td>
-                                <td className="py-2 border">{student.peersResponded}</td>
+                        {teamRatings.length > 0 ? (
+                            teamRatings.map((student) => (
+                                <tr key={student.id} className="hover:bg-gray-100 cursor-pointer" onClick={() => handleStudentClick(student)}>
+                                    <td className="py-2 border">{student.id}</td>
+                                    <td className="py-2 border">{student.name.split(' ')[1]}</td>
+                                    <td className="py-2 border">{student.name.split(' ')[0]}</td>
+                                    <td className="py-2 border">{student.ratings.cooperation}</td>
+                                    <td className="py-2 border">{student.ratings.conceptual}</td>
+                                    <td className="py-2 border">{student.ratings.practical}</td>
+                                    <td className="py-2 border">{student.ratings.workEthic}</td>
+                                    <td className="py-2 border">{averageScore(student)}</td>
+                                    <td className="py-2 border">{student.peersResponded}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="9" className="py-2 border text-center">No data available</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
 

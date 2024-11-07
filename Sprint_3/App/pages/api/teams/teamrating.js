@@ -1,54 +1,50 @@
 // FILE: teamrating.js
 
-const teamData = {
-    teamName: 'Invincibles',
-    students: [
-        {
-            id: '402XXXXX',
-            lastName: 'Doe',
-            firstName: 'John',
-            cooperation: 6.4,
-            conceptual: 6.4,
-            practical: 6.8,
-            workEthic: 6.6,
-            peersResponded: 5,
-            comments: [
-                { peer: 'Student 2', comment: 'Great team player!' },
-                { peer: 'Student 3', comment: '' },
-            ],
-        },
-        {
-            id: '402XXXXX2',
-            lastName: 'Smith',
-            firstName: 'Jane',
-            cooperation: 4.2,
-            conceptual: 5.1,
-            practical: 3.8,
-            workEthic: 4.5,
-            peersResponded: 4,
-            comments: [
-                { peer: 'Student 1', comment: 'Needs improvement.' },
-                { peer: 'Student 4', comment: 'Good effort.' },
-            ],
-        },
-    ],
-};
+import { db } from '../../../lib/firebase'; // Firebase config
+import { collection, query, where, getDocs } from 'firebase/firestore'; // Firestore methods
 
-export function getTeamRatings(teamName) {
-    if (teamData.teamName === teamName) {
-        return teamData.students.map(student => ({
-            id: student.id,
-            name: `${student.firstName} ${student.lastName}`,
-            ratings: {
-                cooperation: student.cooperation,
-                conceptual: student.conceptual,
-                practical: student.practical,
-                workEthic: student.workEthic,
-            },
-            peersResponded: student.peersResponded,
-            comments: student.comments,
-        }));
-    } else {
+export async function getTeamRatings(teamName) {
+    try {
+        // Step 1: Find the team document by name
+        const teamsCollection = collection(db, 'teams');
+        const teamQuery = query(teamsCollection, where('name', '==', teamName));
+        const teamSnapshot = await getDocs(teamQuery);
+
+        if (teamSnapshot.empty) {
+            throw new Error('Team not found');
+        }
+
+        // Assuming there's only one team with that name
+        const teamDoc = teamSnapshot.docs[0]; // Get the first matching team document
+        const teamId = teamDoc.id; // Get the team's document ID
+
+        // Step 2: Reference to the team's ratings subcollection using the team document ID
+        const ratingsCollection = collection(db, 'teams', teamId, 'ratings');
+        const ratingsSnapshot = await getDocs(ratingsCollection);
+
+        // Step 3: Map the ratings data to the desired format
+        const ratings = ratingsSnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                name: `${data.firstName} ${data.lastName}`,
+                ratings: {
+                    cooperation: data.cooperation,
+                    conceptual: data.conceptual,
+                    practical: data.practical,
+                    workEthic: data.workEthic,
+                },
+                peersResponded: data.peersResponded,
+                comments: data.comments,
+            };
+        });
+
+        // Print the ratings information to the console
+        console.log('Fetched team ratings:', ratings);
+
+        return ratings;
+    } catch (error) {
+        console.error('Error retrieving team ratings:', error);
         return [];
     }
 }
