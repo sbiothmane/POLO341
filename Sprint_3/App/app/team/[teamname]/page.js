@@ -1,13 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation'; // Use this to get dynamic route parameters in App Router
+import { FaUsers, FaBookOpen } from 'react-icons/fa';
 import NavBar from '../../components/NavBar';
 
-const TeamPage = ({ teamName }) => {
+const TeamPage = () => {
     const [teamRatings, setTeamRatings] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
+    const { teamname: teamName } = useParams(); // Extract teamname directly from dynamic route
 
     useEffect(() => {
+        if (!teamName) return;
+
         const fetchRatings = async () => {
             try {
                 const response = await fetch('/api/teams/getTeamRatings', {
@@ -15,14 +20,12 @@ const TeamPage = ({ teamName }) => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ teamName }),
+                    body: JSON.stringify({ teamName }), // Passes teamName in request body as expected
                 });
 
                 const result = await response.json();
-                console.log('API Response:', result); // Debug statement
                 if (response.ok) {
-                    console.log('Fetched ratings:', result.ratings); // Debug statement
-                    setTeamRatings(result.ratings);
+                    setTeamRatings(result.ratings); // Set fetched data to state
                 } else {
                     console.error('Error fetching team ratings:', result.message);
                 }
@@ -34,10 +37,6 @@ const TeamPage = ({ teamName }) => {
         fetchRatings();
     }, [teamName]);
 
-    useEffect(() => {
-        console.log('Team Ratings State:', teamRatings); // Debug statement
-    }, [teamRatings]);
-
     const handleStudentClick = (student) => {
         setSelectedStudent(student);
     };
@@ -47,86 +46,138 @@ const TeamPage = ({ teamName }) => {
         return ((cooperation + conceptual + practical + workEthic) / 4).toFixed(2);
     };
 
+    const splitName = (fullName) => {
+        let firstName = 'Unknown';
+        let lastName = 'Unknown';
+
+        if (fullName) {
+            const nameParts = fullName.split(' ');
+            if (nameParts.length > 1) {
+                firstName = nameParts[0];
+                lastName = nameParts.slice(1).join(' ');
+            } else {
+                // If no space found, try splitting by capital letter
+                const match = fullName.match(/([A-Z][a-z]+)([A-Z][a-z]+)/);
+                if (match) {
+                    firstName = match[1];
+                    lastName = match[2];
+                } else {
+                    firstName = fullName;
+                }
+            }
+        }
+
+        return { firstName, lastName };
+    };
+
     return (
         <div className="min-h-screen bg-gray-50">
             <NavBar />
-            <div className="p-6">
-                <h1 className="text-3xl font-bold mb-8 text-center">Team Ratings: {teamName}</h1>
-                <table className="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr>
-                            <th className="py-2 border">Student ID</th>
-                            <th className="py-2 border">Last Name</th>
-                            <th className="py-2 border">First Name</th>
-                            <th className="py-2 border">Cooperation</th>
-                            <th className="py-2 border">Conceptual Contribution</th>
-                            <th className="py-2 border">Practical Contribution</th>
-                            <th className="py-2 border">Work Ethic</th>
-                            <th className="py-2 border">Average</th>
-                            <th className="py-2 border">Peers Who Responded</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {teamRatings.length > 0 ? (
-                            teamRatings.map((student) => (
-                                <tr key={student.id} className="hover:bg-gray-100 cursor-pointer" onClick={() => handleStudentClick(student)}>
-                                    <td className="py-2 border">{student.id}</td>
-                                    <td className="py-2 border">{student.name.split(' ')[1]}</td>
-                                    <td className="py-2 border">{student.name.split(' ')[0]}</td>
-                                    <td className="py-2 border">{student.ratings.cooperation}</td>
-                                    <td className="py-2 border">{student.ratings.conceptual}</td>
-                                    <td className="py-2 border">{student.ratings.practical}</td>
-                                    <td className="py-2 border">{student.ratings.workEthic}</td>
-                                    <td className="py-2 border">{averageScore(student)}</td>
-                                    <td className="py-2 border">{student.peersResponded}</td>
-                                </tr>
-                            ))
-                        ) : (
+            {/* Main Content */}
+            <main className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
+                <div className="bg-white shadow rounded-lg p-6 mb-10">
+                    <div className="flex items-center mb-6">
+                        <FaUsers className="text-blue-400 mr-4" size={28} />
+                        <h1 className="text-3xl font-bold text-gray-800">Team Ratings: {teamName}</h1>
+                    </div>
+                    
+                    <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                        <thead className="bg-blue-500 text-white">
                             <tr>
-                                <td colSpan="9" className="py-2 border text-center">No data available</td>
+                                <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Student ID</th>
+                                <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Last Name</th>
+                                <th className="py-4 px-6 border-b-2 border-blue-300 text-center">First Name</th>
+                                <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Cooperation</th>
+                                <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Conceptual Contribution</th>
+                                <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Practical Contribution</th>
+                                <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Work Ethic</th>
+                                <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Average</th>
+                                <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Peers Who Responded</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {teamRatings.length > 0 ? (
+                                teamRatings.map((student, index) => {
+                                    const { firstName, lastName } = splitName(student.ratedStudent);
+                                    const rowColor = index % 2 === 0 ? 'bg-gray-50' : 'bg-white';
+                                    return (
+                                        <tr
+                                            key={student.id}
+                                            className={`${rowColor} hover:bg-blue-100 transition duration-150 cursor-pointer`}
+                                            onClick={() => handleStudentClick(student)}
+                                        >
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{student.studentId}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{lastName}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{firstName}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{student.ratings.cooperation}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{student.ratings.conceptual}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{student.ratings.practical}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{student.ratings.workEthic}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{averageScore(student)}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{student.peersResponded}</td>
+                                        </tr>
+                                    );
+                                })
+                            ) : (
+                                <tr>
+                                    <td colSpan="9" className="py-4 px-6 text-center text-gray-600">No data available</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
 
                 {/* Detailed View */}
                 {selectedStudent && (
-                    <div className="mt-10 p-6 bg-white shadow-xl rounded-lg">
-                        <h2 className="text-2xl font-semibold mb-4">Detailed View for {selectedStudent.name}</h2>
-                        <table className="min-w-full bg-white border border-gray-300 mb-6">
-                            <thead>
+                    <div className="bg-white shadow rounded-lg p-6 mt-10">
+                        <div className="flex items-center mb-6">
+                            <FaBookOpen className="text-blue-400 mr-4" size={28} />
+                            {/* Update to show the selected student's name */}
+                            <h2 className="text-3xl font-semibold text-gray-800">
+                                Detailed View for {splitName(selectedStudent.ratedStudent).firstName} {splitName(selectedStudent.ratedStudent).lastName}
+                            </h2>
+                        </div>
+                        <table className="min-w-full bg-white border border-blue-300 mb-6 rounded-lg">
+                            <thead className="bg-blue-500 text-white">
                                 <tr>
-                                    <th className="py-2 border">Member</th>
-                                    <th className="py-2 border">Cooperation</th>
-                                    <th className="py-2 border">Conceptual</th>
-                                    <th className="py-2 border">Practical</th>
-                                    <th className="py-2 border">Work Ethic</th>
-                                    <th className="py-2 border">Average Across All</th>
+                                    <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Member</th>
+                                    <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Cooperation</th>
+                                    <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Conceptual</th>
+                                    <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Practical</th>
+                                    <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Work Ethic</th>
+                                    <th className="py-4 px-6 border-b-2 border-blue-300 text-center">Average Across All</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {teamRatings.map((s) => (
-                                    <tr key={s.id}>
-                                        <td className="py-2 border">{s.name}</td>
-                                        <td className="py-2 border">{s.ratings.cooperation}</td>
-                                        <td className="py-2 border">{s.ratings.conceptual}</td>
-                                        <td className="py-2 border">{s.ratings.practical}</td>
-                                        <td className="py-2 border">{s.ratings.workEthic}</td>
-                                        <td className="py-2 border">{averageScore(s)}</td>
-                                    </tr>
-                                ))}
+                                {teamRatings.map((s, index) => {
+                                    const rowColor = index % 2 === 0 ? 'bg-gray-50' : 'bg-white';
+                                    return (
+                                        <tr key={s.id} className={`${rowColor}`}>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{s.name}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{s.ratings.cooperation}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{s.ratings.conceptual}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{s.ratings.practical}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{s.ratings.workEthic}</td>
+                                            <td className="py-4 px-6 border-b border-blue-200 text-black text-center">{averageScore(s)}</td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
 
-                        <h3 className="text-lg font-semibold mb-2">Comments:</h3>
-                        {selectedStudent.comments.map((comment, index) => (
-                            <div key={index} className="mb-2">
-                                <strong>{comment.peer} comment:</strong> {comment.comment || 'No comment provided.'}
-                            </div>
-                        ))}
+                        <h3 className="text-xl font-semibold mb-4 text-blue-500">Comments:</h3>
+                        {Array.isArray(selectedStudent.comments) && selectedStudent.comments.length > 0 ? (
+                            selectedStudent.comments.map((comment, index) => (
+                                <div key={index} className="mb-4 text-black">
+                                    <strong className="text-blue-400">{comment.peer} comment:</strong> {comment.comment || 'No comment provided.'}
+                                </div>
+                            ))
+                        ) : (
+                            <div className="mb-4 text-black">No comments available.</div>
+                        )}
                     </div>
                 )}
-            </div>
+            </main>
         </div>
     );
 };
