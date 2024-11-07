@@ -3,7 +3,7 @@
 
 - POLO
 - Online
-- october 20th, 2024,  (18:00 - 19:00), online via discord
+- November 3th, 2024,  (16h30 - 17:30), online via discord
   
 # Attendees
 
@@ -22,7 +22,7 @@
 # Call to Order
 
 
-- Sprint 2 Coding
+- Sprint 3 Coding
 - Who made the call: Alvin
   
 # Approval of Previous Minutes
@@ -31,16 +31,16 @@
   
 # Agenda Items
 
-- formatted User stories
-- finished all sprint 2 implementations
-- discussed about next meeting
+- Complete User stories, Acceptance tests, tasks
+- Deciding on how to finish sprint 3 implementation
+
 
 
 # Discussion about agenda items
 
-- formatted User stories structure (desciption, AT, tasks...)
-- finished all sprint 2 implementations (live coding with team to finish remainig tasks)
-- discussed about next meeting and fixed a date
+- formatted User stories structure (description, AT, tasks...)
+- finished all sprint 3 planning and finishing part of the Sprint 3 features (live coding with team to finish remaining tasks)
+
   
 # Votes
 
@@ -48,27 +48,27 @@
   
 # Reports
 
-- User stories for sprint 2 were created (complete)
+- User stories for sprint 3 were created (complete)
 - Tasks and issues created (complete)
 - Acceptance tests defined (complete)
   
 # Open Forum or General discussion
 
-- How to implement the project. What is the project. What is the strengths and weakness of the teammates so that tasks can be properly implemented.
-- How to seperate the tasks and how to properly write user stories. It was decided that each teammate will review the fundamentals of git/github along with web development tools such as HTML, CSS, Javascript, etc.
+- How to implement the new feature which is the office hours for the instructors. It was decided that the there will be two interfaces, one for the student and the other for the instructor.
+- How to properlyvseperate the tasks and how to properly write user stories. Helping other teammates with their parts
   
 # Next meeting (if scheduled)
 
- October 24, 2024,  (16:15 - 17:45), during lab, at Concordia Hall building (SJ-X LAB ROOM AT 843)
+ November 07, 2024,  (16:15 - 17:45), during lab, at Concordia Hall building (SJ-X LAB ROOM AT 843)
 
 # Adjournement
 none
 
 # Secretary
-Samy Belmihoub
+John Kasper
 
 # Scrum Master
-Youssef Youssef
+William White
 
 
 
