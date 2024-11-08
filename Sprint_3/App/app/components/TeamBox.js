@@ -9,9 +9,10 @@ export default function TeamBox({ instructor, student }) {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  let studentx = false;
   useEffect(() => {
     const fetchTeams = async () => {
+      
       try {
         // Construct the URL based on instructor or student prop
         let url = '/api/teams/teamsInfo';
@@ -19,6 +20,7 @@ export default function TeamBox({ instructor, student }) {
           url += `?instructor=${instructor}`;
         } else if (student) {
           url += `?student=${student}`;
+          studentx = true;
         }
 
         const response = await fetch(url, {
@@ -77,6 +79,11 @@ export default function TeamBox({ instructor, student }) {
           <Team key={index} team={team} instructor={team.instructor} role={student? "student" : "else"} />
         ))}
       </div>
+      {studentx === true && (
+              <h1 className="text-4xl font-bold text-center mb-10 text-gray-900">
+                Polls
+            </h1>
+            )}
     </div>
   );
 }

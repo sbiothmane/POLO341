@@ -54,6 +54,15 @@ export default function UserProfile() {
                   </Link>
                 </div>
               )}
+              {role === "instructor" && (
+                <div className="mt-6 md:mt-0">
+                  <Link href="/create_poll">
+                    <div className="inline-block bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out">
+                      Create Polls
+                    </div>
+                  </Link>
+                </div>
+              )}
 
               {/* Right: Create Team Button */}
               {role === "instructor" && (
@@ -89,6 +98,7 @@ export default function UserProfile() {
                 <TeamBox student={username} />
               </div>
             )}
+           
 
             
           </div>
