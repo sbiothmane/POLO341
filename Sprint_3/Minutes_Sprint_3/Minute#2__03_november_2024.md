@@ -65,7 +65,7 @@
 none
 
 # Secretary
-John Kasper
+John Kaspar
 
 # Scrum Master
 William White
