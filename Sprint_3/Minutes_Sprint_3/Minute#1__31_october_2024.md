@@ -73,10 +73,10 @@ Standardize format for user stories, tasks, and acceptance tests.
 none
 
 # Secretary
-JOHN KASPER
+John Kaspar
 
 # Scrum Master
-WILLIAM WHITE
+William White
 
 
 
