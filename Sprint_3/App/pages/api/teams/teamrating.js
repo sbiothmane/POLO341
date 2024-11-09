@@ -65,6 +65,7 @@ export async function getTeamRatings(teamName) {
 
                 return {
                     id: ratingDoc.id,
+                    evaluator: evaluatorName,
                     studentId: ratedStudentId, // Student ID to display in the table
                     ratedStudent: ratedStudentName,
                     ratings: {
