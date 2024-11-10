@@ -1,3 +1,5 @@
+"use client";
+import React from "react";
 import { FaChalkboardTeacher, FaUser } from 'react-icons/fa';
 import { useState } from 'react';
 import Link from 'next/link';
