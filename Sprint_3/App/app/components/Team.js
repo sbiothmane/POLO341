@@ -1,7 +1,6 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import { FaUsers, FaUser, FaPoll, FaClock, FaChalkboardTeacher } from 'react-icons/fa';
-import { useState } from 'react';
 import Link from 'next/link';
 
 export default function Team({ team, instructor, role }) {
@@ -55,14 +54,24 @@ export default function Team({ team, instructor, role }) {
               : 'whitespace-nowrap overflow-hidden text-ellipsis'
           }`}
         >
-          {team?.students?.map((student) => (
-            <Link href={`/evaluate/${team.name}/${student}`} key={student}>
-              <div className="inline-flex items-center mr-3 mb-2 cursor-pointer hover:text-blue-500 hover:bg-blue-50 rounded-md p-1 transition-colors duration-200">
-                <FaUser className="text-gray-500 mr-1" />
+          {team?.students?.map((student) =>
+            role === 'student' ? (
+              <Link href={`/evaluate/${team.name}/${student}`} key={student}>
+                <div className="inline-flex items-center mr-3 mb-2 cursor-pointer hover:text-blue-500 hover:bg-blue-50 rounded-md p-1 transition-colors duration-200">
+                  <FaUser className="text-gray-500 mr-1" />
+                  <span className="text-sm">{student}</span>
+                </div>
+              </Link>
+            ) : (
+              <div
+                key={student}
+                className="inline-flex items-center mr-3 mb-2 rounded-md p-1 text-gray-500 opacity-50 cursor-default"
+              >
+                <FaUser className="mr-1" />
                 <span className="text-sm">{student}</span>
               </div>
-            </Link>
-          ))}
+            )
+          )}
         </div>
         {!isHovered && (
           <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent"></div>
