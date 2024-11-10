@@ -13,10 +13,12 @@ export default function Team({ team, instructor, role }) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex items-center justify-between mb-4">
+      <Link href={`/team/${team.name}`}>
         <h1 className="text-xl font-bold text-gray-800 flex items-center">
           <FaUsers className="mr-2 text-blue-500" />
           {team.name}
         </h1>
+        </Link>
         <div className="text-right flex flex-col items-end">
           <span className="text-sm font-semibold text-gray-700 flex items-center mb-2">
             <FaChalkboardTeacher className="mr-1 text-blue-500" />
