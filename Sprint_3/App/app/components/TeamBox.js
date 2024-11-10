@@ -3,22 +3,28 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import Team from './Team';
 import Loading from './Loading';
+import Poll from './Poll';
 
 export default function TeamBox({ instructor, student }) {
   const { data: session } = useSession();
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [studentx, setStudentx] = useState(false);
+  
 
   useEffect(() => {
     const fetchTeams = async () => {
+      
       try {
         // Construct the URL based on instructor or student prop
         let url = '/api/teams/teamsInfo';
         if (instructor) {
           url += `?instructor=${instructor}`;
+          setStudentx(false);
         } else if (student) {
           url += `?student=${student}`;
+          setStudentx(true);
         }
 
         const response = await fetch(url, {
@@ -29,6 +35,8 @@ export default function TeamBox({ instructor, student }) {
         if (!response.ok) throw new Error('Failed to fetch team data');
 
         const data = await response.json();
+        console.log(data);
+        console.log("dataù");
         setTeams(data); // Set the teams data, empty array if no teams found
         setLoading(false);
       } catch (err) {
@@ -75,8 +83,9 @@ export default function TeamBox({ instructor, student }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {teams.map((team, index) => (
           <Team key={index} team={team} instructor={team.instructor} role={student? "student" : "else"} />
+          
         ))}
-      </div>
+      </div> 
     </div>
   );
 }
