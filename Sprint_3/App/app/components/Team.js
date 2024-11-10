@@ -18,13 +18,17 @@ export default function Team({ team, instructor, role }) {
           <FaChalkboardTeacher className="mr-2 text-blue-500" />
           {team.name}
         </h1>
-        {role === 'student' ? (
+        {role === 'student' ? (<div>
           <Link href={`/polls/${instructor}`} key={instructor}>
             <span className="bg-blue-100 text-blue-600 text-sm font-semibold px-3 py-1 rounded-lg cursor-pointer">
               Instructor: {instructor}
             </span>
-          </Link>
-        ) : (
+          </Link> <br></br>
+          <Link href={`/OfficeHours/${instructor}`} key={instructor}>
+          <span className="bg-blue-100 text-blue-600 text-sm font-semibold px-3 py-1 rounded-lg cursor-pointer">
+            OfficeHours
+          </span>
+          </Link></div>) : (
             <span className="bg-blue-100 text-blue-600 text-sm font-semibold px-3 py-1 rounded-lg cursor-pointer">
               Instructor: {instructor}
             </span>
