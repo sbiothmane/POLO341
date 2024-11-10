@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/d5cd5bf5-f1e6-423b-a8e3-baff58143b05)# Meeting 3
+# Meeting 3
 # Heading
 
 - POLO
