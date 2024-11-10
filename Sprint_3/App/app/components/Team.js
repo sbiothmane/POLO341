@@ -1,6 +1,4 @@
-// components/Team.jsx
-
-import { FaChalkboardTeacher, FaUser } from 'react-icons/fa';
+import { FaUsers, FaUser, FaPoll, FaClock, FaChalkboardTeacher } from 'react-icons/fa';
 import { useState } from 'react';
 import Link from 'next/link';
 
@@ -15,25 +13,31 @@ export default function Team({ team, instructor, role }) {
     >
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-xl font-bold text-gray-800 flex items-center">
-          <FaChalkboardTeacher className="mr-2 text-blue-500" />
+          <FaUsers className="mr-2 text-blue-500" />
           {team.name}
         </h1>
-        {role === 'student' ? (<div>
-          <Link href={`/polls/${instructor}`} key={instructor}>
-            <span className="bg-blue-100 text-blue-600 text-sm font-semibold px-3 py-1 rounded-lg cursor-pointer">
-              Instructor: {instructor}
-            </span>
-          </Link> <br></br>
-          <Link href={`/OfficeHours/${instructor}`} key={instructor}>
-          <span className="bg-blue-100 text-blue-600 text-sm font-semibold px-3 py-1 rounded-lg cursor-pointer">
-            OfficeHours
+        <div className="text-right flex flex-col items-end">
+          <span className="text-sm font-semibold text-gray-700 flex items-center mb-2">
+            <FaChalkboardTeacher className="mr-1 text-blue-500" />
+            <span className="ml-1 text-gray-800 font-bold">{instructor}</span>
           </span>
-          </Link></div>) : (
-            <span className="bg-blue-100 text-blue-600 text-sm font-semibold px-3 py-1 rounded-lg cursor-pointer">
-              Instructor: {instructor}
-            </span>
-          
-        )}
+          {role === 'student' && (
+            <div className="flex space-x-2 mt-1">
+              <Link href={`/polls/${instructor}`} key={instructor}>
+                <span className="flex items-center bg-blue-200 text-blue-700 text-sm font-semibold px-3 py-1 rounded-full cursor-pointer hover:bg-blue-300 transition">
+                  <FaPoll className="mr-1" />
+                  Polls
+                </span>
+              </Link>
+              <Link href={`/OfficeHours/${instructor}`} key={`${instructor}-office`}>
+                <span className="flex items-center bg-blue-200 text-blue-700 text-sm font-semibold px-3 py-1 rounded-full cursor-pointer hover:bg-blue-300 transition">
+                  <FaClock className="mr-1" />
+                  Office Hours
+                </span>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Students list */}
@@ -49,31 +53,14 @@ export default function Team({ team, instructor, role }) {
               : 'whitespace-nowrap overflow-hidden text-ellipsis'
           }`}
         >
-          {team?.students?.map((student) =>
-            role === 'student' ? (
-              <Link
-                href={`/evaluate/${team.name}/${student}`}
-                key={student}
-              >
-                <div
-                  className={`inline-flex items-center mr-3 mb-2 cursor-pointer hover:text-blue-500 hover:bg-blue-50 rounded-md p-1 transition-colors duration-200`}
-                >
-                  <FaUser className="text-gray-500 mr-1" />
-                  <span className="text-sm">{student}</span>
-                </div>
-              </Link>
-            ) : (
-              <div
-                className={`inline-flex items-center mr-3 mb-2 rounded-md p-1 transition-colors duration-200 ${
-                  isHovered ? 'hover:bg-gray-100' : ''
-                }`}
-                key={student}
-              >
+          {team?.students?.map((student) => (
+            <Link href={`/evaluate/${team.name}/${student}`} key={student}>
+              <div className="inline-flex items-center mr-3 mb-2 cursor-pointer hover:text-blue-500 hover:bg-blue-50 rounded-md p-1 transition-colors duration-200">
                 <FaUser className="text-gray-500 mr-1" />
                 <span className="text-sm">{student}</span>
               </div>
-            )
-          )}
+            </Link>
+          ))}
         </div>
         {!isHovered && (
           <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent"></div>
