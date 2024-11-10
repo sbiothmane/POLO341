@@ -31,13 +31,11 @@ export async function getTeamRatings(teamName) {
                 const data = ratingDoc.data();
 
                 // Resolve evaluator reference to get the evaluator's name
-                const evaluatorRef = data.evaluator;
-                const evaluatorSnapshot = await getDoc(evaluatorRef);
+                const evaluatorSnapshot = await getDoc(data.evaluator);
                 const evaluatorName = evaluatorSnapshot.exists() ? evaluatorSnapshot.data().username : 'Unknown';
 
                 // Resolve ratedStudent reference to get the student's details
-                const ratedStudentRef = data.ratedStudent;
-                const ratedStudentSnapshot = await getDoc(ratedStudentRef);
+                const ratedStudentSnapshot = await getDoc(data.ratedStudent);
                 let ratedStudentId = 'Unknown';
                 let ratedStudentName = 'Unknown';
 
@@ -47,26 +45,23 @@ export async function getTeamRatings(teamName) {
                     ratedStudentName = studentData.username; // Get the username
                 }
 
-                // Step 4: Format comments as an array
+                // Split ratedStudentName into first and last names
+                const { firstName, lastName } = splitName(ratedStudentName);
+
+                // Format comments
                 const comments = [
-                    {
-                        type: 'Conceptual Contribution',
-                        comment: data.comments?.conceptualContribution || 'No comment provided',
-                    },
-                    {
-                        type: 'Practical Contribution',
-                        comment: data.comments?.practicalContribution || 'No comment provided',
-                    },
-                    {
-                        type: 'Work Ethic',
-                        comment: data.comments?.workEthic || 'No comment provided',
-                    },
+                    { type: 'Cooperation', comment: data.comments?.cooperation || 'No comment provided' },
+                    { type: 'Conceptual Contribution', comment: data.comments?.conceptualContribution || 'No comment provided' },
+                    { type: 'Practical Contribution', comment: data.comments?.practicalContribution || 'No comment provided' },
+                    { type: 'Work Ethic', comment: data.comments?.workEthic || 'No comment provided' },
                 ];
 
                 return {
                     id: ratingDoc.id,
-                    studentId: ratedStudentId, // Student ID to display in the table
-                    ratedStudent: ratedStudentName,
+                    evaluator: evaluatorName,
+                    studentId: ratedStudentId,
+                    lastName: lastName,
+                    firstName: firstName,
                     ratings: {
                         cooperation: data.ratings.cooperation || 0,
                         conceptual: data.ratings.conceptualContribution || 0,
@@ -86,3 +81,28 @@ export async function getTeamRatings(teamName) {
         return [];
     }
 }
+
+// Helper function to split full name into first and last names
+const splitName = (ratedStudentName) => {
+    let firstName = 'Unknown';
+    let lastName = 'Unknown';
+
+    if (ratedStudentName) {
+        const nameParts = ratedStudentName.split(' ');
+        if (nameParts.length > 1) {
+            firstName = nameParts[0];
+            lastName = nameParts.slice(1).join(' ');
+        } else {
+            const match = ratedStudentName.match(/([A-Z][a-z]+)([A-Z][a-z]+)/);
+            if (match) {
+                firstName = match[1];
+                lastName = match[2];
+            } else {
+                firstName = ratedStudentName;
+            }
+        }
+    }
+
+    return { firstName, lastName };
+};
+
