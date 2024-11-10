@@ -62,7 +62,7 @@ _ Finalizing sprint 3 features (data table and polls feature)
   
 # Next meeting (if scheduled)
 
- November 14th, 2024,  (16:15 - 17:55), 
+ November 14th, 2024,  (16:15 - 17:55)
 
 # Adjournement
 none
