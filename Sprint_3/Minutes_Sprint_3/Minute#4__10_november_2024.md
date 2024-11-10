@@ -1,9 +1,9 @@
-# Meeting 3
+![image](https://github.com/user-attachments/assets/d5cd5bf5-f1e6-423b-a8e3-baff58143b05)# Meeting 3
 # Heading
 
 - POLO
 - In person
-- November 7th, 2024,  (16:15 - 17:55),  during lab, at Concordia Hall building (SJ-X LAB ROOM AT 843)
+- November 10th, 2024,  (15:00 - 16:00),  on discord
   
 # Attendees
 
@@ -23,7 +23,7 @@
 
 
 - Sprint 3 Coding
-- Who made the call: Alvin
+- Who made the call: John
   
 # Approval of Previous Minutes
 
@@ -31,18 +31,17 @@
   
 # Agenda Items
 
-_ Dicussing on a new feature to be implemented within sprint 3
-- Created a new user story for the new feature
-- Create the necessary acceptance test for the new feature
-- Deciding on how to finish sprint 3 implementation
+_ Finalizing sprint 3 features (data table and polls feature)
+- Checking overall work to complete and finishing acceptance tests
+- Writing all remaining work logs for team members
 
 
 
 # Discussion about agenda items
 
-- Approving new implemented feature (original) within sprint 3
-- Formatted the new user story structure (description, AT, tasks...)
-- Task breakdown and quick planning included within the sprint planning for the new feature
+- Approving all sprint 3 features
+- Complete all acceptance tests for newly implemented features
+- Final code revision and team approval of work done
   
 
   
@@ -52,18 +51,18 @@ _ Dicussing on a new feature to be implemented within sprint 3
   
 # Reports
 
-- User stories for sprint 3 were created (complete)
-- Tasks and issues created (complete)
-- Acceptance tests defined (complete)
+- Sprint 3 main feature (complete)
+- Polls feature (complete)
+- Final acceptance tests and work logs (progress)
   
 # Open Forum or General discussion
 
-- How to implement the new feature which is the office hours for the instructors. It was decided that the there will be two interfaces, one for the student and the other for the instructor.
-- How to properly seperate the tasks and how to properly write user stories. Helping other teammates with their parts
+- The 2 features in sprint 3 were completed and now it is time to check if everything works as intended and all sprint closure steps have been carried.
+- Some work logs and acceptance tests were not given enough time to be completed and were completed shortly after this meeting.
   
 # Next meeting (if scheduled)
 
- November 10th, 2024,  (15:00 - 16:00), on discord
+ November 14th, 2024,  (16:15 - 17:55), 
 
 # Adjournement
 none
