@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation'; 
+import { useParams, useRouter } from 'next/navigation';
 import { FaUsers } from 'react-icons/fa';
 import NavBar from '../../components/NavBar';
 
@@ -94,7 +94,7 @@ const TeamPage = () => {
                         <FaUsers className="text-blue-400 mr-4" size={28} />
                         <h1 className="text-3xl font-bold text-gray-800">Team Rating Summary: {teamName}</h1>
                     </div>
-                    
+
                     <div className="overflow-x-auto">
                         <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
                             <thead className="bg-blue-500 text-white">
@@ -140,7 +140,12 @@ const TeamPage = () => {
                             </tbody>
                         </table>
                     </div>
+                    {/* Instruct to click student for detailed view */}
+                    <div className="bg-white shadow rounded-lg p-6">
+                        <p className="text-gray-600 text-center">Click a Student to see their Detailed Ratings!</p>
+                    </div>
                 </div>
+
             </main>
         </div>
     );
