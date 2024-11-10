@@ -1,176 +1,149 @@
-'use client';
+// app/create_poll/page.js
+"use client";
+
 import { useSession } from 'next-auth/react';
-import React, { useState, useEffect } from 'react';
-import { db } from '../../lib/firebase';
-import { collection, doc, getDoc, setDoc, deleteDoc, getDocs } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-const PollForm = () => {
+export default function CreatePollPage() {
   const { data: session, status } = useSession();
-  const [questionText, setQuestionText] = useState('');
-  const [answers, setAnswers] = useState(['', '', '', '']);
-  const [pollExists, setPollExists] = useState(false);
-  const [pollStats, setPollStats] = useState(null);
+  const router = useRouter();
 
-  const username = session?.user?.username;
+  const [question, setQuestion] = useState('');
+  const [choices, setChoices] = useState(['', '']);
+  const [loading, setLoading] = useState(false);
+  const [hasActivePoll, setHasActivePoll] = useState(false);
 
   useEffect(() => {
-    if (!username) return;
-  
-    const fetchPollData = async () => {
-      try {
-        const pollRef = doc(db, 'polls', username, 'question', 'questionData');
-        const pollDoc = await getDoc(pollRef);
-  
-        if (pollDoc.exists()) {
-          setPollExists(true);
-          setPollStats(pollDoc.data());
-        } else {
-          setPollExists(false);
-          setPollStats(null);
-        }
-      } catch (error) {
-        console.error('Error fetching poll:', error);
-      }
-    };
-  
-    fetchPollData();
-  }, [username]);
+    if (status === 'authenticated' && session.user.role === 'instructor') {
+      checkActivePoll();
+    } else if (status === 'authenticated') {
+      // Redirect if not an instructor
+      router.push('/unauthorized');
+    }
+  }, [status, session, router]);
 
-  const handleAnswerChange = (index, value) => {
-    const updatedAnswers = [...answers];
-    updatedAnswers[index] = value;
-    setAnswers(updatedAnswers);
+  const checkActivePoll = async () => {
+    try {
+      const response = await fetch(`/api/polls/check?instructor=${session.user.username}`);
+      const data = await response.json();
+
+      if (data.activePoll) {
+        setHasActivePoll(true);
+        router.push(`/polls/${session.user.username}`); // Redirect to the poll results page if there's an active poll
+      }
+    } catch (error) {
+      console.error('Error checking active poll:', error);
+    }
+  };
+
+  const handleChoiceChange = (index, value) => {
+    const newChoices = [...choices];
+    newChoices[index] = value;
+    setChoices(newChoices);
+  };
+
+  const addChoice = () => {
+    setChoices([...choices, '']);
+  };
+
+  const removeChoice = (index) => {
+    const newChoices = choices.filter((_, i) => i !== index);
+    setChoices(newChoices);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!questionText.trim() || answers.some((a) => !a.trim())) {
-      alert('Please fill in all fields');
-      return;
-    }
+    setLoading(true);
+
+    const pollData = {
+      question,
+      choices: choices.filter((choice) => choice.trim() !== ''),
+      instructor: session.user.username,
+    };
 
     try {
-      const pollRef = doc(db, 'polls', username, 'question', 'questionData');
-      await setDoc(pollRef, {
-        questionText,
-        answers: answers.map((answer) => ({
-          answerText: answer,
-          studentAnswers: [],
-        })),
+      const response = await fetch('/api/polls', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pollData),
       });
 
-      alert('Poll created successfully!');
-      setPollExists(true);
+      if (!response.ok) {
+        throw new Error('Failed to create poll');
+      }
+
+      router.push(`/polls/${session.user.username}`);
     } catch (error) {
       console.error('Error creating poll:', error);
-      alert('Error creating poll. Try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const calculateStats = () => {
-    if (!pollStats || !Array.isArray(pollStats.answers)) return [];
-  
-    const totalResponses = pollStats.answers.reduce(
-      (sum, ans) => sum + (Array.isArray(ans.studentAnswers) ? ans.studentAnswers.length : 0),
-      0
-    );
-  
-    return pollStats.answers.map((answer) => {
-      const responseCount = Array.isArray(answer.studentAnswers) ? answer.studentAnswers.length : 0;
-      const percentage = totalResponses ? ((responseCount / totalResponses) * 100).toFixed(2) : 0;
-      return { answerText: answer.answerText, percentage: `${percentage}%` };
-    });
-  };
-
-  const handleDeletePoll = async () => {
-    if (!window.confirm('Are you sure you want to delete this poll?')) return;
-
-    try {
-      const pollRef = doc(db, 'polls', username, 'question', 'questionData');
-      await deleteDoc(pollRef);
-
-      const parentPollRef = doc(db, 'polls', username);
-      await deleteDoc(parentPollRef);
-
-      alert('Poll deleted successfully!');
-      setPollExists(false);
-      setPollStats(null);
-    } catch (error) {
-      console.error('Error deleting poll:', error);
-      alert('Failed to delete the poll. Try again later.');
-    }
-  };
+  if (status === 'loading') {
+    return <p>Loading...</p>;
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          {pollExists ? 'Poll Stats' : 'Create a Question'}
-        </h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900">
+      <div className="max-w-lg w-full p-8 bg-white rounded-lg shadow-lg">
+        <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-8">Create a Poll</h1>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex flex-col">
+            <label className="text-lg font-semibold text-gray-700 mb-2">Question</label>
+            <input
+              type="text"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              required
+              placeholder="Enter your poll question here..."
+              className="p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 transition-all text-black"
+            />
+          </div>
 
-        {pollExists && pollStats ? (
-          <>
-          <p className="text-xl text-black font-semibold mb-4">{pollStats.questionText}</p>
-          <ul className="mb-6">
-            {calculateStats().map((stat, index) => (
-              <li key={index} className="flex justify-between text-black  items-center mb-2">
-                <span>{stat.answerText}</span>
-                <span>{stat.percentage}</span>
-              </li>
+          <div className="flex flex-col space-y-2">
+            <label className="text-lg font-semibold text-gray-700">Choices</label>
+            {choices.map((choice, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={choice}
+                  onChange={(e) => handleChoiceChange(index, e.target.value)}
+                  required
+                  placeholder={`Choice ${index + 1}`}
+                  className="flex-grow p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 transition-all text-black"
+                />
+                {choices.length > 2 && (
+                  <button
+                    type="button"
+                    onClick={() => removeChoice(index)}
+                    className="text-red-500 hover:text-red-700 transition-colors"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
             ))}
-          </ul>
-          <button
-            onClick={handleDeletePoll}
-            className="w-full py-2 px-4 bg-red-600 text-black rounded-md hover:bg-red-700 transition duration-200"
-          >
-            Delete Poll
-          </button>
-        </>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label htmlFor="question" className="block text-gray-700 font-medium">
-                Question Text
-              </label>
-              <input
-                type="text"
-                id="question"
-                value={questionText}
-                onChange={(e) => setQuestionText(e.target.value)}
-                className="w-full p-3 text-black mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            <div className="mb-6">
-              {answers.map((answer, index) => (
-                <div key={index} className="mb-3">
-                  <label htmlFor={`answer${index}`} className="block text-gray-700 font-medium">
-                    Answer Option {index + 1}
-                  </label>
-                  <input
-                    type="text"
-                    id={`answer${index}`}
-                    value={answer}
-                    onChange={(e) => handleAnswerChange(index, e.target.value)}
-                    className="w-full p-3 text-black mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-              ))}
-            </div>
-
             <button
-              type="submit"
-              className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
+              type="button"
+              onClick={addChoice}
+              className="text-blue-500 hover:text-blue-700 underline transition-colors"
             >
-              Create Poll
+              + Add Another Choice
             </button>
-          </form>
-        )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+          >
+            {loading ? 'Creating...' : 'Create Poll'}
+          </button>
+        </form>
       </div>
     </div>
   );
-};
-
-export default PollForm;
+}

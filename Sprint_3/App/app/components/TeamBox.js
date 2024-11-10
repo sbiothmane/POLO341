@@ -85,17 +85,7 @@ export default function TeamBox({ instructor, student }) {
           <Team key={index} team={team} instructor={team.instructor} role={student? "student" : "else"} />
           
         ))}
-      </div> <br></br>
-      {studentx  && (
-              <h1 className="text-4xl font-bold text-center mb-10 text-gray-900">
-                Polls 
-                {teams.map((team, index) => (
-         <Poll instructorUsername={team.instructor} />
-          
-        ))}
-                
-            </h1>
-            )}
+      </div> 
     </div>
   );
 }
