@@ -33,7 +33,7 @@
 
 _ Dicussing on a new feature to be implemented within sprint 3
 - Created a new user story for the new feature
-- Create the necessary acceptace test for the new feature
+- Create the necessary acceptance test for the new feature
 - Deciding on how to finish sprint 3 implementation
 
 
