@@ -63,7 +63,7 @@ _ Dicussing on a new feature to be implemented within sprint 3
   
 # Next meeting (if scheduled)
 
- November 10th, 2024,  (15: - 16:00), on discord
+ November 10th, 2024,  (15:00 - 16:00), on discord
 
 # Adjournement
 none
