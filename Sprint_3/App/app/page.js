@@ -1,14 +1,25 @@
 'use client'
 
-import { useState, useEffect, useRef, Suspense, useMemo } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import {
   motion,
   useScroll,
+  useTransform,
   useSpring,
   useInView,
+  useMotionValue,
+  useVelocity,
+  useAnimationFrame,
 } from 'framer-motion'
-import { Canvas, useFrame, extend, useThree } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import {
+  Sphere,
+  MeshDistortMaterial,
+  Text,
+  Float,
+  Stars,
+} from '@react-three/drei'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -18,11 +29,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { ArrowRight, CheckCircle, Users, BarChart, Lock } from 'lucide-react'
-import * as THREE from 'three'
-import { EffectComposer, Bloom, ChromaticAberration } from '@react-three/postprocessing'
-import { GlitchPass } from 'three-stdlib'
-
-extend({ GlitchPass })
 
 const features = [
   {
@@ -95,111 +101,85 @@ const teamMembers = [
   },
 ]
 
-// Custom Shader Material for Particles
-const vertexShader = `
-  uniform float uTime;
-  attribute float size;
-  varying vec3 vColor;
-  void main() {
-    vColor = color;
-    vec3 pos = position;
-    pos.x += sin(pos.y * 5.0 + uTime * 0.5) * 0.5;
-    pos.y += cos(pos.x * 5.0 + uTime * 0.5) * 0.5;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-    gl_PointSize = size;
-  }
-`
+const AnimatedSphere = () => {
+  const meshRef = useRef()
+  const [hovered, setHovered] = useState(false)
 
-const fragmentShader = `
-  varying vec3 vColor;
-  void main() {
-    float distanceToCenter = length(gl_PointCoord - vec2(0.5));
-    if (distanceToCenter > 0.5) discard;
-    gl_FragColor = vec4(vColor, 1.0);
-  }
-`
-
-const AnimatedParticles = () => {
-  const pointsRef = useRef()
-  const { viewport } = useThree()
-  const aspect = viewport.width / viewport.height
-
-  const [positions, colors, sizes] = useMemo(() => {
-    const positions = []
-    const colors = []
-    const sizes = []
-    const numParticles = 10000
-
-    const colorPalette = [0x69b7ff, 0xff6ac1, 0x9dff6a]
-
-    for (let i = 0; i < numParticles; i++) {
-      const x = (Math.random() - 0.5) * 20 * aspect
-      const y = (Math.random() - 0.5) * 20
-      const z = (Math.random() - 0.5) * 20
-      positions.push(x, y, z)
-
-      const color = new THREE.Color(colorPalette[Math.floor(Math.random() * colorPalette.length)])
-      colors.push(color.r, color.g, color.b)
-
-      sizes.push(Math.random() * 5 + 1)
-    }
-
-    return [new Float32Array(positions), new Float32Array(colors), new Float32Array(sizes)]
-  }, [aspect])
-
-  useFrame(({ clock }) => {
-    if (pointsRef.current) {
-      pointsRef.current.material.uniforms.uTime.value = clock.elapsedTime
-    }
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime()
+    meshRef.current.rotation.x = Math.cos(t / 4) / 2
+    meshRef.current.rotation.y = Math.sin(t / 4) / 2
+    meshRef.current.rotation.z = Math.sin(t / 1.5) / 2
+    meshRef.current.position.x = Math.sin(t / 1) / 2
+    meshRef.current.position.y = Math.cos(t / 1) / 2
+    meshRef.current.scale.set(
+      1 + Math.sin(t) * 0.2,
+      1 + Math.sin(t) * 0.2,
+      1 + Math.sin(t) * 0.2
+    )
   })
 
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attachObject={['attributes', 'position']}
-          count={positions.length / 3}
-          array={positions}
-          itemSize={3}
+    <Float speed={4} rotationIntensity={1} floatIntensity={2}>
+      <Sphere
+        ref={meshRef}
+        args={[1, 100, 200]}
+        scale={2}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+      >
+        <MeshDistortMaterial
+          color={hovered ? '#FF6B6B' : '#4834d4'}
+          attach="material"
+          distort={0.5}
+          speed={5}
+          roughness={0}
         />
-        <bufferAttribute
-          attachObject={['attributes', 'color']}
-          count={colors.length / 3}
-          array={colors}
-          itemSize={3}
-        />
-        <bufferAttribute
-          attachObject={['attributes', 'size']}
-          count={sizes.length}
-          array={sizes}
-          itemSize={1}
-        />
-      </bufferGeometry>
-      <shaderMaterial
-        vertexShader={vertexShader}
-        fragmentShader={fragmentShader}
-        uniforms={{ uTime: { value: 0 } }}
-        vertexColors
-        transparent
-      />
-    </points>
+      </Sphere>
+    </Float>
+  )
+}
+
+const AnimatedText = ({ text }) => {
+  const { viewport } = useThree()
+
+  return (
+    <Text
+      color="#ffffff"
+      fontSize={viewport.width / 20}
+      maxWidth={viewport.width / 2}
+      lineHeight={1}
+      letterSpacing={0.02}
+      textAlign="center"
+      anchorX="center"
+      anchorY="middle"
+    >
+      {text}
+    </Text>
   )
 }
 
 const AnimatedBackground = () => {
   return (
     <div className="fixed inset-0 z-0">
-      <Canvas camera={{ position: [0, 0, 10] }}>
+      <Canvas camera={{ position: [0, 0, 5] }}>
         <ambientLight intensity={0.5} />
-        <Suspense fallback={null}>
-          <AnimatedParticles />
-          <EffectComposer>
-            <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
-            <ChromaticAberration offset={[0.001, 0.001]} />
-          </EffectComposer>
-        </Suspense>
+        <pointLight position={[10, 10, 10]} intensity={0.8} />
+        <AnimatedSphere />
+        <Stars
+          radius={100}
+          depth={50}
+          count={5000}
+          factor={4}
+          saturation={0}
+          fade
+          speed={1}
+        />
+        <Float speed={1} rotationIntensity={1} floatIntensity={1}>
+          <AnimatedText text="PeerAssess" />
+        </Float>
       </Canvas>
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-gray-800/80 to-gray-900/80" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 via-purple-500/30 to-pink-500/30" />
     </div>
   )
 }
@@ -207,23 +187,101 @@ const AnimatedBackground = () => {
 const AnimatedCard = ({ children }) => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
 
-  const variants = {
-    hidden: { opacity: 0, y: 50, rotateY: -10 },
-    visible: { opacity: 1, y: 0, rotateY: 0 },
+  const mouseXSpring = useSpring(x)
+  const mouseYSpring = useSpring(y)
+
+  const rotateX = useTransform(
+    mouseYSpring,
+    [-0.5, 0.5],
+    ['17.5deg', '-17.5deg']
+  )
+  const rotateY = useTransform(
+    mouseXSpring,
+    [-0.5, 0.5],
+    ['-17.5deg', '17.5deg']
+  )
+
+  const handleMouseMove = (e) => {
+    const rect = ref.current.getBoundingClientRect()
+    const width = rect.width
+    const height = rect.height
+    const mouseX = e.clientX - rect.left
+    const mouseY = e.clientY - rect.top
+    const xPct = mouseX / width - 0.5
+    const yPct = mouseY / height - 0.5
+    x.set(xPct)
+    y.set(yPct)
+  }
+
+  const handleMouseLeave = () => {
+    x.set(0)
+    y.set(0)
   }
 
   return (
     <motion.div
       ref={ref}
-      variants={variants}
-      initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.5 }}
+      style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       {children}
     </motion.div>
   )
+}
+
+const ParallaxText = ({ children, baseVelocity = 100 }) => {
+  const baseX = useMotionValue(0)
+  const { scrollY } = useScroll()
+  const scrollVelocity = useVelocity(scrollY)
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: 50,
+    stiffness: 400,
+  })
+  const velocityFactor = useTransform(
+    smoothVelocity,
+    [0, 1000],
+    [0, 5],
+    {
+      clamp: false,
+    }
+  )
+
+  const x = useTransform(baseX, (v) => `${wrap(-20, -45, v)}%`)
+
+  const directionFactor = useRef(1)
+  useAnimationFrame((t, delta) => {
+    let moveBy = directionFactor.current * baseVelocity * (delta / 1000)
+    if (velocityFactor.get() < 0) {
+      directionFactor.current = -1
+    } else if (velocityFactor.get() > 0) {
+      directionFactor.current = 1
+    }
+    moveBy += directionFactor.current * moveBy * velocityFactor.get()
+    baseX.set(baseX.get() + moveBy)
+  })
+
+  return (
+    <div className="parallax">
+      <motion.div className="scroller" style={{ x }}>
+        <span>{children} </span>
+        <span>{children} </span>
+        <span>{children} </span>
+        <span>{children} </span>
+      </motion.div>
+    </div>
+  )
+}
+
+function wrap(min, max, v) {
+  const rangeSize = max - min
+  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min
 }
 
 export default function Home() {
@@ -243,20 +301,20 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="min-h-screen text-gray-200 overflow-hidden bg-gray-900">
+    <div className="min-h-screen text-gray-800 overflow-hidden bg-gradient-to-br from-blue-900 to-purple-900">
       <AnimatedBackground />
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-800/70 backdrop-blur-lg">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-lg">
         <div className="container mx-auto px-6 py-3 flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold text-white">
             PeerAssess
           </Link>
           <div className="space-x-4">
-            <Button variant="ghost" asChild className="text-gray-200 hover:text-white">
+            <Button variant="ghost" asChild className="text-white">
               <Link href="/login">Login</Link>
             </Button>
             <Button
               asChild
-              className="bg-gradient-to-r from-blue-500 to-pink-600 hover:from-blue-600 hover:to-pink-700 text-white shadow-lg rounded-full"
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg rounded-full"
             >
               <Link href="/signup">Sign Up</Link>
             </Button>
@@ -265,7 +323,7 @@ export default function Home() {
       </nav>
 
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-pink-600 z-50 origin-left"
+        className="fixed top-0 left-0 right-0 h-1 bg-blue-500 z-50 origin-left"
         style={{ scaleX }}
       />
 
@@ -274,9 +332,9 @@ export default function Home() {
         <section className="min-h-screen flex items-center justify-center relative">
           <div className="container mx-auto px-6 text-center relative z-10">
             <motion.h1
-              className="text-6xl md:text-8xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-pink-600 animate-gradient"
-              initial={{ opacity: 0, y: 20, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
+              className="text-6xl md:text-8xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-pink-300"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
               Peer Assessment System
@@ -291,14 +349,14 @@ export default function Home() {
               Evaluate, collaborate, and excel together.
             </motion.p>
             <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
               <Button
                 size="lg"
                 asChild
-                className="bg-gradient-to-r from-blue-500 to-pink-600 hover:from-blue-600 hover:to-pink-700 text-white shadow-lg rounded-full"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg rounded-full"
               >
                 <Link href="/signup">
                   Get Started <ArrowRight className="ml-2" />
@@ -308,8 +366,11 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Parallax Text */}
+        <ParallaxText baseVelocity={-5}>Peer Assessment System</ParallaxText>
+
         {/* Features Section */}
-        <section className="py-20 bg-gray-800/70 backdrop-blur-lg">
+        <section className="py-20 bg-white/10 backdrop-blur-lg">
           <div className="container mx-auto px-6">
             <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-white">
               Powerful Features
@@ -317,7 +378,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {features.map((feature, index) => (
                 <AnimatedCard key={index}>
-                  <Card className="bg-gray-800 border-none text-gray-200 hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                  <Card className="bg-gray-900/50 border-none text-white h-full">
                     <CardHeader>
                       <CardTitle className="flex items-center">
                         {feature.icon}
@@ -325,7 +386,7 @@ export default function Home() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <CardDescription className="text-gray-400">
+                      <CardDescription className="text-gray-300">
                         {feature.description}
                       </CardDescription>
                     </CardContent>
@@ -337,21 +398,8 @@ export default function Home() {
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-20 relative">
-          <div className="absolute inset-0">
-            <Canvas camera={{ position: [0, 0, 10] }}>
-              <ambientLight intensity={0.5} />
-              <Suspense fallback={null}>
-                <AnimatedParticles />
-                <EffectComposer>
-                  <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
-                  <ChromaticAberration offset={[0.001, 0.001]} />
-                </EffectComposer>
-              </Suspense>
-            </Canvas>
-            <div className="absolute inset-0 bg-gray-900/80" />
-          </div>
-          <div className="container mx-auto px-6 relative z-10">
+        <section className="py-20">
+          <div className="container mx-auto px-6">
             <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-white">
               What People Say
             </h2>
@@ -360,15 +408,11 @@ export default function Home() {
                 <motion.div
                   key={index}
                   className="absolute inset-0"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={
-                    index === activeTestimonial
-                      ? { opacity: 1, scale: 1 }
-                      : { opacity: 0, scale: 0.8 }
-                  }
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: index === activeTestimonial ? 1 : 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Card className="h-full flex flex-col justify-center items-center text-center bg-gray-800 border-none text-gray-200 hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                  <Card className="h-full flex flex-col justify-center items-center text-center bg-gray-900/50 border-none text-white">
                     <CardContent>
                       <p className="text-lg mb-4">"{testimonial.quote}"</p>
                       <p className="font-semibold">{testimonial.author}</p>
@@ -381,7 +425,7 @@ export default function Home() {
         </section>
 
         {/* Team Section */}
-        <section className="py-20 bg-gray-800/70 backdrop-blur-lg">
+        <section className="py-20 bg-white/10 backdrop-blur-lg">
           <div className="container mx-auto px-6">
             <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-white">
               Meet Our Team
@@ -389,10 +433,10 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {teamMembers.map((member, index) => (
                 <AnimatedCard key={index}>
-                  <Card className="bg-gray-800 border-none text-gray-200 hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                  <Card className="bg-gray-900/50 border-none text-white h-full">
                     <CardHeader>
                       <CardTitle>{member.name}</CardTitle>
-                      <CardDescription className="text-gray-400">
+                      <CardDescription className="text-gray-300">
                         {member.role}
                       </CardDescription>
                     </CardHeader>
@@ -407,21 +451,8 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 relative">
-          <div className="absolute inset-0">
-            <Canvas camera={{ position: [0, 0, 10] }}>
-              <ambientLight intensity={0.5} />
-              <Suspense fallback={null}>
-                <AnimatedParticles />
-                <EffectComposer>
-                  <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
-                  <ChromaticAberration offset={[0.001, 0.001]} />
-                </EffectComposer>
-              </Suspense>
-            </Canvas>
-            <div className="absolute inset-0 bg-gray-900/80" />
-          </div>
-          <div className="container mx-auto px-6 text-center relative z-10">
+        <section className="py-20">
+          <div className="container mx-auto px-6 text-center">
             <motion.h2
               className="text-4xl md:text-5xl font-bold mb-8 text-white"
               initial={{ opacity: 0, y: 20 }}
@@ -432,15 +463,15 @@ export default function Home() {
               Ready to Transform Team Assessments?
             </motion.h2>
             <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.8 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
             >
               <Button
                 size="lg"
                 asChild
-                className="bg-gradient-to-r from-blue-500 to-pink-600 hover:from-blue-600 hover:to-pink-700 text-white shadow-lg rounded-full"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg rounded-full"
               >
                 <Link href="/signup">
                   Get Started Now <ArrowRight className="ml-2" />
@@ -451,8 +482,8 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="bg-gray-800/70 backdrop-blur-lg py-8">
-        <div className="container mx-auto px-6 text-center text-gray-400">
+      <footer className="bg-white/10 backdrop-blur-lg py-8">
+        <div className="container mx-auto px-6 text-center text-white">
           <p>&copy; 2024 Peer Assessment System. All rights reserved.</p>
         </div>
       </footer>
