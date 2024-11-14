@@ -1,21 +1,31 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react' // Imported useSession
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Loader2 } from 'lucide-react' // Imported Loader2 for loading state
 
 export default function Login() {
+  const { data: session, status } = useSession() // Use useSession to get session data
+  const router = useRouter()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const router = useRouter()
+  const [loading, setLoading] = useState(false) // State for form submission loading
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      // If the user is authenticated, redirect to /dashboard
+      router.push('/dashboard')
+    }
+  }, [status, router])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true) // Start loading
 
     const res = await signIn('credentials', {
       redirect: false,
@@ -24,11 +34,21 @@ export default function Login() {
     })
 
     if (res.ok) {
-      // Redirect to dashboard or home page
+      // Redirect to dashboard if sign-in is successful
       router.push('/dashboard')
     } else {
       setError('Invalid credentials')
     }
+    setLoading(false) // Stop loading
+  }
+
+  // If the authentication status is loading, show a loader
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+      </div>
+    )
   }
 
   return (
@@ -40,15 +60,20 @@ export default function Login() {
             PeerAssess
           </Link>
           <div className="space-x-4">
-            <Button variant="ghost" asChild className="text-gray-800">
-              <Link href="/login">Login</Link>
-            </Button>
-            <Button
-              asChild
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg rounded-full"
-            >
-              <Link href="/signup">Sign Up</Link>
-            </Button>
+            {/* Show Login link only if not authenticated */}
+            {status !== 'authenticated' && (
+              <>
+                <Button variant="ghost" asChild className="text-gray-800">
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button
+                  asChild
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg rounded-full"
+                >
+                  <Link href="/signup">Sign Up</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -98,9 +123,15 @@ export default function Login() {
             </div>
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out"
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out flex items-center justify-center"
+              disabled={loading} // Disable button when loading
             >
-              Login <ArrowRight className="ml-2 inline-block" />
+              {loading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <ArrowRight className="ml-2 h-4 w-4" />
+              )}
+              {loading ? 'Logging in...' : 'Login'}
             </Button>
           </form>
           {error && <p className="mt-4 text-center text-red-600">{error}</p>}

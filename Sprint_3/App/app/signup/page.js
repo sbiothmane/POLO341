@@ -2,11 +2,15 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { signIn, signOut, useSession } from 'next-auth/react' // Imported useSession and signOut
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react'
 
 function Signup() {
+  const { data: session, status } = useSession() // Use useSession to get session data
+  const router = useRouter()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('student')
@@ -19,6 +23,13 @@ function Signup() {
   })
   const [checkingAvailability, setCheckingAvailability] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
+
+  // Redirect authenticated users to /dashboard
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/dashboard')
+    }
+  }, [status, router])
 
   // Debounced check for username and ID availability
   useEffect(() => {
@@ -54,6 +65,7 @@ function Signup() {
     } catch (error) {
       console.error('Error checking availability:', error)
     } finally {
+      // Optional: Remove the artificial delay if not needed
       setTimeout(() => {
         setCheckingAvailability(false)
       }, 1000)
@@ -97,15 +109,15 @@ function Signup() {
         const result = await response.json()
         setMessage(result.message)
 
-        setUsername('')
-        setPassword('')
-        setRole('student')
-        setId('')
-        setName('')
-        setAvailability({
-          usernameAvailable: null,
-          idAvailable: null,
+        // Optionally, automatically log in the user after signup
+        await signIn('credentials', {
+          redirect: false,
+          username,
+          password,
         })
+
+        // Redirect to dashboard after successful signup
+        router.push('/dashboard')
       } else {
         const error = await response.json()
         setMessage(error.message)
@@ -128,8 +140,17 @@ function Signup() {
     if (/^\d{0,8}$/.test(newId)) setId(newId)
   }
 
+  // If the authentication status is loading, show a loader
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+      </div>
+    )
+  }
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col min-h-screen">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-lg">
         <div className="container mx-auto px-6 py-3 flex justify-between items-center">
@@ -137,15 +158,20 @@ function Signup() {
             PeerAssess
           </Link>
           <div className="space-x-4">
-            <Button variant="ghost" asChild className="text-gray-800">
-              <Link href="/login">Login</Link>
-            </Button>
-            <Button
-              asChild
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg rounded-full"
-            >
-              <Link href="/signup">Sign Up</Link>
-            </Button>
+            {/* Show Login and Sign Up buttons only if not authenticated */}
+            {status !== 'authenticated' && (
+              <>
+                <Button variant="ghost" asChild className="text-gray-800">
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button
+                  asChild
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg rounded-full"
+                >
+                  <Link href="/signup">Sign Up</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -259,8 +285,8 @@ function Signup() {
               />
             </div>
 
-             {/* Role Selection */}
-             <div>
+            {/* Role Selection */}
+            <div>
               <label htmlFor="role" className="block text-sm font-medium text-gray-700">
                 Select Role
               </label>
@@ -283,7 +309,7 @@ function Signup() {
                 availability.idAvailable === false ||
                 checkingAvailability
               }
-              className={`w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out ${
+              className={`w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out flex items-center justify-center ${
                 availability.usernameAvailable === false ||
                 availability.idAvailable === false ||
                 checkingAvailability
@@ -291,6 +317,11 @@ function Signup() {
                   : ''
               }`}
             >
+              {checkingAvailability ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <CheckCircle className="ml-2 h-4 w-4" />
+              )}
               Sign Up
             </Button>
             {message && <p className="mt-4 text-center text-gray-600">{message}</p>}

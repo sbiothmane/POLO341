@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
-import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Sphere, MeshDistortMaterial } from '@react-three/drei'
 import { Button } from '@/components/ui/button'
@@ -22,10 +22,12 @@ import {
   Clock,
   PieChart,
   Loader2,
-  ArrowRight,
-  ChevronRight,
 } from 'lucide-react'
 
+import NavBar from '@/app/components/NavBar' // Import the NavBar component
+import Footer from '@/app/components//Footer' // Import the Footer component
+
+// AnimatedSphere Component
 const AnimatedSphere = () => {
   const meshRef = useRef()
 
@@ -52,6 +54,7 @@ const AnimatedSphere = () => {
   )
 }
 
+// AnimatedBackground Component
 const AnimatedBackground = () => {
   return (
     <div className="fixed inset-0 z-0">
@@ -65,73 +68,7 @@ const AnimatedBackground = () => {
   )
 }
 
-const NavBar = ({ role }) => {
-  const { scrollYProgress } = useScroll()
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  })
-
-  return (
-    <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-lg border-b border-gray-200/20">
-        <div className="container mx-auto px-6 py-3 flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-gray-800">
-            PeerAssess
-          </Link>
-          <div className="flex items-center space-x-4">
-            {/* Action Buttons with Icons, only for instructors */}
-            {role === 'instructor' && (
-              <div className="flex space-x-2">
-                <Link href="/create_time">
-                  <Button
-                    variant="outline"
-                    className="flex items-center bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white"
-                  >
-                    <Clock className="mr-2 h-4 w-4" />
-                    Office Hours
-                  </Button>
-                </Link>
-                <Link href="/create_poll">
-                  <Button
-                    variant="outline"
-                    className="flex items-center bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white"
-                  >
-                    <PieChart className="mr-2 h-4 w-4" />
-                    Polls
-                  </Button>
-                </Link>
-                <Link href="/create_teams">
-                  <Button
-                    variant="outline"
-                    className="flex items-center bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
-                  >
-                    <Users className="mr-2 h-4 w-4" />
-                    Team
-                  </Button>
-                </Link>
-              </div>
-            )}
-            <Button
-              variant="ghost"
-              className="text-gray-800 flex items-center"
-              onClick={() => signOut()}
-            >
-              <User className="mr-2 h-5 w-5 text-gray-800" />
-              Logout
-            </Button>
-          </div>
-        </div>
-      </nav>
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-blue-500 z-50 origin-left"
-        style={{ scaleX }}
-      />
-    </>
-  )
-}
-
+// TeamCard Component
 const TeamCard = ({ team, instructor, role }) => {
   const [isHovered, setIsHovered] = useState(false)
 
@@ -223,6 +160,7 @@ const TeamCard = ({ team, instructor, role }) => {
   )
 }
 
+// TeamBox Component
 const TeamBox = ({ instructor, student }) => {
   const [teams, setTeams] = useState([])
   const [loading, setLoading] = useState(true)
@@ -309,6 +247,7 @@ const TeamBox = ({ instructor, student }) => {
   )
 }
 
+// UserProfile Component
 export default function UserProfile() {
   const { data: session, status } = useSession()
 
@@ -322,7 +261,14 @@ export default function UserProfile() {
 
   if (status === 'unauthenticated') {
     return (
-      <p className="text-red-500 text-center mt-8">You are not signed in.</p>
+      <div className="flex flex-col min-h-screen">
+        <AnimatedBackground />
+        <NavBar role="guest" />
+        <main className="flex-grow flex items-center justify-center">
+          <p className="text-red-500 text-center mt-8">You are not signed in.</p>
+        </main>
+        <Footer />
+      </div>
     )
   }
 
@@ -330,10 +276,10 @@ export default function UserProfile() {
     const { id, name, role, username } = session.user
 
     return (
-      <div className="min-h-screen text-gray-800 overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="flex flex-col min-h-screen">
         <AnimatedBackground />
         <NavBar role={role} />
-        <main className="pt-24 relative z-10">
+        <main className="flex-grow pt-24 relative z-10">
           <section className="py-20">
             <div className="container mx-auto px-6 text-center">
               <motion.div
@@ -377,15 +323,19 @@ export default function UserProfile() {
             </div>
           </section>
         </main>
-
-        <footer className="bg-white/70 backdrop-blur-lg py-8">
-          <div className="container mx-auto px-6 text-center text-gray-800">
-            <p>&copy; 2024 Peer Assessment System. All rights reserved.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     )
   }
 
-  return <p className="text-red-500 text-center mt-8">No user data found.</p>
+  return (
+    <div className="flex flex-col min-h-screen">
+      <AnimatedBackground />
+      <NavBar role="guest" />
+      <main className="flex-grow flex items-center justify-center">
+        <p className="text-red-500 text-center mt-8">No user data found.</p>
+      </main>
+      <Footer />
+    </div>
+  )
 }
