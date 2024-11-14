@@ -101,6 +101,34 @@ const teamMembers = [
   },
 ]
 
+// Divisez le titre en lettres
+const title = "Peer Assessment System";
+const letters = title.split("");
+
+// Définissez les variantes d'animation
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const letterVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 500,
+      damping: 30,
+    },
+  },
+};
+
 const AnimatedSphere = () => {
   const meshRef = useRef()
   const [hovered, setHovered] = useState(false)
@@ -329,16 +357,20 @@ export default function Home() {
 
       <main className="pt-24 relative z-10">
         {/* Hero Section */}
-        <section className="min-h-screen flex items-center justify-center relative">
-          <div className="container mx-auto px-6 text-center relative z-10">
-            <motion.h1
-              className="text-6xl md:text-8xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-pink-300"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              Peer Assessment System
-            </motion.h1>
+        <section className="min-h-screen flex items-center justify-center">
+            <div className="container mx-auto px-6 text-center">
+              <motion.h1
+                className="text-6xl md:text-8xl font-extrabold mb-6 text-white"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                {letters.map((letter, index) => (
+                  <motion.span key={index} variants={letterVariants}>
+                    {letter}
+                  </motion.span>
+                ))}
+              </motion.h1>
             <motion.p
               className="text-xl md:text-2xl mb-12 max-w-2xl mx-auto text-gray-200"
               initial={{ opacity: 0, y: 20 }}
