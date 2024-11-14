@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import {
   motion,
@@ -15,17 +15,10 @@ import {
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import {
   Sphere,
-  Box,
-  Torus,
   MeshDistortMaterial,
   Text,
   Float,
   Stars,
-  useTexture,
-  OrbitControls,
-  PerspectiveCamera,
-  Environment,
-  Cloud,
 } from '@react-three/drei'
 import { Button } from '@/components/ui/button'
 import {
@@ -36,7 +29,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { ArrowRight, CheckCircle, Users, BarChart, Lock } from 'lucide-react'
-import * as THREE from 'three'
 
 const features = [
   {
@@ -109,85 +101,71 @@ const teamMembers = [
   },
 ]
 
-const AnimatedShape = ({ position, rotation }) => {
+const AnimatedSphere = () => {
   const meshRef = useRef()
   const [hovered, setHovered] = useState(false)
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime()
-    meshRef.current.rotation.x = Math.cos(t / 4) / 2 + rotation[0]
-    meshRef.current.rotation.y = Math.sin(t / 4) / 2 + rotation[1]
-    meshRef.current.rotation.z = Math.sin(t / 1.5) / 2 + rotation[2]
-    meshRef.current.position.y = Math.sin(t) * 0.2 + position[1]
+    meshRef.current.rotation.x = Math.cos(t / 4) / 2
+    meshRef.current.rotation.y = Math.sin(t / 4) / 2
+    meshRef.current.rotation.z = Math.sin(t / 1.5) / 2
+    meshRef.current.position.x = Math.sin(t / 1) / 2
+    meshRef.current.position.y = Math.cos(t / 1) / 2
+    meshRef.current.scale.set(
+      1 + Math.sin(t) * 0.2,
+      1 + Math.sin(t) * 0.2,
+      1 + Math.sin(t) * 0.2
+    )
   })
 
-  const geometry = useMemo(() => {
-    const geometries = [
-      new THREE.SphereGeometry(1, 32, 32),
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.TorusGeometry(0.7, 0.3, 16, 100),
-    ]
-    return geometries[Math.floor(Math.random() * geometries.length)]
-  }, [])
-
   return (
-    <mesh
-      ref={meshRef}
-      position={position}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
-      geometry={geometry}
-    >
-      <MeshDistortMaterial
-        color={hovered ? '#FF6B6B' : '#4834d4'}
-        attach="material"
-        distort={0.3}
-        speed={3}
-        roughness={0}
-      />
-    </mesh>
+    <Float speed={4} rotationIntensity={1} floatIntensity={2}>
+      <Sphere
+        ref={meshRef}
+        args={[1, 100, 200]}
+        scale={2}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+      >
+        <MeshDistortMaterial
+          color={hovered ? '#FF6B6B' : '#4834d4'}
+          attach="material"
+          distort={0.5}
+          speed={5}
+          roughness={0}
+        />
+      </Sphere>
+    </Float>
   )
 }
 
-const FloatingIsland = () => {
-  const texture = useTexture('/placeholder.svg?height=200&width=200')
-  const meshRef = useRef()
-
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime()
-    meshRef.current.position.y = Math.sin(t / 2) * 0.1
-    meshRef.current.rotation.z = Math.sin(t / 4) * 0.05
-  })
+const AnimatedText = ({ text }) => {
+  const { viewport } = useThree()
 
   return (
-    <group ref={meshRef}>
-      <mesh position={[0, -1, 0]}>
-        <cylinderGeometry args={[2, 2.5, 0.5, 32]} />
-        <meshStandardMaterial map={texture} />
-      </mesh>
-      <Cloud
-        position={[0, 0, 0]}
-        opacity={0.5}
-        speed={0.4}
-        width={3}
-        depth={0.5}
-      />
-    </group>
+    <Text
+      color="#ffffff"
+      fontSize={viewport.width / 20}
+      maxWidth={viewport.width / 2}
+      lineHeight={1}
+      letterSpacing={0.02}
+      textAlign="center"
+      anchorX="center"
+      anchorY="middle"
+    >
+      {text}
+    </Text>
   )
 }
 
 const AnimatedBackground = () => {
   return (
     <div className="fixed inset-0 z-0">
-      <Canvas camera={{ position: [0, 0, 10], fov: 75 }}>
-        <PerspectiveCamera makeDefault position={[0, 0, 10]} />
-        <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          enableRotate={true}
-        />
+      <Canvas camera={{ position: [0, 0, 5] }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={0.8} />
+        <AnimatedSphere />
         <Stars
           radius={100}
           depth={50}
@@ -197,41 +175,9 @@ const AnimatedBackground = () => {
           fade
           speed={1}
         />
-
-        <Float speed={1.5} rotationIntensity={1} floatIntensity={2}>
-          <AnimatedShape position={[-3, 2, -5]} rotation={[0, 0, 0]} />
+        <Float speed={1} rotationIntensity={1} floatIntensity={1}>
+          
         </Float>
-        <Float speed={1.2} rotationIntensity={1.5} floatIntensity={1.5}>
-          <AnimatedShape
-            position={[3, -2, -3]}
-            rotation={[Math.PI / 4, 0, Math.PI / 4]}
-          />
-        </Float>
-        <Float speed={1.8} rotationIntensity={2} floatIntensity={1}>
-          <AnimatedShape
-            position={[0, 3, -4]}
-            rotation={[0, Math.PI / 4, 0]}
-          />
-        </Float>
-
-        <FloatingIsland />
-
-        <Text
-          color="#ffffff"
-          fontSize={1.5}
-          maxWidth={200}
-          lineHeight={1}
-          letterSpacing={0.02}
-          textAlign="center"
-          anchorX="center"
-          anchorY="middle"
-          position={[0, 2, -2]}
-          font="/fonts/Inter-Bold.ttf"
-        >
-          PeerAssess
-        </Text>
-
-        <Environment preset="sunset" />
       </Canvas>
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 via-purple-500/30 to-pink-500/30" />
     </div>
@@ -284,11 +230,8 @@ const AnimatedCard = ({ children }) => {
       style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="group"
     >
-      <div className="relative transition-all duration-200 ease-out group-hover:translate-z-10">
-        {children}
-      </div>
+      {children}
     </motion.div>
   )
 }
@@ -341,23 +284,6 @@ function wrap(min, max, v) {
   return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min
 }
 
-const GlowingButton = ({ children, ...props }) => {
-  return (
-    <Button
-      {...props}
-      className="relative overflow-hidden group bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg rounded-full"
-    >
-      <span className="relative z-10">{children}</span>
-      <motion.div
-        className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.3 }}
-      />
-    </Button>
-  )
-}
-
 export default function Home() {
   const [activeTestimonial, setActiveTestimonial] = useState(0)
   const { scrollYProgress } = useScroll()
@@ -375,7 +301,7 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="min-h-screen text-gray-100 overflow-hidden bg-gradient-to-br from-blue-900 to-purple-900">
+    <div className="min-h-screen text-gray-800 overflow-hidden bg-gradient-to-br from-blue-900 to-purple-900">
       <AnimatedBackground />
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-lg">
         <div className="container mx-auto px-6 py-3 flex justify-between items-center">
@@ -383,16 +309,15 @@ export default function Home() {
             PeerAssess
           </Link>
           <div className="space-x-4">
-            <Button
-              variant="ghost"
-              asChild
-              className="text-white hover:text-blue-300"
-            >
+            <Button variant="ghost" asChild className="text-white">
               <Link href="/login">Login</Link>
             </Button>
-            <GlowingButton asChild>
+            <Button
+              asChild
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg rounded-full"
+            >
               <Link href="/signup">Sign Up</Link>
-            </GlowingButton>
+            </Button>
           </div>
         </div>
       </nav>
@@ -428,17 +353,21 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <GlowingButton size="lg" asChild>
+              <Button
+                size="lg"
+                asChild
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg rounded-full"
+              >
                 <Link href="/signup">
                   Get Started <ArrowRight className="ml-2" />
                 </Link>
-              </GlowingButton>
+              </Button>
             </motion.div>
           </div>
         </section>
 
         {/* Parallax Text */}
-        <ParallaxText baseVelocity={-5}>Peer Assessment System</ParallaxText>
+        <ParallaxText baseVelocity={-5}></ParallaxText>
 
         {/* Features Section */}
         <section className="py-20 bg-white/10 backdrop-blur-lg">
@@ -449,7 +378,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {features.map((feature, index) => (
                 <AnimatedCard key={index}>
-                  <Card className="bg-gray-900/50 border-none text-white h-full transform transition-all duration-300 hover:scale-105">
+                  <Card className="bg-gray-900/50 border-none text-white h-full">
                     <CardHeader>
                       <CardTitle className="flex items-center">
                         {feature.icon}
@@ -480,9 +409,7 @@ export default function Home() {
                   key={index}
                   className="absolute inset-0"
                   initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: index === activeTestimonial ? 1 : 0,
-                  }}
+                  animate={{ opacity: index === activeTestimonial ? 1 : 0 }}
                   transition={{ duration: 0.5 }}
                 >
                   <Card className="h-full flex flex-col justify-center items-center text-center bg-gray-900/50 border-none text-white">
@@ -506,7 +433,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {teamMembers.map((member, index) => (
                 <AnimatedCard key={index}>
-                  <Card className="bg-gray-900/50 border-none text-white h-full transform transition-all duration-300 hover:scale-105">
+                  <Card className="bg-gray-900/50 border-none text-white h-full">
                     <CardHeader>
                       <CardTitle>{member.name}</CardTitle>
                       <CardDescription className="text-gray-300">
@@ -541,11 +468,15 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <GlowingButton size="lg" asChild>
+              <Button
+                size="lg"
+                asChild
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg rounded-full"
+              >
                 <Link href="/signup">
                   Get Started Now <ArrowRight className="ml-2" />
                 </Link>
-              </GlowingButton>
+              </Button>
             </motion.div>
           </div>
         </section>
