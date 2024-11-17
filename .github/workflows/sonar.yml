@@ -23,8 +23,7 @@ jobs:
         with:
           args: |
             -Dsonar.projectKey=POLO-SOEN341_POLO-SOEN341_Project_F24
-            -Dsonar.organization=POLO-SOEN34 # For SonarCloud only
+            -Dsonar.organization=polo-soen341
             -Dsonar.sources=src
             -Dsonar.tests=tests
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.verbose=true
