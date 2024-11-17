@@ -1,6 +1,41 @@
 # Coding Standard
+# Universal coding standards
+# Naming 
+Use Meaningful Names: Variables, functions, classes, and methods should have descriptive names that clearly indicate their purpose (e.g., calculateTotalPrice, userProfile).
+Follow Naming Conventions: Stick to common naming conventions:
+CamelCase for variables and functions (myVariable, handleClick).
+PascalCase for classes and components (MyComponent, UserProfile).
+UPPERCASE for constants (MAX_LENGTH).
+Avoid Abbreviations: Use full words in names unless the abbreviation is well-known and commonly accepted (e.g., user vs usr).
 
-# React.js 
+# Code Formatting
+Consistent Indentation: Use consistent indentation.
+Line Length: Keep lines of code under 80 or 100 characters to improve readability. Break long lines into multiple shorter ones.
+Blank Lines: Use blank lines to separate logical blocks of code (e.g., between function definitions, imports, or major logic sections).
+Curly Braces
+
+# Code Structure
+Avoid Duplicate Code
+Organize Code Logically
+
+# Documentation
+Comment Purpose, Not Implementation
+Update Documentation
+
+# Error Handling
+Use Proper Error Messages
+Handle Errors Gracefully
+
+# Testing
+Write Tests: Ensure that your code is covered by unit tests, integration tests, and end-to-end tests where appropriate.
+Test Edge Cases
+Testable Code
+
+# Security
+Avoid Hardcoding Sensitive Data
+Validate Input
+
+# React.js best coding pratices
 # General conventions
 Use Functional Components: Prefer functional components with hooks (useState, useEffect, etc.) over class components.
 Avoid Inline Functions in JSX: Define functions outside of JSX to prevent unnecessary re-renders.
@@ -28,7 +63,8 @@ Use Destructuring: Destructure props and state variables to improve readability 
 Self-Closing Tags: Always close self-closing tags (e.g., <img />, <input />).
 Component Return Statements: Return only one root element per component.
 
-# Next.js 
+# Next.js best coding pratices
+
 # File and Folder Structure
 File-based Routing: Use the pages/ directory for routing, with each file corresponding to a route.
 Dynamic Routing: Use brackets ([]) for dynamic route segments.
