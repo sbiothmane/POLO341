@@ -1,5 +1,5 @@
 # Coding Standard
-# Universal coding standards
+# 1. Universal coding standards
 # Naming 
 Use Meaningful Names: Variables, functions, classes, and methods should have descriptive names that clearly indicate their purpose (e.g., calculateTotalPrice, userProfile).
 Follow Naming Conventions: Stick to common naming conventions:
@@ -35,7 +35,7 @@ Testable Code
 Avoid Hardcoding Sensitive Data
 Validate Input
 
-# React.js best coding pratices
+# 2. React.js best coding pratices
 # General conventions
 Use Functional Components: Prefer functional components with hooks (useState, useEffect, etc.) over class components.
 Avoid Inline Functions in JSX: Define functions outside of JSX to prevent unnecessary re-renders.
@@ -63,7 +63,7 @@ Use Destructuring: Destructure props and state variables to improve readability 
 Self-Closing Tags: Always close self-closing tags (e.g., <img />, <input />).
 Component Return Statements: Return only one root element per component.
 
-# Next.js best coding pratices
+# 3. Next.js best coding pratices
 
 # File and Folder Structure
 File-based Routing: Use the pages/ directory for routing, with each file corresponding to a route.
