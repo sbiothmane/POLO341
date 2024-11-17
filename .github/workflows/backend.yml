@@ -4,10 +4,10 @@ name: Run Backend Test
 on:
   pull_request:
     branches:
-      - main  # Or specify the target branch
+      - correction  # Or specify the target branch
   push:
     branches:
-      - main  # Or specify the target branch
+      - correction  # Or specify the target branch
 
 jobs:
   build:
