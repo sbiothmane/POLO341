@@ -23,7 +23,7 @@ jobs:
       - name: Analyze with SonarQube
         uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
         env:
-          SECRET_GITHUB_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
+          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
@@ -33,4 +33,4 @@ jobs:
             -Dsonar.sources=src
             -Dsonar.tests=tests
             -Dsonar.verbose=true
-            -X  # Enable full debug mode
+            -X
