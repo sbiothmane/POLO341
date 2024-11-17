@@ -21,16 +21,16 @@ jobs:
           java-version: '17'
 
       - name: Analyze with SonarQube
-        uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
+        uses: SonarSource/sonarqube-scan-action@v1
         env:
-          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
+          JAVA_HOME: "/usr/lib/jvm/java-17-openjdk"
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           args: |
             -Dsonar.projectKey=POLO-SOEN341_POLO-SOEN341_Project_F24
             -Dsonar.organization=polo-soen341
-            -Dsonar.sources=src
+            -Dsonar.sources="Sprint_4/App"
             -Dsonar.tests=tests
             -Dsonar.verbose=true
             -X
