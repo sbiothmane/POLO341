@@ -33,3 +33,4 @@ jobs:
             -Dsonar.sources=src
             -Dsonar.tests=tests
             -Dsonar.verbose=true
+            -X  # Enable full debug mode
