@@ -33,3 +33,4 @@ jobs:
             -Dsonar.sources=Sprint_4
             -Dsonar.tests=tests
             -Dsonar.verbose=true
+            -Dsonar.projectVersion=0.1.0
