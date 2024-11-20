@@ -1,4 +1,5 @@
-import { Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast';
+import PropTypes from 'prop-types';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -8,5 +9,9 @@ function MyApp({ Component, pageProps }) {
     </>
   )
 }
+MyApp.propTypes = {
+  Component: PropTypes.elementType.isRequired,
+  pageProps: PropTypes.object.isRequired,
+};
 
 export default MyApp
