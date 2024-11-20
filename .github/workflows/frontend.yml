@@ -38,4 +38,3 @@ jobs:
         run: |
           cd 'Sprint_3/App/app'
           npm test
-          
