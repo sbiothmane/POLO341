@@ -24,15 +24,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Analyze with SonarQube
-        uses: SonarSource/sonarqube-scan-action@v1.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args:
-            -Dsonar.projectKey=polo-soen341
+      - name: Run SonarQube Scanner
+        run: |
+          curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonar-scanner-cli.zip
+          export PATH="$PATH:$(pwd)/sonar-scanner-5.0.1.3006-linux/bin"
+          sonar-scanner \
+            -Dsonar.projectKey=polo-soen341 \
+            -Dsonar.sources=Sprint_4 \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.login=$SONAR_TOKEN \
             -X
-            -Dsonar.sources=Sprint_4
-
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
