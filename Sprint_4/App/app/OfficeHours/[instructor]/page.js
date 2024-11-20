@@ -12,8 +12,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Sphere, MeshDistortMaterial } from '@react-three/drei';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+{/*import { Input } from '@/components/ui/input';*/}
+{/*import { Label } from '@/components/ui/label';*/}
 import { toast, Toaster } from 'sonner';
 import { format, isSameDay } from 'date-fns';
 import {
@@ -129,7 +129,7 @@ const ViewOfficeHours = ({ params }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const { data: session, status } = useSession();
   const [isReserving, setIsReserving] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  {/*const [selectedSlot, setSelectedSlot] = useState(null);*/}
 
   useEffect(() => {
     if (instructorName) {
