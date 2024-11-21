@@ -1,6 +1,6 @@
-// components/create-team/StudentTable.js
 'use client'
 
+import PropTypes from 'prop-types'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-react'
@@ -54,4 +54,22 @@ export default function StudentTable({ students, onStudentClick, selectedStudent
       </div>
     </div>
   )
+}
+
+// Prop Types Validation
+StudentTable.propTypes = {
+  students: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  onStudentClick: PropTypes.func.isRequired,
+  selectedStudents: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    })
+  ).isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  onSearchTermChange: PropTypes.func.isRequired,
 }
