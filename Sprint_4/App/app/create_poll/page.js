@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import PropTypes from 'prop-types'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -19,7 +20,6 @@ import AnimatedBackground from '../components/home/AnimatedBackground'
 import NavBar from '../components/home/Navbar'
 import Footer from '../components/home/Footer'
 
-// Main Component
 export default function CreatePollPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -84,7 +84,6 @@ export default function CreatePollPage() {
     }
   }
 
-  // Conditional Rendering
   const renderUnauthorized = (message) => (
     <div className="flex flex-col min-h-screen">
       <AnimatedBackground />
@@ -109,7 +108,6 @@ export default function CreatePollPage() {
     return renderUnauthorized('You are not authorized to access this page.')
   }
 
-  // Main Content
   return (
     <div className="flex flex-col min-h-screen">
       <AnimatedBackground />
@@ -197,6 +195,13 @@ const InputField = ({ label, value, onChange, placeholder }) => (
   </motion.div>
 )
 
+InputField.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string.isRequired,
+}
+
 // Reusable Choices Field Component
 const ChoicesField = ({ choices, onUpdate, onAdd, onRemove }) => (
   <motion.div
@@ -245,3 +250,10 @@ const ChoicesField = ({ choices, onUpdate, onAdd, onRemove }) => (
     </Button>
   </motion.div>
 )
+
+ChoicesField.propTypes = {
+  choices: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  onAdd: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
+}
