@@ -1,5 +1,6 @@
 'use client'
 
+import PropTypes from 'prop-types'  // Import PropTypes for prop validation
 import { Calendar } from '@/components/ui/calendar'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
@@ -37,4 +38,16 @@ export default function CalendarComponent({
       </Button>
     </motion.div>
   )
+}
+
+// Prop validation
+CalendarComponent.propTypes = {
+  selectedDate: PropTypes.instanceOf(Date).isRequired,
+  setSelectedDate: PropTypes.func.isRequired,
+  officeHours: PropTypes.arrayOf(
+    PropTypes.shape({
+      start: PropTypes.instanceOf(Date).isRequired,
+    })
+  ).isRequired,
+  openCreateDialog: PropTypes.func.isRequired,
 }
