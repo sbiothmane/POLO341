@@ -6,7 +6,7 @@ import {
   motion,
   AnimatePresence,
 } from 'framer-motion';
-import { useFrame } from '@react-three/fiber';
+
 import { Sphere, MeshDistortMaterial } from '@react-three/drei';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
