@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react';
 import {
   motion,
   AnimatePresence,
-  useScroll,
   useSpring,
 } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
