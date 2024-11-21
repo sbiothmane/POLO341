@@ -17,8 +17,8 @@ import {
   Clock,
   PieChart,
   ChevronRight,
-
 } from 'lucide-react'
+import PropTypes from 'prop-types'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -28,7 +28,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -117,15 +116,8 @@ const NavBar = ({ role }) => {
   )
 }
 
-// Footer Component
-const Footer = () => {
-  return (
-    <footer className="bg-white/10 backdrop-blur-lg py-8">
-      <div className="container mx-auto px-6 text-center text-gray-800">
-        <p>&copy; 2024 Peer Assessment System. All rights reserved.</p>
-      </div>
-    </footer>
-  )
+NavBar.propTypes = {
+  role: PropTypes.string.isRequired,
 }
 
 // StarRating Component
@@ -152,6 +144,14 @@ const StarRating = ({ rating, hoverRating, setRating, setHoverRating, isDisabled
       ))}
     </div>
   )
+}
+
+StarRating.propTypes = {
+  rating: PropTypes.number.isRequired,
+  hoverRating: PropTypes.number.isRequired,
+  setRating: PropTypes.func.isRequired,
+  setHoverRating: PropTypes.func.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
 }
 
 // EvaluateStudent Component
@@ -200,7 +200,6 @@ export default function EvaluateStudent({ params }) {
       })
 
       const result = await response.json()
-      console.log(result)
 
       if (result.rating) {
         const { ratings, comments } = result.rating
@@ -257,22 +256,18 @@ export default function EvaluateStudent({ params }) {
     }
 
     try {
-      const response = await fetch('/api/teams/evaluate', {
+      const response = await fetch('/api/teams/rating', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(evaluationData),
       })
-
       const result = await response.json()
 
-      if (response.ok) {
+      if (result.success) {
         setSubmissionStatus('success')
-        resetForm()
-        setTimeout(() => {
-          router.push('/dashboard')
-        }, 2000)
+        setIsDisabled(true)
       } else {
         setSubmissionStatus('error')
       }
@@ -284,235 +279,157 @@ export default function EvaluateStudent({ params }) {
     }
   }
 
-  const resetForm = () => {
-    setRatingConceptual(0)
-    setCommentConceptual('')
-    setRatingPractical(0)
-    setCommentPractical('')
-    setRatingWorkEthic(0)
-    setCommentWorkEthic('')
-  }
-
-  // Loading State
-  if (status === 'loading') {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
-      </div>
-    )
-  }
-
-  // Unauthorized or Unauthenticated States
-  if (status === 'unauthenticated') {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <AnimatedBackground />
-        <NavBar role="guest" />
-        <main className="flex-grow flex items-center justify-center">
-          <p className="text-red-500 text-center mt-8">
-            You are not signed in.
-          </p>
-        </main>
-        <Footer />
-      </div>
-    )
-  }
-
-  // Main Content
   return (
-    <div className="flex flex-col min-h-screen">
+    <>
       <AnimatedBackground />
-      <NavBar role={session.user.role} />
+      <NavBar role={session?.user?.role || 'student'} />
 
-      <main className="flex-grow flex items-center justify-center px-6 py-24">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-2xl"
-        >
-          <Card className="bg-white/30 backdrop-blur-lg border-none shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-center space-x-2 text-4xl">
-                <Star className="h-8 w-8 text-yellow-500" />
-                <span>Evaluate Student</span>
-              </CardTitle>
-              <CardDescription className="text-center">
-                Evaluating{' '}
-                <span className="font-semibold text-blue-600">{student}</span> in
-                Team{' '}
-                <Badge variant="outline" className="ml-1">
-                  {team}
-                </Badge>
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Conceptual Contribution */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 }}
+      <div className="relative container mx-auto px-6 py-16 z-10">
+        <Card className="max-w-2xl mx-auto">
+          <CardHeader>
+            <CardTitle>Evaluate Student</CardTitle>
+            <CardDescription>
+              Evaluate your team member, {student} on the following areas:
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit}>
+              {/* Conceptual Contribution */}
+              <div className="mb-6">
+                <label
+                  htmlFor="conceptual"
+                  className="block text-sm font-medium text-gray-700"
                 >
-                  <label className="block text-lg font-medium mb-2">
-                    Conceptual Contribution
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <StarRating
-                      rating={ratingConceptual}
-                      hoverRating={hoverRatingConceptual}
-                      setRating={setRatingConceptual}
-                      setHoverRating={setHoverRatingConceptual}
-                      isDisabled={isDisabled}
-                    />
-                    {errors.ratingConceptual && (
-                      <p className="text-red-500 text-sm">
-                        {errors.ratingConceptual}
-                      </p>
-                    )}
-                  </div>
-                  <Textarea
-                    placeholder="Comments on conceptual contribution..."
-                    value={commentConceptual}
-                    onChange={(e) => setCommentConceptual(e.target.value)}
-                    disabled={isDisabled}
-                    className="mt-2"
-                  />
-                </motion.div>
-
-                {/* Practical Contribution */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <label className="block text-lg font-medium mb-2">
-                    Practical Contribution
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <StarRating
-                      rating={ratingPractical}
-                      hoverRating={hoverRatingPractical}
-                      setRating={setRatingPractical}
-                      setHoverRating={setHoverRatingPractical}
-                      isDisabled={isDisabled}
-                    />
-                    {errors.ratingPractical && (
-                      <p className="text-red-500 text-sm">
-                        {errors.ratingPractical}
-                      </p>
-                    )}
-                  </div>
-                  <Textarea
-                    placeholder="Comments on practical contribution..."
-                    value={commentPractical}
-                    onChange={(e) => setCommentPractical(e.target.value)}
-                    disabled={isDisabled}
-                    className="mt-2"
-                  />
-                </motion.div>
-
-                {/* Work Ethic */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  <label className="block text-lg font-medium mb-2">
-                    Work Ethic
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <StarRating
-                      rating={ratingWorkEthic}
-                      hoverRating={hoverRatingWorkEthic}
-                      setRating={setRatingWorkEthic}
-                      setHoverRating={setHoverRatingWorkEthic}
-                      isDisabled={isDisabled}
-                    />
-                    {errors.ratingWorkEthic && (
-                      <p className="text-red-500 text-sm">
-                        {errors.ratingWorkEthic}
-                      </p>
-                    )}
-                  </div>
-                  <Textarea
-                    placeholder="Comments on work ethic..."
-                    value={commentWorkEthic}
-                    onChange={(e) => setCommentWorkEthic(e.target.value)}
-                    disabled={isDisabled}
-                    className="mt-2"
-                  />
-                </motion.div>
-
-                {isDisabled && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    <Alert>
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertTitle>Note</AlertTitle>
-                      <AlertDescription>
-                        You have already submitted an evaluation for this
-                        student.
-                      </AlertDescription>
-                    </Alert>
-                  </motion.div>
+                  Conceptual Contribution
+                </label>
+                <StarRating
+                  rating={ratingConceptual}
+                  hoverRating={hoverRatingConceptual}
+                  setRating={setRatingConceptual}
+                  setHoverRating={setHoverRatingConceptual}
+                  isDisabled={isDisabled}
+                />
+                <Textarea
+                  id="conceptual"
+                  placeholder="Comments on conceptual contribution..."
+                  value={commentConceptual}
+                  onChange={(e) => setCommentConceptual(e.target.value)}
+                  disabled={isDisabled}
+                  className="mt-2"
+                />
+                {errors.ratingConceptual && (
+                  <Alert variant="destructive">
+                    <AlertTitle>Missing rating</AlertTitle>
+                    <AlertDescription>
+                      Please provide a rating for conceptual contribution.
+                    </AlertDescription>
+                  </Alert>
                 )}
+              </div>
 
-                {!isDisabled && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    <Button
-                      type="submit"
-                      className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white"
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : (
-                        <ChevronRight className="mr-2 h-4 w-4" />
-                      )}
-                      {loading ? 'Submitting...' : 'Submit Evaluation'}
-                    </Button>
-                  </motion.div>
+              {/* Practical Contribution */}
+              <div className="mb-6">
+                <label
+                  htmlFor="practical"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Practical Contribution
+                </label>
+                <StarRating
+                  rating={ratingPractical}
+                  hoverRating={hoverRatingPractical}
+                  setRating={setRatingPractical}
+                  setHoverRating={setHoverRatingPractical}
+                  isDisabled={isDisabled}
+                />
+                <Textarea
+                  id="practical"
+                  placeholder="Comments on practical contribution..."
+                  value={commentPractical}
+                  onChange={(e) => setCommentPractical(e.target.value)}
+                  disabled={isDisabled}
+                  className="mt-2"
+                />
+                {errors.ratingPractical && (
+                  <Alert variant="destructive">
+                    <AlertTitle>Missing rating</AlertTitle>
+                    <AlertDescription>
+                      Please provide a rating for practical contribution.
+                    </AlertDescription>
+                  </Alert>
                 )}
+              </div>
 
-                <AnimatePresence>
-                  {submissionStatus && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.3 }}
-                      className="mt-6"
-                    >
-                      {submissionStatus === 'success' ? (
-                        <div className="flex items-center justify-center text-green-500">
-                          <CheckCircle className="mr-2 h-5 w-5" />
-                          <p>Evaluation submitted successfully!</p>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center text-red-500">
-                          <XCircle className="mr-2 h-5 w-5" />
-                          <p>Error submitting evaluation.</p>
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </form>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </main>
+              {/* Work Ethic */}
+              <div className="mb-6">
+                <label
+                  htmlFor="workEthic"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Work Ethic
+                </label>
+                <StarRating
+                  rating={ratingWorkEthic}
+                  hoverRating={hoverRatingWorkEthic}
+                  setRating={setRatingWorkEthic}
+                  setHoverRating={setHoverRatingWorkEthic}
+                  isDisabled={isDisabled}
+                />
+                <Textarea
+                  id="workEthic"
+                  placeholder="Comments on work ethic..."
+                  value={commentWorkEthic}
+                  onChange={(e) => setCommentWorkEthic(e.target.value)}
+                  disabled={isDisabled}
+                  className="mt-2"
+                />
+                {errors.ratingWorkEthic && (
+                  <Alert variant="destructive">
+                    <AlertTitle>Missing rating</AlertTitle>
+                    <AlertDescription>
+                      Please provide a rating for work ethic.
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </div>
 
-      <Footer />
-    </div>
+              <div className="mt-8">
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isDisabled || loading}
+                >
+                  {loading ? <Loader2 className="animate-spin h-5 w-5" /> : 'Submit'}
+                </Button>
+
+                {submissionStatus === 'success' && (
+                  <Alert variant="success" className="mt-4">
+                    <AlertTitle>Success!</AlertTitle>
+                    <AlertDescription>
+                      Your evaluation has been submitted successfully.
+                    </AlertDescription>
+                  </Alert>
+                )}
+                {submissionStatus === 'error' && (
+                  <Alert variant="destructive" className="mt-4">
+                    <AlertTitle>Error!</AlertTitle>
+                    <AlertDescription>
+                      Something went wrong. Please try again.
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   )
+}
+
+EvaluateStudent.propTypes = {
+  params: PropTypes.shape({
+    team: PropTypes.string.isRequired,
+    student: PropTypes.string.isRequired,
+  }).isRequired,
 }
