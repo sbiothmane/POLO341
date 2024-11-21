@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import SignOutButton from '../components/Disconnect.js'; // Adjust the path if necessary
 import { signOut, useSession } from "next-auth/react/index.js";
 
