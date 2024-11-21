@@ -1,4 +1,3 @@
-// components/create-team/CreateTeamForm.js
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -11,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { User, Upload, CheckCircle, XCircle } from 'lucide-react'
 import StudentTable from './StudentTable'
+import PropTypes from 'prop-types'
 
 export default function CreateTeamForm({ session }) {
   const router = useRouter()
@@ -19,7 +19,6 @@ export default function CreateTeamForm({ session }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [teamName, setTeamName] = useState('')
   const [statusMessage, setStatusMessage] = useState(null)
-  const [isFileUploaded, setIsFileUploaded] = useState(false)
   const [isTeamNameValid, setIsTeamNameValid] = useState(true)
 
   const teamNameRegex = /^[a-zA-Z0-9-_]+$/
@@ -59,7 +58,6 @@ export default function CreateTeamForm({ session }) {
             id: item.id,
           }))
           setStudents(formattedData)
-          setIsFileUploaded(true)
         },
         header: true,
         skipEmptyLines: true,
@@ -243,11 +241,7 @@ export default function CreateTeamForm({ session }) {
                   </Button>
                 ) : (
                   <p className="text-center text-gray-600 mb-4">
-                    {clickedStudents.length < 2 && teamName === ''
-                      ? 'Select at least 2 students and provide a team name.'
-                      : clickedStudents.length < 2
-                      ? 'Select at least 2 students.'
-                      : 'Provide a valid team name.'}
+                    {clickedStudents.length < 2 ? 'Select at least 2 students.' : 'Provide a valid team name.'}
                   </p>
                 )}
                 {clickedStudents.length > 0 ? (
@@ -270,4 +264,14 @@ export default function CreateTeamForm({ session }) {
       </Card>
     </motion.div>
   )
+}
+
+CreateTeamForm.propTypes = {
+  session: PropTypes.shape({
+    user: PropTypes.shape({
+      username: PropTypes.string,
+      name: PropTypes.string,
+      role: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
 }
