@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import PropTypes from 'prop-types'
 
 export default function CreateOfficeHoursDialog({
   isOpen,
@@ -98,4 +99,11 @@ export default function CreateOfficeHoursDialog({
       </DialogContent>
     </Dialog>
   )
+}
+
+CreateOfficeHoursDialog.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
+  handleCreateOfficeHours: PropTypes.func.isRequired,
+  isCreating: PropTypes.bool.isRequired,
 }
