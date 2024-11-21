@@ -1,22 +1,13 @@
-# POLO-SOEN341_Project_F24
-Peer Assessment Website
+Sprint_planning google sheets : https://docs.google.com/spreadsheets/d/1xLrcB4kmvTsDEpPq_jaMNroHuVZtpWZd-KmdEPQSI6U/edit?usp=sharing
+The problem is to implement all the features which consists of the peer assessment website.
 
-# Description of the project:
-A Peer Assessment System for university team projects is designed to allow students to evaluate the contributions and performance of their teammates based on four key dimensions: cooperation, conceptual contribution, practical contribution, and work ethic. The system promotes accountability and provides valuable feedback to both students and instructors on team dynamics and individual efforts. Students and Instructors are the clients for this project.
+Core feature 1 : User Authentication and Team Management : Implement the student and instructor login system with respective roles. Allow functionality for teachers to create teams and assign students to specific groups. Ensure teams are visible to both groups. Instructors should see all groups and students should see their own.
 
-# Programming languages and Frameworks:
-Frontend : (HTML, CSS, JAVASCRIPT,REACT.js),  Backend (NEXT.js)
+Core feature 2: Basic Peer Assessment Interface : A simple interfaces where students can select teammates for evaluation.
 
-# Members:
+Core feature 3: Basic Evaluation and Submission : Enable students to provide peer ratings using a 5-point scale for the Cooperation dimension. User should be prompted to confirm the submission of a peer assessment.
 
-**Alvin Biju:** 40278182 (Backend) Secretary
+Core feature 4: Dimension-Based Assessment : Add the remaining assessment dimensions: Conceptual Contribution, Practical Contribution, and Work Ethic. Add optional comment boxes for each dimension, where students can provide qualitative feedback on specific team members.
 
-**Othmane Sbi:** 40249134  (Backend) Scrummaster
-
-**William White:** 40135771  (Frontend) 
-
-**Samy Belmihoub:** 40251504 (Frontend) 
-
-**Youssef Youssef:** 40285384  (Backend) 
-
-**John Kaspar:** 40285931  (Frontend) 
+Core feature 5: Instructor Dashboard: Create a dashboard for instructors to access the results of the assessment from two different views: summary and detailed view.
+Add any new features that you consider appropriate to enhance the system : Add OfficeHours, Add Polling for instructors.
