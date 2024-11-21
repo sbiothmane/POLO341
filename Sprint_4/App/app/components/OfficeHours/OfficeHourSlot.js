@@ -4,14 +4,14 @@ import { motion } from 'framer-motion'
 import { format } from 'date-fns'
 import { CheckCircle, Clock, Trash2, UserPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import PropTypes from 'prop-types'
 
-export default function OfficeHourSlot({
+const OfficeHourSlot = ({
   slot,
   handleDeleteOfficeHour,
   setSelectedSlot,
   setStudentName,
-}) {
+}) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -67,3 +67,18 @@ export default function OfficeHourSlot({
     </motion.div>
   )
 }
+
+OfficeHourSlot.propTypes = {
+  slot: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    reserved: PropTypes.bool.isRequired,
+    reservedBy: PropTypes.string,
+    start: PropTypes.instanceOf(Date).isRequired,
+    end: PropTypes.instanceOf(Date).isRequired,
+  }).isRequired,
+  handleDeleteOfficeHour: PropTypes.func.isRequired,
+  setSelectedSlot: PropTypes.func.isRequired,
+  setStudentName: PropTypes.func.isRequired,
+}
+
+export default OfficeHourSlot
