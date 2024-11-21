@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { signOut, useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { User, Users, Clock, PieChart } from 'lucide-react'
+import PropTypes from 'prop-types'
 
 // Role-Based Links Configuration
 const roleLinks = [
@@ -69,6 +70,14 @@ const NavButton = ({ href, label, Icon, gradient }) => (
   </Link>
 )
 
+// PropTypes validation for NavButton
+NavButton.propTypes = {
+  href: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  Icon: PropTypes.elementType.isRequired, // For React components passed as props
+  gradient: PropTypes.string.isRequired,
+}
+
 // Reusable Authentication Buttons
 const AuthButton = ({ session }) => {
   if (session) {
@@ -97,4 +106,13 @@ const AuthButton = ({ session }) => {
       </Button>
     </>
   )
+}
+
+// PropTypes validation for AuthButton
+AuthButton.propTypes = {
+  session: PropTypes.shape({
+    user: PropTypes.shape({
+      role: PropTypes.string,
+    }),
+  }),
 }
