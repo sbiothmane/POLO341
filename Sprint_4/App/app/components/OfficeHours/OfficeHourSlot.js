@@ -6,12 +6,11 @@ import { CheckCircle, Clock, Trash2, UserPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import PropTypes from 'prop-types'
 
-const OfficeHourSlot = ({
+export default function OfficeHourSlot({
   slot,
   handleDeleteOfficeHour,
   setSelectedSlot,
-  setStudentName,
-}) => {
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -48,7 +47,6 @@ const OfficeHourSlot = ({
               className="rounded-full hover:bg-green-200"
               onClick={() => {
                 setSelectedSlot(slot)
-                setStudentName('')
               }}
             >
               <UserPlus className="h-4 w-4" />
@@ -69,16 +67,7 @@ const OfficeHourSlot = ({
 }
 
 OfficeHourSlot.propTypes = {
-  slot: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    reserved: PropTypes.bool.isRequired,
-    reservedBy: PropTypes.string,
-    start: PropTypes.instanceOf(Date).isRequired,
-    end: PropTypes.instanceOf(Date).isRequired,
-  }).isRequired,
+  slot: PropTypes.object.isRequired,
   handleDeleteOfficeHour: PropTypes.func.isRequired,
   setSelectedSlot: PropTypes.func.isRequired,
-  setStudentName: PropTypes.func.isRequired,
 }
-
-export default OfficeHourSlot
