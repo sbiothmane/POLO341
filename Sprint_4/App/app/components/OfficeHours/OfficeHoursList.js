@@ -1,16 +1,16 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { format, isSameDay } from 'date-fns'
+import { format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
 import OfficeHourSlot from './OfficeHourSlot'
+import PropTypes from 'prop-types'
 
 export default function OfficeHoursList({
   selectedDate,
   officeHours,
   handleDeleteOfficeHour,
   setSelectedSlot,
-  setStudentName,
   filteredOfficeHours,
 }) {
   return (
@@ -33,7 +33,6 @@ export default function OfficeHoursList({
                 slot={slot}
                 handleDeleteOfficeHour={handleDeleteOfficeHour}
                 setSelectedSlot={setSelectedSlot}
-                setStudentName={setStudentName}
               />
             ))
           ) : (
@@ -49,4 +48,12 @@ export default function OfficeHoursList({
       </div>
     </motion.div>
   )
+}
+
+OfficeHoursList.propTypes = {
+  selectedDate: PropTypes.instanceOf(Date),
+  officeHours: PropTypes.arrayOf(PropTypes.object).isRequired,
+  handleDeleteOfficeHour: PropTypes.func.isRequired,
+  setSelectedSlot: PropTypes.func.isRequired,
+  filteredOfficeHours: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
