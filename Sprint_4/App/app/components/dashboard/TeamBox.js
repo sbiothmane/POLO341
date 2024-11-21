@@ -41,12 +41,14 @@ export default function TeamBox({ instructor, student }) {
     fetchTeams()
   }, [instructor, student])
 
-  // Determine messages based on props
-  const noTeamsMessage = instructor
-    ? 'You have not created any teams yet.'
-    : student
-    ? 'You are not part of any teams yet.'
-    : 'No teams available at the moment.'
+let noTeamsMessage;
+if (instructor) {
+  noTeamsMessage = 'You have not created any teams yet.';
+} else if (student) {
+  noTeamsMessage = 'You are not part of any teams yet.';
+} else {
+  noTeamsMessage = 'No teams available at the moment.';
+}
 
   const headingText = instructor || student ? 'My Teams' : 'All Teams'
 
