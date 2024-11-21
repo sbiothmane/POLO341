@@ -1,6 +1,6 @@
-// components/create-poll/CreatePollForm.js
 'use client'
 
+import PropTypes from 'prop-types'; // Import PropTypes
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { AlertCircle, CheckCircle, ChevronRight, Loader2, Minus, Plus, PieChart } from 'lucide-react'
 
-export default function CreatePollForm({ session }) {
+function CreatePollForm({ session }) {
   const router = useRouter()
   const [question, setQuestion] = useState('')
   const [choices, setChoices] = useState(['', ''])
@@ -122,10 +122,11 @@ export default function CreatePollForm({ session }) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <label className="block text-lg font-medium mb-2">
+              <label htmlFor="question" className="block text-lg font-medium mb-2">
                 Question
               </label>
               <Input
+                id="question"
                 type="text"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
@@ -149,7 +150,7 @@ export default function CreatePollForm({ session }) {
               <AnimatePresence>
                 {choices.map((choice, index) => (
                   <motion.div
-                    key={index}
+                    key={choice + index}
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
@@ -243,3 +244,13 @@ export default function CreatePollForm({ session }) {
     </motion.div>
   )
 }
+
+CreatePollForm.propTypes = {
+  session: PropTypes.shape({
+    user: PropTypes.shape({
+      username: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
+export default CreatePollForm;
