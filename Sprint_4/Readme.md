@@ -1,4 +1,4 @@
-Sprint_planning google sheets : https://docs.google.com/spreadsheets/d/1xLrcB4kmvTsDEpPq_jaMNroHuVZtpWZd-KmdEPQSI6U/edit?usp=sharing
+# Sprint_planning google sheets : https://docs.google.com/spreadsheets/d/1xLrcB4kmvTsDEpPq_jaMNroHuVZtpWZd-KmdEPQSI6U/edit?usp=sharing
 The problem is to implement all the features which consists of the peer assessment website.
 
 Core feature 1 : User Authentication and Team Management : Implement the student and instructor login system with respective roles. Allow functionality for teachers to create teams and assign students to specific groups. Ensure teams are visible to both groups. Instructors should see all groups and students should see their own.
