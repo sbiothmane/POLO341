@@ -1,54 +1,39 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useSession } from 'next-auth/react';
-import {
-  motion,
-  AnimatePresence,
-} from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { toast, Toaster } from 'sonner';
 import { format, isSameDay } from 'date-fns';
-import {
-  UserPlus,
-  Calendar as CalendarIcon,
-  CheckCircle,
-  XCircle,
-} from 'lucide-react';
+import { UserPlus, Calendar as CalendarIcon, CheckCircle, XCircle, Trash2 } from 'lucide-react';
 import AnimatedBackground from '@/app/components/home/AnimatedBackground';
 import NavBar from '@/app/components/NavBar';
 
 const ViewOfficeHours = ({ params }) => {
-  const [instructorName] = useState(params.instructor);
+  const [instructorName] = useState(params?.instructor || '');
   const [officeHours, setOfficeHours] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const { data: session, status } = useSession();
   const [isReserving, setIsReserving] = useState(false);
 
   useEffect(() => {
-    if (instructorName) {
-      fetchOfficeHours();
-    }
+    if (instructorName) fetchOfficeHours();
   }, [instructorName]);
 
   const fetchOfficeHours = async () => {
     try {
-      const response = await fetch(
-        `/api/office-hours/office-hours?instructor=${instructorName}`
-      );
-      if (!response.ok) {
-        throw new Error('Failed to fetch office hours');
-      }
-      const hours = await response.json();
+      const response = await fetch(`/api/office-hours/office-hours?instructor=${instructorName}`);
+      if (!response.ok) throw new Error('Failed to fetch office hours');
 
-      // Parse the start and end times into Date objects
+      const hours = await response.json();
       const parsedHours = hours.map((hour) => ({
         ...hour,
         start: new Date(hour.start),
         end: new Date(hour.end),
       }));
-
       setOfficeHours(parsedHours);
     } catch (error) {
       console.error('Error fetching office hours:', error);
@@ -57,10 +42,8 @@ const ViewOfficeHours = ({ params }) => {
   };
 
   const reserveOfficeHour = async (slotId, isReserved) => {
-    if (!session || !session.user) {
-      toast.error(
-        'You need to be logged in to reserve or unreserve office hours.'
-      );
+    if (!session?.user) {
+      toast.error('You need to be logged in to reserve or unreserve office hours.');
       return;
     }
 
@@ -69,9 +52,7 @@ const ViewOfficeHours = ({ params }) => {
     try {
       const response = await fetch('/api/office-hours/office-hours-update', {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: slotId,
           reserved: !isReserved,
@@ -79,13 +60,9 @@ const ViewOfficeHours = ({ params }) => {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to update the office hour');
-      }
+      if (!response.ok) throw new Error('Failed to update the office hour');
 
-      toast.success(
-        `Office hour ${isReserved ? 'unreserved' : 'reserved'} successfully.`
-      );
+      toast.success(`Office hour ${isReserved ? 'unreserved' : 'reserved'} successfully.`);
       fetchOfficeHours();
     } catch (error) {
       console.error('Error updating office hour:', error);
@@ -100,10 +77,40 @@ const ViewOfficeHours = ({ params }) => {
     : [];
 
   if (status === 'unauthenticated') {
-    return (
-      <p className="text-red-500 text-center mt-8">You are not signed in.</p>
-    );
+    return <p className="text-red-500 text-center mt-8">You are not signed in.</p>;
   }
+
+  const renderSlotActions = (slot) => {
+    if (!slot.reserved) {
+      return (
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full hover:bg-green-200"
+          onClick={() => reserveOfficeHour(slot.id, slot.reserved)}
+          disabled={isReserving}
+        >
+          <UserPlus className="h-4 w-4" />
+        </Button>
+      );
+    }
+
+    if (slot.reservedBy === session?.user?.username) {
+      return (
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full hover:bg-red-200"
+          onClick={() => reserveOfficeHour(slot.id, slot.reserved)}
+          disabled={isReserving}
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <div className="min-h-screen text-gray-800 overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 bg-white/30">
@@ -154,9 +161,7 @@ const ViewOfficeHours = ({ params }) => {
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.3 }}
                         className={`p-4 rounded-lg shadow-md bg-white/80 backdrop-blur-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105 border-l-4 ${
-                          slot.reserved
-                            ? 'border-red-500'
-                            : 'border-green-500'
+                          slot.reserved ? 'border-red-500' : 'border-green-500'
                         }`}
                       >
                         <div className="flex justify-between items-center">
@@ -168,8 +173,7 @@ const ViewOfficeHours = ({ params }) => {
                             )}
                             <div>
                               <p className="text-lg font-medium">
-                                {format(slot.start, 'h:mm a')} -{' '}
-                                {format(slot.end, 'h:mm a')}
+                                {format(slot.start, 'h:mm a')} - {format(slot.end, 'h:mm a')}
                               </p>
                               {slot.reserved && slot.reservedBy && (
                                 <p className="text-sm text-gray-600 mt-1">
@@ -177,40 +181,14 @@ const ViewOfficeHours = ({ params }) => {
                                 </p>
                               )}
                               {slot.reserved &&
-                                slot.reservedBy === session.user.username && (
+                                slot.reservedBy === session?.user?.username && (
                                   <p className="text-sm mt-2 font-bold">
                                     (You reserved this slot)
                                   </p>
                                 )}
                             </div>
                           </div>
-                          <div className="flex space-x-2">
-                            {!slot.reserved ? (
-                              <Button
-                                variant="outline"
-                                size="icon"
-                                className="rounded-full hover:bg-green-200"
-                                onClick={() =>
-                                  reserveOfficeHour(slot.id, slot.reserved)
-                                }
-                                disabled={isReserving}
-                              >
-                                <UserPlus className="h-4 w-4" />
-                              </Button>
-                            ) : slot.reservedBy === session.user.username ? (
-                              <Button
-                                variant="outline"
-                                size="icon"
-                                className="rounded-full hover:bg-red-200"
-                                onClick={() =>
-                                  reserveOfficeHour(slot.id, slot.reserved)
-                                }
-                                disabled={isReserving}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            ) : null}
-                          </div>
+                          <div className="flex space-x-2">{renderSlotActions(slot)}</div>
                         </div>
                       </motion.div>
                     ))}
@@ -238,6 +216,12 @@ const ViewOfficeHours = ({ params }) => {
       <Toaster />
     </div>
   );
+};
+
+ViewOfficeHours.propTypes = {
+  params: PropTypes.shape({
+    instructor: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default ViewOfficeHours;
