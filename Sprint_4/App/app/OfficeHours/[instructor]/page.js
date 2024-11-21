@@ -6,24 +6,16 @@ import {
   motion,
   AnimatePresence,
 } from 'framer-motion';
-
-import { Sphere, MeshDistortMaterial } from '@react-three/drei';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
-{/*import { Input } from '@/components/ui/input';*/}
-{/*import { Label } from '@/components/ui/label';*/}
 import { toast, Toaster } from 'sonner';
 import { format, isSameDay } from 'date-fns';
 import {
-  User,
-  Clock,
-  Trash2,
   UserPlus,
   Calendar as CalendarIcon,
   CheckCircle,
   XCircle,
 } from 'lucide-react';
-import Link from 'next/link';
 import AnimatedBackground from '@/app/components/home/AnimatedBackground';
 import NavBar from '@/app/components/NavBar';
 
@@ -33,7 +25,6 @@ const ViewOfficeHours = ({ params }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const { data: session, status } = useSession();
   const [isReserving, setIsReserving] = useState(false);
-  {/*const [selectedSlot, setSelectedSlot] = useState(null);*/}
 
   useEffect(() => {
     if (instructorName) {
@@ -126,7 +117,7 @@ const ViewOfficeHours = ({ params }) => {
                 initial={{ x: -100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className=" h-full p-6 flex flex-col items-center"
+                className="h-full p-6 flex flex-col items-center"
               >
                 <Calendar
                   mode="single"
