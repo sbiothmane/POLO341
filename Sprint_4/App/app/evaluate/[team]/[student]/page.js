@@ -17,8 +17,7 @@ import {
   Clock,
   PieChart,
   ChevronRight,
-  Plus,
-  Minus,
+
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -201,6 +200,7 @@ export default function EvaluateStudent({ params }) {
       })
 
       const result = await response.json()
+      console.log(result)
 
       if (result.rating) {
         const { ratings, comments } = result.rating
