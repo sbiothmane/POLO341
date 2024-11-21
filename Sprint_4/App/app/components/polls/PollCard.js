@@ -1,7 +1,6 @@
-// components/polls/PollCard.js
 'use client'
 
-import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -40,23 +39,25 @@ export default function PollCard({
           )}
         </CardHeader>
         <CardContent className="space-y-4">
-          {poll.choices.map((choice, index) => {
+          {poll.choices.map((choice) => {
             const percentage = calculatePercentage(choice.votes, totalVotes)
 
             return (
               <motion.div
-                key={index}
+                key={choice.id} // Ensure we use a unique identifier for the key
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: choice.id * 0.1 }} // Adjust delay for animation
               >
                 <div
+                  role="button"
+                  tabIndex={0}
                   className={`rounded-lg p-4 transition-all ${
                     !showResults && !hasVoted && !isInstructor
                       ? 'cursor-pointer hover:bg-blue-50'
                       : ''
                   } ${
-                    selectedChoice === index
+                    selectedChoice === choice.id
                       ? 'bg-blue-50 border-blue-200'
                       : 'bg-white/20'
                   }`}
@@ -64,13 +65,19 @@ export default function PollCard({
                     !showResults &&
                     !hasVoted &&
                     !isInstructor &&
-                    setSelectedChoice(index)
+                    setSelectedChoice(choice.id)
                   }
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      !showResults &&
+                        !hasVoted &&
+                        !isInstructor &&
+                        setSelectedChoice(choice.id)
+                    }
+                  }}
                 >
                   <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium">
-                      {choice.text}
-                    </span>
+                    <span className="font-medium">{choice.text}</span>
                     {showResults && (
                       <Badge variant="secondary">
                         {percentage}% ({choice.votes})
@@ -117,4 +124,25 @@ export default function PollCard({
       </Card>
     </motion.div>
   )
+}
+
+// PropTypes Validation
+PollCard.propTypes = {
+  poll: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    question: PropTypes.string.isRequired,
+    choices: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+        votes: PropTypes.number.isRequired,
+      })
+    ).isRequired,
+  }).isRequired,
+  isInstructor: PropTypes.bool.isRequired,
+  hasVoted: PropTypes.bool.isRequired,
+  handleVoteSubmit: PropTypes.func.isRequired,
+  selectedChoice: PropTypes.number,
+  setSelectedChoice: PropTypes.func.isRequired,
+  showResults: PropTypes.bool.isRequired,
 }
