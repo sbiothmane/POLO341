@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Card,
@@ -100,8 +101,18 @@ export default function TeamCard({ team, instructor, role }) {
               )}
             </motion.div>
           </AnimatePresence>
-        </CardContent>
+        </CardContent> 
       </Card>
     </motion.div>
   )
+}
+
+// PropTypes validation
+TeamCard.propTypes = {
+  team: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    students: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
+  instructor: PropTypes.string.isRequired,
+  role: PropTypes.oneOf(['student', 'instructor']).isRequired,
 }
