@@ -11,3 +11,7 @@ Core feature 4: Dimension-Based Assessment : Add the remaining assessment dimens
 
 Core feature 5: Instructor Dashboard: Create a dashboard for instructors to access the results of the assessment from two different views: summary and detailed view.
 Add any new features that you consider appropriate to enhance the system : Add OfficeHours, Add Polling for instructors.
+
+Core feature 6: Office Hours:
+
+Core feature 7: Polls:
