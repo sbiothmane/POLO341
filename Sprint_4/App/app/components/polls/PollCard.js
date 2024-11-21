@@ -49,25 +49,24 @@ export default function PollCard({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: choice.id * 0.1 }} // Adjust delay for animation
               >
-<button
-  className={`w-full text-left rounded-lg p-4 transition-all ${
-    !showResults && !hasVoted && !isInstructor
-      ? 'cursor-pointer hover:bg-blue-50'
-      : ''
-  } ${
-    selectedChoice === choice.id
-      ? 'bg-blue-50 border-blue-200'
-      : 'bg-white/20'
-  }`}
-  onClick={() =>
-    !showResults &&
-    !hasVoted &&
-    !isInstructor &&
-    setSelectedChoice(choice.id)
-  }
-  disabled={showResults || hasVoted || isInstructor}
->
-
+                <button
+                  className={`w-full text-left rounded-lg p-4 transition-all ${
+                    !showResults && !hasVoted && !isInstructor
+                      ? 'cursor-pointer hover:bg-blue-50'
+                      : ''
+                  } ${
+                    selectedChoice === choice.id
+                      ? 'bg-blue-50 border-blue-200'
+                      : 'bg-white/20'
+                  }`}
+                  onClick={() =>
+                    !showResults &&
+                    !hasVoted &&
+                    !isInstructor &&
+                    setSelectedChoice(choice.id)
+                  }
+                  disabled={showResults || hasVoted || isInstructor}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">{choice.text}</span>
                     {showResults && (
@@ -91,7 +90,7 @@ export default function PollCard({
                       />
                     </motion.div>
                   )}
-                </div>
+                </button>
               </motion.div>
             )
           })}
