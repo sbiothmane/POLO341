@@ -12,7 +12,7 @@ import CalendarComponent from '@/app/components/OfficeHours/CalendarComponent'
 import OfficeHoursList from '@/app/components/OfficeHours/OfficeHoursList'
 import CreateOfficeHoursDialog from '@/app/components/OfficeHours/CreateOfficeHoursDialog'
 import ReserveOfficeHourDialog from '@/app/components/OfficeHours/ReserveOfficeHourDialog'
-import Footer from '@/app/components/OfficeHours/Footer'
+import Footer from '@/app/components/home/Footer'
 
 export default function OfficeHoursCalendar() {
   const { data: session, status } = useSession()
