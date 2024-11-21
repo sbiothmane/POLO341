@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
@@ -10,7 +9,7 @@ import LoadingSpinner from '@/app/components/auth/LoadingSpinner'
 import AuthFormWrapper from '@/app/components/auth/AuthFormWrapper'
 
 export default function Login() {
-  const { data: session, status } = useSession()
+  const { status } = useSession() // Removed 'session' since it is unused
   const router = useRouter()
 
   useEffect(() => {
