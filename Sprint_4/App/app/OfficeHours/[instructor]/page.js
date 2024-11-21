@@ -10,7 +10,7 @@ import { toast, Toaster } from 'sonner';
 import { format, isSameDay } from 'date-fns';
 import { UserPlus, Calendar as CalendarIcon, CheckCircle, XCircle, Trash2 } from 'lucide-react';
 import AnimatedBackground from '@/app/components/home/AnimatedBackground';
-import NavBar from '@/app/components/home/NavBar';
+import NavBar from '@/app/components/home/Navbar';
 
 const ViewOfficeHours = ({ params }) => {
   const [instructorName] = useState(params?.instructor || '');
