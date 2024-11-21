@@ -24,8 +24,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import NavBar from '@/app/components/NavBar';
-import Footer from '@/app/components/Footer';
+import NavBar from '@/app/components/home/NavBar';
+import Footer from '@/app/components/home/Footer';
 
 const AnimatedSphere = () => {
   return (
