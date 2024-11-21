@@ -1,9 +1,8 @@
 'use client';
 
-import { Canvas } from '@react-three/fiber'
 import { useRef, useState } from 'react'
 import { Sphere, MeshDistortMaterial, Float, Stars } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import { useFrame,Canvas } from '@react-three/fiber'
 
 function AnimatedSphere() {
   const meshRef = useRef()
