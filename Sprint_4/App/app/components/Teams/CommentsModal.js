@@ -18,18 +18,13 @@ const CommentsModal = ({ comments, onClose }) => {
         exit={{ opacity: 0 }}
       >
         {/* Background Overlay */}
-        <div
-          className="absolute inset-0 bg-black bg-opacity-50"
-          onClick={onClose}
-          role="button"
-          tabIndex={0}
-          aria-label="Close modal"
-          onKeyPress={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              onClose();
-            }
-          }}
-        ></div>
+<button
+  className="absolute inset-0 bg-black bg-opacity-50"
+  onClick={onClose}
+  aria-label="Close modal"
+  style={{ border: 'none', padding: 0, margin: 0 }}
+></button>
+
 
         {/* Modal Content */}
         <motion.div
