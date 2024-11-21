@@ -1,9 +1,9 @@
 'use client'
 
-import PropTypes from 'prop-types'  // Import PropTypes for prop validation
 import { Calendar } from '@/components/ui/calendar'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
+import PropTypes from 'prop-types'
 
 export default function CalendarComponent({
   selectedDate,
@@ -13,8 +13,8 @@ export default function CalendarComponent({
 }) {
   return (
     <motion.div
-      initial={{ x: -100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.2 }}
       className="h-full p-6 flex flex-col items-center w-full md:w-1/2"
     >
@@ -40,14 +40,9 @@ export default function CalendarComponent({
   )
 }
 
-// Prop validation
 CalendarComponent.propTypes = {
-  selectedDate: PropTypes.instanceOf(Date).isRequired,
+  selectedDate: PropTypes.instanceOf(Date),
   setSelectedDate: PropTypes.func.isRequired,
-  officeHours: PropTypes.arrayOf(
-    PropTypes.shape({
-      start: PropTypes.instanceOf(Date).isRequired,
-    })
-  ).isRequired,
+  officeHours: PropTypes.arrayOf(PropTypes.object).isRequired,
   openCreateDialog: PropTypes.func.isRequired,
 }
