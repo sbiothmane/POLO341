@@ -1,11 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
-const CommentsModal = ({ comments, onClose }) => (
-  <AnimatePresence>
-    {comments && (
+const CommentsModal = ({ comments, onClose }) => {
+  if (!comments) return null;
+
+  const generateKey = (comment) => `${comment.type}-${comment.comment}`;
+
+  return (
+    <AnimatePresence>
       <motion.div
         className="fixed inset-0 flex items-center justify-center z-50"
         initial={{ opacity: 0 }}
@@ -16,6 +21,14 @@ const CommentsModal = ({ comments, onClose }) => (
         <div
           className="absolute inset-0 bg-black bg-opacity-50"
           onClick={onClose}
+          role="button"
+          tabIndex={0}
+          aria-label="Close modal"
+          onKeyPress={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              onClose();
+            }
+          }}
         ></div>
 
         {/* Modal Content */}
@@ -35,13 +48,13 @@ const CommentsModal = ({ comments, onClose }) => (
             </Button>
           </div>
           <div className="space-y-4 max-h-80 overflow-y-auto">
-            {comments.map((comment, index) => (
+            {comments.map((comment) => (
               <motion.div
-                key={index}
+                key={generateKey(comment)}
                 className="p-4 bg-gray-50 rounded-lg shadow"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: 0.1 }}
               >
                 <p className="text-gray-700">
                   <strong className="text-indigo-600">{comment.type}:</strong> {comment.comment}
@@ -58,8 +71,18 @@ const CommentsModal = ({ comments, onClose }) => (
           </Button>
         </motion.div>
       </motion.div>
-    )}
-  </AnimatePresence>
-);
+    </AnimatePresence>
+  );
+};
+
+CommentsModal.propTypes = {
+  comments: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      comment: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default CommentsModal;

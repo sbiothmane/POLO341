@@ -63,8 +63,8 @@ const StudentDetailPage = () => {
       let aValue, bValue;
 
       if (key === 'average') {
-        aValue = calculateAverage(a.ratings);
-        bValue = calculateAverage(b.ratings);
+        aValue = parseFloat(a.average);
+        bValue = parseFloat(b.average);
       } else if (key === 'evaluator') {
         aValue = a[key].toLowerCase();
         bValue = b[key].toLowerCase();
@@ -80,16 +80,6 @@ const StudentDetailPage = () => {
 
     setStudentRatings(sortedData);
   };
-
-  const calculateAverage = (ratings) => (
-    (
-      (ratings.cooperation +
-        ratings.conceptual +
-        ratings.practical +
-        ratings.workEthic) /
-      4
-    ).toFixed(2)
-  );
 
   if (!isInstructor) {
     return (

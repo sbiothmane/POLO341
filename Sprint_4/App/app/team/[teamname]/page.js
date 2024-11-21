@@ -51,6 +51,7 @@ const TeamPage = () => {
 
         if (!summaryData[studentId]) {
           summaryData[studentId] = {
+            id: studentId,
             studentId,
             lastName,
             firstName,
@@ -70,6 +71,7 @@ const TeamPage = () => {
       });
 
       const summaryArray = Object.values(summaryData).map((student) => ({
+        id: student.studentId,
         studentId: student.studentId,
         lastName: student.lastName,
         firstName: student.firstName,

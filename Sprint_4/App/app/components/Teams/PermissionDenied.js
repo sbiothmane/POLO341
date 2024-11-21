@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { AlertTriangle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,5 +20,9 @@ const PermissionDenied = ({ message }) => (
     </Card>
   </motion.div>
 );
+
+PermissionDenied.propTypes = {
+  message: PropTypes.string.isRequired,
+};
 
 export default PermissionDenied;
