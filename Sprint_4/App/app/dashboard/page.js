@@ -3,9 +3,9 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import AnimatedBackground from '@/app/components/dashboard/AnimatedBackground'
-import Navbar from '@/app/components/auth/Navbar' // Updated import
-import Footer from '@/app/components/auth/Footer'
+import AnimatedBackground from '@/app/components/home/AnimatedBackground'
+import Navbar from '@/app/components/home/Navbar' // Updated import
+import Footer from '@/app/components/home/Footer'
 import UserProfile from '@/app/components/dashboard/UserProfile'
 import TeamBox from '@/app/components/dashboard/TeamBox'
 import { Loader2 } from 'lucide-react'

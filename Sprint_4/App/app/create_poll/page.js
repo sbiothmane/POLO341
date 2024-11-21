@@ -29,100 +29,10 @@ import {
   AlertCircle,
   ChevronRight,
 } from 'lucide-react'
+import AnimatedBackground from '../components/home/AnimatedBackground'
+import NavBar from '../components/home/NavBar'
+import Footer from '../components/home/Footer'
 
-// AnimatedSphere Component
-const AnimatedSphere = () => {
-  return (
-    <Sphere args={[1, 100, 200]} scale={2}>
-      <MeshDistortMaterial
-        color="#FFFFFF"
-        attach="material"
-        distort={0.5}
-        speed={1.5}
-        roughness={0}
-      />
-    </Sphere>
-  )
-}
-
-// AnimatedBackground Component
-const AnimatedBackground = () => {
-  return (
-    <div className="fixed inset-0 z-0">
-      <Canvas>
-        <ambientLight intensity={0.8} />
-        <pointLight position={[10, 10, 10]} intensity={0.5} />
-        <AnimatedSphere />
-      </Canvas>
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-50/70 via-blue-50/70 to-indigo-50/70" />
-    </div>
-  )
-}
-
-// NavBar Component
-const NavBar = ({ role }) => {
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-lg border-b border-gray-200/20">
-      <div className="container mx-auto px-6 py-3 flex justify-between items-center">
-        <Link href="/dashboard" className="text-2xl font-bold text-gray-800">
-          PeerAssess
-        </Link>
-        <div className="flex items-center space-x-4">
-          {role === 'instructor' && (
-            <div className="flex space-x-2">
-              <Link href="/create_time">
-                <Button
-                  variant="outline"
-                  className="flex items-center bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white"
-                >
-                  <Clock className="mr-2 h-4 w-4" />
-                  Office Hours
-                </Button>
-              </Link>
-              <Link href="/create_poll">
-                <Button
-                  variant="outline"
-                  className="flex items-center bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white"
-                >
-                  <PieChart className="mr-2 h-4 w-4" />
-                  Polls
-                </Button>
-              </Link>
-              <Link href="/create_teams">
-                <Button
-                  variant="outline"
-                  className="flex items-center bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
-                >
-                  <Users className="mr-2 h-4 w-4" />
-                  Team
-                </Button>
-              </Link>
-            </div>
-          )}
-          <Button
-            variant="ghost"
-            className="text-gray-800 flex items-center"
-            onClick={() => signOut()}
-          >
-            <User className="mr-2 h-5 w-5 text-gray-800" />
-            Logout
-          </Button>
-        </div>
-      </div>
-    </nav>
-  )
-}
-
-// Footer Component
-const Footer = () => {
-  return (
-    <footer className="bg-white/10 backdrop-blur-lg py-8">
-      <div className="container mx-auto px-6 text-center text-gray-800">
-        <p>&copy; 2024 Peer Assessment System. All rights reserved.</p>
-      </div>
-    </footer>
-  )
-}
 
 // CreatePollPage Component
 export default function CreatePollPage() {
