@@ -2,18 +2,17 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { motion } from 'framer-motion'
 import { format, parse, addMinutes, isSameDay } from 'date-fns'
 import { toast, Toaster } from 'sonner'
 
-import AnimatedBackground from '@/app/components/home/AnimatedBackground'
-import Navbar from '@/app/components/home/Navbar'
+import AnimatedBackground from '@/components/home/AnimatedBackground'
+import Navbar from '@/components/home/Navbar'
 
-import CalendarComponent from '@/app/components/OfficeHours/CalendarComponent'
-import OfficeHoursList from '@/app/components/OfficeHours/OfficeHoursList'
-import CreateOfficeHoursDialog from '@/app/components/OfficeHours/CreateOfficeHoursDialog'
-import ReserveOfficeHourDialog from '@/app/components/OfficeHours/ReserveOfficeHourDialog'
-import Footer from '@/app/components/home/Footer'
+import CalendarComponent from '@/components/OfficeHours/CalendarComponent'
+import OfficeHoursList from '@/components/OfficeHours/OfficeHoursList'
+import CreateOfficeHoursDialog from '@/components/OfficeHours/CreateOfficeHoursDialog'
+import ReserveOfficeHourDialog from '@/components/OfficeHours/ReserveOfficeHourDialog'
+import Footer from '@/components/OfficeHours/Footer'
 
 export default function OfficeHoursCalendar() {
   const { data: session, status } = useSession()
@@ -146,27 +145,18 @@ export default function OfficeHoursCalendar() {
   }
 
   return (
-    <div className="min-h-screen text-gray-800 flex flex-col bg-gradient-to-br from-blue-50 to-purple-50 bg-white/30">
+    <div className="min-h-screen text-gray-800 overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 bg-white/30 flex flex-col">
       <AnimatedBackground />
       <Navbar role={session?.user?.role} />
-      <main className="pt-24 z-20 flex-1 items-center justify-center">
-        <section className="py-10">
-          <div className="container mx-auto">
-            <div className="flex flex-col md:flex-row bg-white/30">
-              <CalendarComponent
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-                officeHours={officeHours}
-                openCreateDialog={() => setIsCreateDialogOpen(true)}
-              />
-              <OfficeHoursList
-                selectedDate={selectedDate}
-                officeHours={officeHours}
-                handleDeleteOfficeHour={handleDeleteOfficeHour}
-                setSelectedSlot={setSelectedSlot}
-                filteredOfficeHours={filteredOfficeHours}
-              />
-            </div>
+      <main className="pt-24 relative z-10 flex-grow flex flex-col">
+        <section className="flex-grow py-10">
+          <div className="container mx-auto flex justify-center">
+            <CalendarComponent
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              officeHours={officeHours}
+              openCreateDialog={() => setIsCreateDialogOpen(true)}
+            />
           </div>
         </section>
       </main>
