@@ -1,7 +1,6 @@
-// components/polls/PollsList.js
 'use client'
 
-import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { motion, AnimatePresence } from 'framer-motion'
 import PollCard from './PollCard'
 import { Card, CardContent } from '@/components/ui/card'
@@ -49,4 +48,27 @@ export default function PollsList({
       )}
     </AnimatePresence>
   )
+}
+
+// PropTypes Validation
+PollsList.propTypes = {
+  polls: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      question: PropTypes.string.isRequired,
+      choices: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string.isRequired,
+          text: PropTypes.string.isRequired,
+          votes: PropTypes.number.isRequired,
+        })
+      ).isRequired,
+    })
+  ).isRequired,
+  isInstructor: PropTypes.bool.isRequired,
+  hasVoted: PropTypes.bool.isRequired,
+  handleVoteSubmit: PropTypes.func.isRequired,
+  selectedChoice: PropTypes.number,
+  setSelectedChoice: PropTypes.func.isRequired,
+  showResults: PropTypes.bool.isRequired,
 }
