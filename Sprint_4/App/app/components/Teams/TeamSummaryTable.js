@@ -27,11 +27,9 @@ render: (row) => {
     <Badge variant={badgeVariant}>
       {row.average}
     </Badge>
-  );
-},
-
-
-
+          );
+        },
+      },   
     { key: 'peersResponded', label: 'Peers Responded', sortable: true },
   ];
 
