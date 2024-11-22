@@ -26,7 +26,7 @@ export default function CreatePollPage() {
   const [question, setQuestion] = useState('')
   const [choices, setChoices] = useState(['', ''])
   const [loading, setLoading] = useState(false)
-  const [hasActivePoll, setHasActivePoll] = useState(false)
+  const [ setHasActivePoll] = useState(false)
 
   useEffect(() => {
     if (status === 'authenticated' && session?.user?.role === 'instructor') {
