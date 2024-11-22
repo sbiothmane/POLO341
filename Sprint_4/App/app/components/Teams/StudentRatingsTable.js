@@ -4,7 +4,11 @@ import SortableTable from './SortableTable';
 import { Badge } from '@/components/ui/badge';
 
 const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick }) => {
-  const calculateAverage = (ratings) =>
+  const calculateAverage = (ratings) => {
+    if (average >= 4) return 'success';
+    if (average >= 3) return 'warning';
+    return 'destructive';
+  };
     (
       (ratings.cooperation +
         ratings.conceptual +
