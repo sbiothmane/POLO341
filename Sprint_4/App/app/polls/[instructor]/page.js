@@ -25,6 +25,12 @@ import {
   onSnapshot,
 } from 'firebase/firestore'
 
+PollsPage.propTypes = {
+  params: PropTypes.shape({
+    instructor: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
 export default function PollsPage({ params }) {
   const { instructor } = params
   const { data: session, status } = useSession()
