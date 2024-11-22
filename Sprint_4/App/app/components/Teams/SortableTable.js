@@ -44,19 +44,22 @@ const SortableTable = ({ data, columns, sortConfig, onSort, onRowClick }) => (
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="hover:bg-indigo-50 transition-colors cursor-pointer"
-                onClick={() => onRowClick && onRowClick(row)}
-                role="button"
-                tabIndex={0}
-                onKeyPress={(e) => {
+                className="hover:bg-indigo-50 transition-colors"
+                >
+                {columns.map((column) => (
+                    <TableCell key={column.key} className="text-center">
+                       <button
+                           type="button"
+                            className="w-full h-full bg-transparent border-none text-left cursor-pointer"
+                             onClick={() => onRowClick && onRowClick(row)}
+                            onKeyPress={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     onRowClick && onRowClick(row);
                   }
                 }}
               >
-                {columns.map((column) => (
-                  <TableCell key={column.key} className="text-center">
-                    {column.render ? column.render(row) : row[column.key]}
+        {column.render ? column.render(row) : row[column.key]}
+                     </button>
                   </TableCell>
                 ))}
               </motion.tr>
