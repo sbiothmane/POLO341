@@ -24,7 +24,7 @@ render: (row) => {
     : 'destructive';
 
   return (
-    <Badge variant={badgeVariant}>
+    const <Badge variant={badgeVariant}>
       {row.average}
     </Badge>
   );
