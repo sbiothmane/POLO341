@@ -210,7 +210,7 @@ const ChoicesField = ({ choices, onUpdate, onAdd, onRemove }) => (
     transition={{ delay: 0.3 }}
     className="space-y-4"
   >
-    <label className="block text-lg font-medium">Choices</label>
+<label htmlFor={`choice-${index}`} className="block text-lg font-medium">Choices</label>
     <AnimatePresence>
       {choices.map((choice, index) => (
         <motion.div
