@@ -50,13 +50,13 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
       label: 'Average',
       sortable: true,
       render: (row) => (
-       const badgeVariant = row.average >= 4
+        badgeVariant = row.average >= 4
               ? 'success'
               : row.average >= 3
               ? 'warning'
               : 'destructive'
         return (
-          <Badge variant={badgeVariant}>
+           <Badge variant={badgeVariant}>
           {row.average}
         </Badge>
       );
