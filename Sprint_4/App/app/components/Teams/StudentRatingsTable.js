@@ -14,6 +14,12 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
   return parseFloat(average.toFixed(2));
   };
 
+    const getBadgeVariant = (average) => {
+    if (average >= 4) return 'success';
+    if (average >= 3) return 'warning';
+    return 'destructive';
+  };
+
   const data = studentRatings.map((rating, index) => ({
     id: `${rating.evaluator}-${index}`,
     ...rating,
@@ -51,20 +57,11 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
       label: 'Average',
       sortable: true,
       render: (row) => {
-        // Extract the ternary operation into a separate statement
-        const badgeVariant = row.average >= 4
-          ? 'success'
-          : row.average >= 3
-          ? 'warning'
-          : 'destructive';
-
-        return (
           <Badge variant={badgeVariant}>
             {row.average}
           </Badge>
         );
       },
-    },
   ];
 
   return (
