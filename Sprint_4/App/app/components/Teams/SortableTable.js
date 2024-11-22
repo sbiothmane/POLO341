@@ -54,7 +54,7 @@ const SortableTable = ({ data, columns, sortConfig, onSort, onRowClick }) => (
                              onClick={() => onRowClick && onRowClick(row)}
                             onKeyPress={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
-                    onRowClick && onRowClick(row);
+                     onRowClick?.(row);
                   }
                 }}
               >
