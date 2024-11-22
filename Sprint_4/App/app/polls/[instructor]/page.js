@@ -48,7 +48,7 @@ export default function PollsPage({ params }) {
   useEffect(() => {
     if (status === 'authenticated') {
       const unsubscribe = fetchPolls()
-      return () => unsubscribe && unsubscribe()
+      return () => unsubscribe?.();
     } else if (status === 'unauthenticated') {
       router.push('/login')
     }
