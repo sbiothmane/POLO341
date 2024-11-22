@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Signup from '../signup/page';
 import '@testing-library/jest-dom';
-import { act } from 'react-dom/test-utils';
 
 
 // Mocking the fetch API for availability check and signup submission
