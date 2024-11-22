@@ -17,7 +17,6 @@ const TeamSummaryTable = ({ summaryTable, sortConfig, sortTable, onStudentClick 
       label: 'Average',
       sortable: true,
 render: (row) => {
-
   const badgeVariant = row.average >= 4
     ? 'success'
     : row.average >= 3
@@ -30,6 +29,7 @@ render: (row) => {
     </Badge>
   );
 },
+
 
     { key: 'peersResponded', label: 'Peers Responded', sortable: true },
   ];
