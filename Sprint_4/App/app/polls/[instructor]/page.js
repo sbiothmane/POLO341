@@ -2,6 +2,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { motion } from 'framer-motion'
@@ -16,7 +17,6 @@ import { PieChart, Loader2, XCircle } from 'lucide-react'
 import { db } from '@/lib/firebase'
 import {
   collection,
-  getDocs,
   query,
   where,
   doc,
@@ -24,6 +24,12 @@ import {
   arrayUnion,
   onSnapshot,
 } from 'firebase/firestore'
+
+PollsPage.propTypes = {
+  params: PropTypes.shape({
+    instructor: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default function PollsPage({ params }) {
   const { instructor } = params
@@ -42,7 +48,7 @@ export default function PollsPage({ params }) {
   useEffect(() => {
     if (status === 'authenticated') {
       const unsubscribe = fetchPolls()
-      return () => unsubscribe && unsubscribe()
+      return () => unsubscribe?.();
     } else if (status === 'unauthenticated') {
       router.push('/login')
     }

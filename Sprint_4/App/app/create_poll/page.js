@@ -26,7 +26,7 @@ export default function CreatePollPage() {
   const [question, setQuestion] = useState('')
   const [choices, setChoices] = useState(['', ''])
   const [loading, setLoading] = useState(false)
-  const [hasActivePoll, setHasActivePoll] = useState(false)
+  const [ setHasActivePoll] = useState(false)
 
   useEffect(() => {
     if (status === 'authenticated' && session?.user?.role === 'instructor') {
@@ -210,11 +210,11 @@ const ChoicesField = ({ choices, onUpdate, onAdd, onRemove }) => (
     transition={{ delay: 0.3 }}
     className="space-y-4"
   >
-    <label className="block text-lg font-medium">Choices</label>
+<label htmlFor={`choice-${index}`} className="block text-lg font-medium">Choices</label>
     <AnimatePresence>
       {choices.map((choice, index) => (
         <motion.div
-          key={index}
+          key={`${choice}-${index}`}
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}

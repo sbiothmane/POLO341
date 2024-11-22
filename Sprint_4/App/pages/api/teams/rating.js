@@ -1,5 +1,5 @@
 import { db } from '../../../lib/firebase'; // Firebase config
-import { collection, query, where, getDocs, addDoc, doc, Timestamp } from 'firebase/firestore'; // Firestore methods
+import { collection, query, where, getDocs } from 'firebase/firestore'; // Firestore methods
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {

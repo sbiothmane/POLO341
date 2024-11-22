@@ -11,6 +11,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog'
+import PropTypes from 'prop-types'
 
 export default function ReserveOfficeHourDialog({
   selectedSlot,
@@ -54,4 +55,11 @@ export default function ReserveOfficeHourDialog({
       </DialogContent>
     </Dialog>
   )
+}
+
+ReserveOfficeHourDialog.propTypes = {
+  selectedSlot: PropTypes.object,
+  setSelectedSlot: PropTypes.func.isRequired,
+  handleReservation: PropTypes.func.isRequired,
+  isReserving: PropTypes.bool.isRequired,
 }

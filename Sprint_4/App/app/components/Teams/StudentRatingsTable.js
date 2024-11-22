@@ -4,14 +4,21 @@ import SortableTable from './SortableTable';
 import { Badge } from '@/components/ui/badge';
 
 const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick }) => {
-  const calculateAverage = (ratings) =>
-    (
+  const calculateAverage = (ratings) => {
+    const average =
       (ratings.cooperation +
         ratings.conceptual +
         ratings.practical +
         ratings.workEthic) /
       4
-    ).toFixed(2);
+  return parseFloat(average.toFixed(2));
+  };
+
+    const getBadgeVariant = (average) => {
+    if (average >= 4) return 'success';
+    if (average >= 3) return 'warning';
+    return 'destructive';
+  };
 
   const data = studentRatings.map((rating, index) => ({
     id: `${rating.evaluator}-${index}`,
@@ -25,43 +32,38 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
       key: 'cooperation',
       label: 'Cooperation',
       sortable: true,
-      render: (row) => row.ratings.cooperation,
+      render: (row) => row.ratings.cooperation
     },
     {
       key: 'conceptual',
       label: 'Conceptual',
       sortable: true,
-      render: (row) => row.ratings.conceptual,
+      render: (row) => row.ratings.conceptual
     },
     {
       key: 'practical',
       label: 'Practical',
       sortable: true,
-      render: (row) => row.ratings.practical,
+      render: (row) => row.ratings.practical
     },
     {
       key: 'workEthic',
       label: 'Work Ethic',
       sortable: true,
-      render: (row) => row.ratings.workEthic,
+      render: (row) => row.ratings.workEthic
     },
     {
       key: 'average',
       label: 'Average',
       sortable: true,
-      render: (row) => (
-        <Badge
-          variant={
-            row.average >= 4
-              ? 'success'
-              : row.average >= 3
-              ? 'warning'
-              : 'destructive'
-          }
-        >
-          {row.average}
-        </Badge>
-      ),
+      render: (row) => {
+       const badgeVariant = getBadgeVariant(row.average);
+        return (
+          <Badge variant={badgeVariant}>
+            {row.average}
+          </Badge>
+        );
+      },
     },
   ];
 

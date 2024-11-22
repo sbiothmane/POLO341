@@ -1,4 +1,4 @@
-import { getFirestore, doc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
 import { db } from '../../lib/firebase';
 

@@ -3,6 +3,7 @@ import './globals.css';
 import { Providers } from './providers';
 import 'react-toastify/dist/ReactToastify.css'
 import { Toaster } from 'react-hot-toast'
+import PropTypes from 'prop-types'
 
 export default function RootLayout({ children }) {
   return (
@@ -14,3 +15,7 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
+RootLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+};

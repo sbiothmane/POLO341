@@ -3,7 +3,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs'; // Use bcryptjs
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
-import { createFakeStudents } from '../makeFakeStudents'; 
 
 export default NextAuth({
   providers: [

@@ -1,5 +1,5 @@
 import { db } from '../../../lib/firebase';
-import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 
 export async function getTeamRatings(teamName) {
     try {
