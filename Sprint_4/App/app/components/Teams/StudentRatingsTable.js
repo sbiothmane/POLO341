@@ -5,10 +5,6 @@ import { Badge } from '@/components/ui/badge';
 
 const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick }) => {
   const calculateAverage = (ratings) => {
-    if (average >= 4) return 'success';
-    if (average >= 3) return 'warning';
-    return 'destructive';
-  };
     (
       (ratings.cooperation +
         ratings.conceptual +
@@ -16,6 +12,7 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
         ratings.workEthic) /
       4
     ).toFixed(2);
+  };
 
   const data = studentRatings.map((rating, index) => ({
     id: `${rating.evaluator}-${index}`,
