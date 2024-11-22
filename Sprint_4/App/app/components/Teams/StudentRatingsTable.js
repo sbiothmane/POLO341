@@ -57,11 +57,13 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
       label: 'Average',
       sortable: true,
       render: (row) => {
+       const badgeVariant = getBadgeVariant(row.average);
+        return (
           <Badge variant={badgeVariant}>
             {row.average}
           </Badge>
         );
-      },
+      }
   ];
 
   return (
