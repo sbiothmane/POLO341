@@ -62,7 +62,7 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
       );
     },
 
-  return (
+  , (
     <SortableTable
       data={data}
       columns={columns}
