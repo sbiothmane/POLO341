@@ -146,7 +146,9 @@ function CreatePollForm({ session }) {
               transition={{ delay: 0.3 }}
               className="space-y-4"
             >
-              <label className="block text-lg font-medium">Choices</label>
+            <label className="block text-lg font-medium" htmlFor="choices">
+            Choices
+            </label>
               <AnimatePresence>
                 {choices.map((choice, index) => (
                   <motion.div
