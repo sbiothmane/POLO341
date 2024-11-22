@@ -63,7 +63,7 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
             {row.average}
           </Badge>
         );
-      }
+      },
   ];
 
   return (
