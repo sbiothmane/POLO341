@@ -16,7 +16,6 @@ import { PieChart, Loader2, XCircle } from 'lucide-react'
 import { db } from '@/lib/firebase'
 import {
   collection,
-  getDocs,
   query,
   where,
   doc,
