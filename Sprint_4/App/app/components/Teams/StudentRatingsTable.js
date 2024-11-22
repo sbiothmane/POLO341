@@ -5,13 +5,13 @@ import { Badge } from '@/components/ui/badge';
 
 const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick }) => {
   const calculateAverage = (ratings) => {
-    (
+    const average =
       (ratings.cooperation +
         ratings.conceptual +
         ratings.practical +
         ratings.workEthic) /
       4
-    ).toFixed(2);
+  return parseFloat(average.toFixed(2));
   };
 
   const data = studentRatings.map((rating, index) => ({
