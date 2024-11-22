@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { format, parse, addMinutes, isSameDay } from 'date-fns'
+import { parse, addMinutes, isSameDay } from 'date-fns'
 import { toast, Toaster } from 'sonner'
 
 import AnimatedBackground from '@/app/components/home/AnimatedBackground'
 import Navbar from '@/app/components/home/Navbar'
 
 import CalendarComponent from '@/app/components/OfficeHours/CalendarComponent'
-import OfficeHoursList from '@/app/components/OfficeHours/OfficeHoursList'
 import CreateOfficeHoursDialog from '@/app/components/OfficeHours/CreateOfficeHoursDialog'
 import ReserveOfficeHourDialog from '@/app/components/OfficeHours/ReserveOfficeHourDialog'
 import Footer from '@/app/components/home/Footer'
