@@ -16,20 +16,21 @@ const TeamSummaryTable = ({ summaryTable, sortConfig, sortTable, onStudentClick 
       key: 'average',
       label: 'Average',
       sortable: true,
-      render: (row) => (
-        <Badge
-          variant={
-            row.average >= 4
-              ? 'success'
-              : row.average >= 3
-              ? 'warning'
-              : 'destructive'
-          }
-        >
-          {row.average}
-        </Badge>
-      ),
-    },
+render: (row) => {
+
+  const badgeVariant = row.average >= 4
+    ? 'success'
+    : row.average >= 3
+    ? 'warning'
+    : 'destructive';
+
+  return (
+    <Badge variant={badgeVariant}>
+      {row.average}
+    </Badge>
+  );
+},
+
     { key: 'peersResponded', label: 'Peers Responded', sortable: true },
   ];
 
