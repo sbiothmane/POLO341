@@ -45,26 +45,26 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
       sortable: true,
       render: (row) => row.ratings.workEthic,
     },
-{
-  key: 'average',
-  label: 'Average',
-  sortable: true,
-  render: (row) => {
-    // Extracting the logic into a separate statement
-    const badgeVariant = row.average >= 4
-      ? 'success'
-      : (row.average >= 3 ? 'warning' : 'destructive');
+    {
+      key: 'average',
+      label: 'Average',
+      sortable: true,
+      render: (row) => {
+        // Extract the ternary operation into a separate statement
+        const badgeVariant = row.average >= 4
+          ? 'success'
+          : row.average >= 3
+          ? 'warning'
+          : 'destructive';
 
-    // Ensuring the return statement is clear and follows the logic
-    return (
-      <Badge variant={badgeVariant}>
-        {row.average}
-      </Badge>
-    );
-  },
-},
-
-];
+        return (
+          <Badge variant={badgeVariant}>
+            {row.average}
+          </Badge>
+        );
+      },
+    },
+  ];
 
   return (
     <SortableTable
