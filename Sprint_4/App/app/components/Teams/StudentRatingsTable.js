@@ -56,7 +56,7 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
               ? 'warning'
               : 'destructive'
         return (
-           <Badge variant={badgeVariant}>
+           const <Badge variant={badgeVariant}>
           {row.average}
         </Badge>
       );
