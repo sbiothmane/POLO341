@@ -60,8 +60,10 @@ render: (row) => {
     <Badge variant={badgeVariant}>
       {row.average}
     </Badge>
-  );
-},
+        );
+      },
+    };
+  ];
 
 
   return (
