@@ -1,7 +1,5 @@
 import React from 'react';
-import { screen, fireEvent } from '@testing-library/react';
-import SignOutButton from '../components/Disconnect.js'; // Adjust the path if necessary
-import { signOut, useSession } from "next-auth/react/index.js";
+import { useSession } from "next-auth/react/index.js";
 
 // Mock the next-auth useSession hook and signOut function
 jest.mock("next-auth/react", () => ({
