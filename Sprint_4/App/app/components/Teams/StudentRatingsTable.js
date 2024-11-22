@@ -19,7 +19,7 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
     average: calculateAverage(rating.ratings),
   }));
 
-  const columns = [
+  const columns =
     { key: 'evaluator', label: 'Evaluator', sortable: true },
     {
       key: 'cooperation',
@@ -63,7 +63,6 @@ render: (row) => {
         );
       },
     },
-  ];
 
 
   return (
