@@ -32,25 +32,25 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
       key: 'cooperation',
       label: 'Cooperation',
       sortable: true,
-      render: (row) => row.ratings.cooperation,
+      render: (row) => row.ratings.cooperation
     },
     {
       key: 'conceptual',
       label: 'Conceptual',
       sortable: true,
-      render: (row) => row.ratings.conceptual,
+      render: (row) => row.ratings.conceptual
     },
     {
       key: 'practical',
       label: 'Practical',
       sortable: true,
-      render: (row) => row.ratings.practical,
+      render: (row) => row.ratings.practical
     },
     {
       key: 'workEthic',
       label: 'Work Ethic',
       sortable: true,
-      render: (row) => row.ratings.workEthic,
+      render: (row) => row.ratings.workEthic
     },
     {
       key: 'average',
