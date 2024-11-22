@@ -64,6 +64,7 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
           </Badge>
         );
       },
+    },
   ];
 
   return (
