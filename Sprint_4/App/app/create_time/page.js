@@ -92,21 +92,22 @@ export default function OfficeHoursCalendar() {
     return slots
   }
 
-  async function handleDeleteOfficeHour(id) => {
-    try {
-      const response = await fetch('/api/office_index_delete', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id }),
-      })
-      if (!response.ok) throw new Error('Failed to delete office hour')
-      toast.success('Office hour deleted successfully')
-      setOfficeHours((prevSlots) => prevSlots.filter((slot) => slot.id !== id))
-    } catch (error) {
-      console.error('Error deleting office hour:', error)
-      toast.error('Failed to delete the office hour')
-    }
+async function handleDeleteOfficeHour(id) {
+  try {
+    const response = await fetch('/api/office_index_delete', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    })
+    if (!response.ok) throw new Error('Failed to delete office hour')
+    toast.success('Office hour deleted successfully')
+    setOfficeHours((prevSlots) => prevSlots.filter((slot) => slot.id !== id))
+  } catch (error) {
+    console.error('Error deleting office hour:', error)
+    toast.error('Failed to delete the office hour')
   }
+}
+
 
   const handleReservation = async (slot, studentName) => {
     if (!slot || !studentName) return
