@@ -253,7 +253,6 @@ CreatePollForm.propTypes = {
       username: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  children: PropTypes.node, // Added children prop validation
 };
 
 export default CreatePollForm;
