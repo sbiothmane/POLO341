@@ -55,14 +55,14 @@ const StudentRatingsTable = ({ studentRatings, sortConfig, sortTable, onRowClick
               : row.average >= 3
               ? 'warning'
               : 'destructive'
-        return (
+        , (
            const <Badge variant={badgeVariant}>
           {row.average}
         </Badge>
       );
     },
 
-  , (
+  return (
     <SortableTable
       data={data}
       columns={columns}
