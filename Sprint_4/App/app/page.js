@@ -1,6 +1,6 @@
 'use client'
 
-import { useScroll, useSpring } from 'framer-motion'
+import { useScroll, useSpring, motion } from 'framer-motion'
 import AnimatedBackground from '@/app/components/home/AnimatedBackground'
 import Navbar from '@/app/components/home/Navbar'
 import HeroSection from '@/app/components/home/HeroSection'
@@ -10,7 +10,6 @@ import TestimonialsSection from '@/app/components/home/TestimonialsSection'
 import TeamSection from '@/app/components/home/TeamSection'
 import CTASection from '@/app/components/home/CTASection'
 import Footer from '@/app/components/home/Footer'
-import { motion } from 'framer-motion'
 
 export default function Home() {
   const { scrollYProgress } = useScroll()
