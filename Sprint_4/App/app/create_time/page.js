@@ -92,7 +92,7 @@ export default function OfficeHoursCalendar() {
     return slots
   }
 
-  const handleDeleteOfficeHour = async (id) => {
+  async function handleDeleteOfficeHour(id) => {
     try {
       const response = await fetch('/api/office_index_delete', {
         method: 'DELETE',
