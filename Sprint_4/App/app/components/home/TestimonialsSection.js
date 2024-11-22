@@ -24,7 +24,7 @@ export default function TestimonialsSection() {
         <div className="relative h-48">
           {testimonials.map((testimonial, index) => (
             <motion.div
-              key= key={testimonial.author + testimonial.quote}
+              key={testimonial.author + testimonial.quote}
               className="absolute inset-0"
               initial={{ opacity: 0 }}
               animate={{ opacity: index === activeTestimonial ? 1 : 0 }}
