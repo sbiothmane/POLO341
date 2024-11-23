@@ -1,6 +1,6 @@
-import * as React from "react"
+import PropTypes from 'prop-types';
 import { cva } from "class-variance-authority";
-
+import * as React from "react";
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
@@ -22,6 +22,11 @@ const badgeVariants = cva(
     },
   }
 )
+
+Badge.propTypes = {
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(['default', 'secondary', 'destructive', 'outline']),
+};
 
 function Badge({
   className,
