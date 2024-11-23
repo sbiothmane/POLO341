@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { parse, addMinutes, isSameDay } from 'date-fns'
+import { parse, addMinutes } from 'date-fns'
 import { toast, Toaster } from 'sonner'
 
 import AnimatedBackground from '@/app/components/home/AnimatedBackground'
