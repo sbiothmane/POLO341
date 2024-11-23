@@ -62,7 +62,7 @@ function Calendar({
 
   />
   ),
-}
+};
 
 Calendar.propTypes = {
   className: PropTypes.string,
