@@ -9,6 +9,7 @@ const TeamSummaryTable = ({ summaryTable, sortConfig, sortTable, onStudentClick 
     if (average >= 4) return 'success';
     if (average >= 3) return 'warning';
     return 'destructive';
+    };
       
   const columns = [
     { key: 'studentId', label: 'Student ID', sortable: true },
