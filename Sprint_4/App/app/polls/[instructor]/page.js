@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import PropTypes from 'prop-types' // Import PropTypes
+import PropTypes from 'prop-types'
 import {
   PieChart,
   Loader2,
@@ -223,10 +223,9 @@ export default function PollsPage({ params }) {
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: index * 0.1 }}
                             >
-                              <div
-                                role="button"
-                                tabIndex="0"
-                                className={`rounded-lg p-4 transition-all ${
+                              <button
+                                type="button"
+                                className={`w-full text-left rounded-lg p-4 transition-all ${
                                   !showResults &&
                                   !hasVoted &&
                                   !isInstructor
@@ -243,16 +242,6 @@ export default function PollsPage({ params }) {
                                   !isInstructor &&
                                   setSelectedChoice(index)
                                 }
-                                onKeyDown={(e) => {
-                                  if (
-                                    !showResults &&
-                                    !hasVoted &&
-                                    !isInstructor &&
-                                    (e.key === 'Enter' || e.key === ' ')
-                                  ) {
-                                    setSelectedChoice(index)
-                                  }
-                                }}
                               >
                                 <div className="flex justify-between items-center mb-2">
                                   <span className="font-medium">
@@ -269,7 +258,10 @@ export default function PollsPage({ params }) {
                                     className="h-2 bg-gray-200 rounded-full overflow-hidden"
                                     initial={{ width: 0 }}
                                     animate={{ width: '100%' }}
-                                    transition={{ duration: 0.5, delay: 0.2 }}
+                                    transition={{
+                                      duration: 0.5,
+                                      delay: 0.2,
+                                    }}
                                   >
                                     <motion.div
                                       className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
@@ -282,7 +274,7 @@ export default function PollsPage({ params }) {
                                     />
                                   </motion.div>
                                 )}
-                              </div>
+                              </button>
                             </motion.div>
                           )
                         })}
