@@ -42,10 +42,14 @@ const AlertTitle = React.forwardRef(({ className, ...props }, ref) => (
     ref={ref}
     className={cn("mb-1 font-medium leading-none tracking-tight", className)}
     {...props} />
+     >
+    {children}
+  </h5>
 ))
 
 AlertTitle.propTypes = {
   className: PropTypes.string,
+  children: PropTypes.node.isRequired,
 }
 
 AlertTitle.displayName = "AlertTitle"
@@ -55,10 +59,14 @@ const AlertDescription = React.forwardRef(({ className, ...props }, ref) => (
     ref={ref}
     className={cn("text-sm [&_p]:leading-relaxed", className)}
     {...props} />
+   >
+    {children}
+  </div>
 ))
 
 AlertDescription.propTypes = {
   className: PropTypes.string,
+  children: PropTypes.node,
 };
 
 AlertDescription.displayName = "AlertDescription"
