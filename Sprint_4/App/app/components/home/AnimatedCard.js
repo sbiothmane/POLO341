@@ -54,3 +54,7 @@ export default function AnimatedCard({ children }) {
     </motion.div>
   )
 }
+
+AnimatedCard.propTypes = {
+  children: PropTypes.node.isRequired,
+};
