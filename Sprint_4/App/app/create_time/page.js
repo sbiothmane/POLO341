@@ -119,7 +119,7 @@ export default function OfficeHoursCalendar() {
     }
   }
 
-
+    const filteredOfficeHours = selectedDate
     ? officeHours.filter((slot) => isSameDay(slot.start, selectedDate))
     : []
 
