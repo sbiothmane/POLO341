@@ -1,3 +1,5 @@
+// page.js
+
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -7,14 +9,15 @@ import { toast, Toaster } from 'sonner'
 
 import AnimatedBackground from '@/app/components/home/AnimatedBackground'
 import Navbar from '@/app/components/home/Navbar'
-
 import CalendarComponent from '@/app/components/OfficeHours/CalendarComponent'
 import CreateOfficeHoursDialog from '@/app/components/OfficeHours/CreateOfficeHoursDialog'
 import ReserveOfficeHourDialog from '@/app/components/OfficeHours/ReserveOfficeHourDialog'
+import OfficeHoursList from '@/app/components/OfficeHours/OfficeHoursList'
 import Footer from '@/app/components/home/Footer'
 
 export default function OfficeHoursCalendar() {
   const { data: session, status } = useSession()
+
   const [officeHours, setOfficeHours] = useState([])
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [isCreating, setIsCreating] = useState(false)
@@ -40,7 +43,6 @@ export default function OfficeHoursCalendar() {
       }))
       setOfficeHours(updatedData)
     } catch (error) {
-      console.error('Error fetching office hours:', error)
       toast.error('Failed to fetch office hours')
     }
   }
@@ -64,7 +66,6 @@ export default function OfficeHoursCalendar() {
       toast.success('Office hours created successfully')
       fetchOfficeHours()
     } catch (error) {
-      console.error('Error creating office hours:', error)
       toast.error('Failed to create office hours')
     } finally {
       setIsCreating(false)
@@ -92,8 +93,6 @@ export default function OfficeHoursCalendar() {
     return slots
   }
 
-
-
   const handleReservation = async (slot, studentName) => {
     if (!slot || !studentName) return
     setIsReserving(true)
@@ -112,13 +111,31 @@ export default function OfficeHoursCalendar() {
       fetchOfficeHours()
       setSelectedSlot(null)
     } catch (error) {
-      console.error('Error updating office hour:', error)
       toast.error('Failed to update the office hour')
     } finally {
       setIsReserving(false)
     }
   }
 
+  const handleDeleteOfficeHour = async (id) => {
+    try {
+      const response = await fetch('/api/office_index_delete', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      })
+      if (!response.ok) throw new Error('Failed to delete office hour')
+      toast.success('Office hour deleted successfully')
+      fetchOfficeHours()
+    } catch (error) {
+      toast.error('Failed to delete the office hour')
+    }
+  }
+
+  const filteredOfficeHours = officeHours.filter(
+    (slot) =>
+      slot.start.toDateString() === selectedDate.toDateString()
+  )
 
   if (status === 'unauthenticated') {
     return (
@@ -127,17 +144,24 @@ export default function OfficeHoursCalendar() {
   }
 
   return (
-    <div className="min-h-screen text-gray-800 overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 bg-white/30 flex flex-col">
+    <div className="min-h-screen text-gray-800 overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 flex flex-col">
       <AnimatedBackground />
       <Navbar role={session?.user?.role} />
       <main className="pt-24 relative z-10 flex-grow flex flex-col">
         <section className="flex-grow py-10">
-          <div className="container mx-auto flex justify-center">
+          <div className="container mx-auto flex flex-col md:flex-row justify-center items-start space-y-6 md:space-y-0 md:space-x-6">
             <CalendarComponent
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               officeHours={officeHours}
               openCreateDialog={() => setIsCreateDialogOpen(true)}
+            />
+            <OfficeHoursList
+              selectedDate={selectedDate}
+              officeHours={officeHours}
+              handleDeleteOfficeHour={handleDeleteOfficeHour}
+              setSelectedSlot={setSelectedSlot}
+              filteredOfficeHours={filteredOfficeHours}
             />
           </div>
         </section>

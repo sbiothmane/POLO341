@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useSpring, useTransform, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import PropTypes from 'prop-types'
 
 export default function AnimatedCard({ children }) {
   const ref = useRef(null)

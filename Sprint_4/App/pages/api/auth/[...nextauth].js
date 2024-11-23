@@ -3,6 +3,9 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs'; // Use bcryptjs
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
+import { createFakeStudents } from '../makeFakeStudents'; 
+import Credentials from 'next-auth/providers/credentials';
+console.log(CredentialsProvider);
 
 export default NextAuth({
   providers: [
