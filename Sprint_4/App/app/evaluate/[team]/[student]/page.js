@@ -3,20 +3,16 @@
 import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Canvas } from '@react-three/fiber'
 import { Sphere, MeshDistortMaterial } from '@react-three/drei'
 import {
   Star,
-  AlertCircle,
-  CheckCircle,
-  XCircle,
   Loader2,
   User,
   Users,
   Clock,
   PieChart,
-  ChevronRight,
 } from 'lucide-react'
 import PropTypes from 'prop-types'
 
