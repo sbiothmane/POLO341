@@ -5,6 +5,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Canvas } from '@react-three/fiber'
+import AnimatedBackground from '@/app/components/home/AnimatedBackground';
 import { Sphere, MeshDistortMaterial } from '@react-three/drei'
 import {
   Star,
