@@ -41,7 +41,7 @@ export default function HeroSection() {
           animate="visible"
         >
           {letters.map((letter, index) => (
-            <motion.span key={index} variants={letterVariants}>
+            <motion.span key={`${letter}-${index}`} variants={letterVariants}>
               {letter}
             </motion.span>
           ))}

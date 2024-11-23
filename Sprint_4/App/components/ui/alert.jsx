@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cva } from "class-variance-authority";
-
+import PropTypes from 'prop-types';
 import { cn } from "@/lib/utils"
 
 const alertVariants = cva(
@@ -19,29 +19,57 @@ const alertVariants = cva(
   }
 )
 
-const Alert = React.forwardRef(({ className, variant, ...props }, ref) => (
+const Alert = React.forwardRef(({ className, variant, children, ...props }, ref) => (
   <div
     ref={ref}
     role="alert"
     className={cn(alertVariants({ variant }), className)}
-    {...props} />
+    {...props}
+    >
+    {children}
+  </div>
 ))
+
+Alert.propTypes = {
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(['default', 'destructive']),
+  children: PropTypes.node.isRequired,
+};
+
 Alert.displayName = "Alert"
 
-const AlertTitle = React.forwardRef(({ className, ...props }, ref) => (
+const AlertTitle = React.forwardRef(({ className, children, ...props }, ref) => (
   <h5
     ref={ref}
     className={cn("mb-1 font-medium leading-none tracking-tight", className)}
-    {...props} />
+    {...props}
+     >
+    {children}
+  </h5>
 ))
+
+AlertTitle.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node.isRequired,
+}
+
 AlertTitle.displayName = "AlertTitle"
 
-const AlertDescription = React.forwardRef(({ className, ...props }, ref) => (
+const AlertDescription = React.forwardRef(({ className, children, ...props }, ref) => (
   <div
     ref={ref}
     className={cn("text-sm [&_p]:leading-relaxed", className)}
-    {...props} />
+    {...props}
+   >
+    {children}
+  </div>
 ))
+
+AlertDescription.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node,
+};
+
 AlertDescription.displayName = "AlertDescription"
 
 export { Alert, AlertTitle, AlertDescription }

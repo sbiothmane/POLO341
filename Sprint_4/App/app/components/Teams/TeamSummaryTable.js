@@ -4,6 +4,13 @@ import SortableTable from './SortableTable';
 import { Badge } from '@/components/ui/badge';
 
 const TeamSummaryTable = ({ summaryTable, sortConfig, sortTable, onStudentClick }) => {
+  
+    const getBadgeVariant = (average) => {
+    if (average >= 4) return 'success';
+    if (average >= 3) return 'warning';
+    return 'destructive';
+    };
+      
   const columns = [
     { key: 'studentId', label: 'Student ID', sortable: true },
     { key: 'lastName', label: 'Last Name', sortable: true },
@@ -17,11 +24,7 @@ const TeamSummaryTable = ({ summaryTable, sortConfig, sortTable, onStudentClick 
       label: 'Average',
       sortable: true,
 render: (row) => {
-  const badgeVariant = row.average >= 4
-    ? 'success'
-    : row.average >= 3
-    ? 'warning'
-    : 'destructive';
+  const badgeVariant = getBadgeVariant(row.average);
 
   return (
     <Badge variant={badgeVariant}>

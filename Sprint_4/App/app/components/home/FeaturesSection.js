@@ -23,7 +23,7 @@ export default function FeaturesSection() {
           {features.map((feature, index) => {
             const IconComponent = iconMap[feature.icon]
             return (
-              <AnimatedCard key={index}>
+              <AnimatedCard key={feature.id}>
                 <Card className="bg-gray-900/50 border-none text-white h-full">
                   <CardHeader>
                     <CardTitle className="flex items-center">

@@ -1,3 +1,5 @@
+// CalendarComponent.js
+
 'use client'
 
 import { Calendar } from '@/components/ui/calendar'
@@ -15,20 +17,20 @@ export default function CalendarComponent({
     <motion.div
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.2 }}
+      transition={{ duration: 0.5 }}
       className="h-full p-6 flex flex-col items-center w-full md:w-1/2"
     >
       <Calendar
         mode="single"
         selected={selectedDate}
         onSelect={setSelectedDate}
-        className="rounded-md border shadow bg-white p-3 w-full h-full bg-white/30"
         modifiers={{
           hasOfficeHours: officeHours.map((slot) => slot.start),
         }}
         modifiersClassNames={{
           hasOfficeHours: 'bg-blue-200 text-blue-800',
         }}
+        className="rounded-md border shadow bg-white p-3 w-full h-full"
       />
       <Button
         onClick={openCreateDialog}
