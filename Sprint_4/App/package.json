@@ -32,6 +32,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.1",
     "three": "^0.159.0",
+    "prop-types": "^15.8.1",
     "@react-three/fiber": "^8.15.12",
     "@react-three/drei": "^9.92.1",
     "framer-motion": "^10.16.16",
