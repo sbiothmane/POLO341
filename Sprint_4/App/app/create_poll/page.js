@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import PropTypes from 'prop-types'
+import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -15,7 +16,14 @@ import {
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Loader2, Plus, Minus, AlertCircle, ChevronRight, PieChart } from 'lucide-react'
+import {
+  Loader2,
+  Plus,
+  Minus,
+  AlertCircle,
+  ChevronRight,
+  PieChart,
+} from 'lucide-react'
 import AnimatedBackground from '../components/home/AnimatedBackground'
 import NavBar from '../components/home/Navbar'
 import Footer from '../components/home/Footer'
@@ -24,9 +32,11 @@ export default function CreatePollPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [question, setQuestion] = useState('')
-  const [choices, setChoices] = useState(['', ''])
+  const [choices, setChoices] = useState([
+    { id: uuidv4(), value: '' },
+    { id: uuidv4(), value: '' },
+  ])
   const [loading, setLoading] = useState(false)
-  const [hasActivePoll, setHasActivePoll] = useState(false) // Corrected useState
 
   useEffect(() => {
     if (status === 'authenticated' && session?.user?.role === 'instructor') {
@@ -38,11 +48,12 @@ export default function CreatePollPage() {
 
   const checkActivePoll = async () => {
     try {
-      const response = await fetch(`/api/polls/check?instructor=${session.user.username}`)
+      const response = await fetch(
+        `/api/polls/check?instructor=${session.user.username}`
+      )
       const data = await response.json()
 
       if (data.activePoll) {
-        setHasActivePoll(true)
         router.push(`/polls/${session.user.username}`)
       }
     } catch (error) {
@@ -50,15 +61,17 @@ export default function CreatePollPage() {
     }
   }
 
-  const updateChoice = (index, value) => {
+  const updateChoice = (id, value) => {
     setChoices((prev) =>
-      prev.map((choice, i) => (i === index ? value : choice))
+      prev.map((choice) => (choice.id === id ? { ...choice, value } : choice))
     )
   }
 
-  const addChoice = () => setChoices((prev) => [...prev, ''])
-  const removeChoice = (index) =>
-    setChoices((prev) => prev.filter((_, i) => i !== index))
+  const addChoice = () =>
+    setChoices((prev) => [...prev, { id: uuidv4(), value: '' }])
+
+  const removeChoice = (id) =>
+    setChoices((prev) => prev.filter((choice) => choice.id !== id))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -66,7 +79,9 @@ export default function CreatePollPage() {
 
     const pollData = {
       question,
-      choices: choices.filter((choice) => choice.trim() !== ''),
+      choices: choices
+        .map((choice) => choice.value)
+        .filter((value) => value.trim() !== ''),
       instructor: session.user.username,
     }
 
@@ -107,7 +122,8 @@ export default function CreatePollPage() {
     )
   }
 
-  if (status === 'unauthenticated') return renderUnauthorized('You are not signed in.')
+  if (status === 'unauthenticated')
+    return renderUnauthorized('You are not signed in.')
   if (status === 'authenticated' && session.user.role !== 'instructor') {
     return renderUnauthorized('You are not authorized to access this page.')
   }
@@ -190,23 +206,29 @@ export default function CreatePollPage() {
 }
 
 // Reusable Input Field Component
-const InputField = ({ label, value, onChange, placeholder }) => (
-  <motion.div
-    initial={{ opacity: 0, x: -20 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ delay: 0.2 }}
-  >
-    <label className="block text-lg font-medium mb-2">{label}</label>
-    <input
-      type="text"
-      value={value}
-      onChange={onChange}
-      required
-      placeholder={placeholder}
-      className="w-full p-4 rounded-lg bg-white/50 backdrop-blur-sm border border-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
-    />
-  </motion.div>
-)
+const InputField = ({ label, value, onChange, placeholder }) => {
+  const inputId = `input-${label.replace(/\s+/g, '-').toLowerCase()}`
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.2 }}
+    >
+      <label htmlFor={inputId} className="block text-lg font-medium mb-2">
+        {label}
+      </label>
+      <input
+        id={inputId}
+        type="text"
+        value={value}
+        onChange={onChange}
+        required
+        placeholder={placeholder}
+        className="w-full p-4 rounded-lg bg-white/50 backdrop-blur-sm border border-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+      />
+    </motion.div>
+  )
+}
 
 InputField.propTypes = {
   label: PropTypes.string.isRequired,
@@ -225,37 +247,44 @@ const ChoicesField = ({ choices, onUpdate, onAdd, onRemove }) => (
   >
     <label className="block text-lg font-medium mb-2">Choices</label>
     <AnimatePresence>
-      {choices.map((choice, index) => (
-        <motion.div
-          key={index} // Use index as key to ensure stability
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.2 }}
-          className="flex items-center space-x-2"
-        >
-          <Badge className="bg-blue-500">{index + 1}</Badge>
-          <input
-            type="text"
-            value={choice}
-            onChange={(e) => onUpdate(index, e.target.value)}
-            required
-            placeholder={`Choice ${index + 1}`}
-            className="flex-1 p-4 rounded-lg bg-white/50 backdrop-blur-sm border border-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
-          />
-          {choices.length > 2 && (
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => onRemove(index)}
-              className="text-red-500 hover:text-red-700"
-            >
-              <Minus className="h-4 w-4" />
-            </Button>
-          )}
-        </motion.div>
-      ))}
+      {choices.map((choiceObj, index) => {
+        const inputId = `choice-${choiceObj.id}`
+        return (
+          <motion.div
+            key={choiceObj.id}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex items-center space-x-2"
+          >
+            <Badge className="bg-blue-500">{index + 1}</Badge>
+            <label htmlFor={inputId} className="sr-only">
+              Choice {index + 1}
+            </label>
+            <input
+              id={inputId}
+              type="text"
+              value={choiceObj.value}
+              onChange={(e) => onUpdate(choiceObj.id, e.target.value)}
+              required
+              placeholder={`Choice ${index + 1}`}
+              className="flex-1 p-4 rounded-lg bg-white/50 backdrop-blur-sm border border-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+            />
+            {choices.length > 2 && (
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={() => onRemove(choiceObj.id)}
+                className="text-red-500 hover:text-red-700"
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+            )}
+          </motion.div>
+        )
+      })}
     </AnimatePresence>
     <Button type="button" onClick={onAdd} variant="outline" className="w-full">
       <Plus className="mr-2 h-4 w-4" />
@@ -265,7 +294,12 @@ const ChoicesField = ({ choices, onUpdate, onAdd, onRemove }) => (
 )
 
 ChoicesField.propTypes = {
-  choices: PropTypes.arrayOf(PropTypes.string).isRequired,
+  choices: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   onUpdate: PropTypes.func.isRequired,
   onAdd: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
