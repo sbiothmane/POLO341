@@ -49,9 +49,9 @@ export default function AnimatedBackground() {
     <div className="fixed inset-0 z-0">
       <Canvas camera={{ position: [0, 0, 5] }}>
         <ambientLight />
-        <mesh position={[10, 10, 10]}>
+        <group position={[10, 10, 10]}>
         <pointLight />
-        </mesh>
+        </group>
         <AnimatedSphere />
         <Stars
           radius={100}
