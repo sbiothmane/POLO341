@@ -1,3 +1,5 @@
+// ReserveOfficeHourDialog.js
+
 'use client'
 
 import { useState } from 'react'
@@ -45,7 +47,10 @@ export default function ReserveOfficeHourDialog({
         />
         <DialogFooter>
           <Button
-            onClick={() => handleReservation(selectedSlot, studentName)}
+            onClick={() => {
+              handleReservation(selectedSlot, studentName)
+              setStudentName('')
+            }}
             disabled={isReserving || !studentName}
             className="bg-green-500 hover:bg-green-600 text-white"
           >

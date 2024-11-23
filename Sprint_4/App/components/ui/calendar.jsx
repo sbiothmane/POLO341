@@ -1,9 +1,15 @@
 "use client";
 import * as React from "react";
 import PropTypes from "prop-types";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
+
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+
+// Move IconLeft and IconRight outside of the Calendar component
+const IconLeft = (props) => <ChevronLeft className="h-4 w-4" {...props} />;
+const IconRight = (props) => <ChevronRight className="h-4 w-4" {...props} />;
 
 function Calendar({
   className,
@@ -57,22 +63,24 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
+      components={{
+        IconLeft,
+        IconRight,
+      }}
+      mode={mode}
       {...props}
     />
   );
 }
 
+Calendar.displayName = "Calendar";
+
+// Define prop types for prop validation
 Calendar.propTypes = {
   className: PropTypes.string,
   classNames: PropTypes.object,
   showOutsideDays: PropTypes.bool,
   mode: PropTypes.string,
 };
-
-Calendar.defaultProps = {
-  showOutsideDays: true,
-};
-
-Calendar.displayName = "Calendar";
 
 export { Calendar };

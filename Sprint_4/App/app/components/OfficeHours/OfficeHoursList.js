@@ -1,3 +1,5 @@
+// OfficeHoursList.js
+
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
@@ -17,7 +19,7 @@ export default function OfficeHoursList({
     <motion.div
       initial={{ x: 100, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      transition={{ delay: 0.2 }}
+      transition={{ duration: 0.5 }}
       className="w-full md:w-1/2 p-6"
     >
       <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center justify-center">

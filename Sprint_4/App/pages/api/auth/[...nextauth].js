@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs'; // Use bcryptjs
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 
+
 export default NextAuth({
   providers: [
     CredentialsProvider({
