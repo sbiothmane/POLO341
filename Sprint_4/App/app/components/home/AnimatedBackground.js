@@ -51,7 +51,7 @@ export default function AnimatedBackground() {
         <Stars
           radius={30}
           depth={30}
-          count={5000}
+          count={9000}
           factor={4}
           saturation={0}
           fade

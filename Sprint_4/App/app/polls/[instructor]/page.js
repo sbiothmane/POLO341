@@ -4,8 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Canvas } from '@react-three/fiber'
-import { Sphere, MeshDistortMaterial } from '@react-three/drei'
+import PropTypes from 'prop-types'
 import {
   PieChart,
   Loader2,
@@ -36,8 +35,6 @@ import {
 } from 'firebase/firestore'
 import NavBar from '@/app/components/home/Navbar' // Import the NavBar component
 import AnimatedBackground from '@/app/components/home/AnimatedBackground' // Import the AnimatedBackground component
-
-
 
 export default function PollsPage({ params }) {
   const { instructor } = params
@@ -182,9 +179,7 @@ export default function PollsPage({ params }) {
                 <span>Poll Results</span>
               </CardTitle>
               <CardDescription className="text-center">
-                <Badge className="bg-blue-500">
-                  Instructor: {instructor}
-                </Badge>
+                <Badge className="bg-blue-500">Instructor: {instructor}</Badge>
               </CardDescription>
             </CardHeader>
           </Card>
@@ -223,14 +218,17 @@ export default function PollsPage({ params }) {
 
                           return (
                             <motion.div
-                              key={index}
+                              key={choice.text}
                               initial={{ opacity: 0, x: -20 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: index * 0.1 }}
                             >
-                              <div
-                                className={`rounded-lg p-4 transition-all ${
-                                  !showResults && !hasVoted && !isInstructor
+                              <button
+                                type="button"
+                                className={`w-full text-left rounded-lg p-4 transition-all ${
+                                  !showResults &&
+                                  !hasVoted &&
+                                  !isInstructor
                                     ? 'cursor-pointer hover:bg-blue-50'
                                     : ''
                                 } ${
@@ -260,17 +258,23 @@ export default function PollsPage({ params }) {
                                     className="h-2 bg-gray-200 rounded-full overflow-hidden"
                                     initial={{ width: 0 }}
                                     animate={{ width: '100%' }}
-                                    transition={{ duration: 0.5, delay: 0.2 }}
+                                    transition={{
+                                      duration: 0.5,
+                                      delay: 0.2,
+                                    }}
                                   >
                                     <motion.div
                                       className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
                                       initial={{ width: 0 }}
                                       animate={{ width: `${percentage}%` }}
-                                      transition={{ duration: 0.5, delay: 0.4 }}
+                                      transition={{
+                                        duration: 0.5,
+                                        delay: 0.4,
+                                      }}
                                     />
                                   </motion.div>
                                 )}
-                              </div>
+                              </button>
                             </motion.div>
                           )
                         })}
@@ -334,4 +338,11 @@ export default function PollsPage({ params }) {
       </main>
     </div>
   )
+}
+
+// Add PropTypes validation
+PollsPage.propTypes = {
+  params: PropTypes.shape({
+    instructor: PropTypes.string.isRequired,
+  }).isRequired,
 }
