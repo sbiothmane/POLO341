@@ -61,7 +61,7 @@ function Calendar({
       }}
 
   />
-  );
+  ),
 }
 
 Calendar.propTypes = {
