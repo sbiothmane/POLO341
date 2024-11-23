@@ -11,7 +11,6 @@ import {
   Vote,
   XCircle,
   AlertCircle,
-  ChevronRight,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -22,7 +21,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { db } from '../../../lib/firebase'
 import {
   collection,
