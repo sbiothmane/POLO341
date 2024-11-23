@@ -26,14 +26,20 @@ const badgeVariants = cva(
 Badge.propTypes = {
   className: PropTypes.string,
   variant: PropTypes.oneOf(['default', 'secondary', 'destructive', 'outline']),
+  children: PropTypes.node,
+  style: PropTypes.object,
+  id: PropTypes.string,
 };
 
 function Badge({
   className,
   variant,
+  children,
+  style,
+  id,
   ...props
 }) {
-  return (<div className={cn(badgeVariants({ variant }), className)} {...props} />);
+  return (<div className={cn(badgeVariants({ variant }), className)} style={style} id={id} {...props}>{children}</div>);
 }
 
 export { Badge, badgeVariants }
