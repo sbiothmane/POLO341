@@ -63,6 +63,18 @@ function Calendar({
       {...props} />)
   );
 }
+
+Calendar.propTypes = {
+  className: PropTypes.string,
+  classNames: PropTypes.object,
+  showOutsideDays: PropTypes.bool,
+  mode: PropTypes.string, // Optional `mode` prop if used in `props`
+};
+
+Calendar.defaultProps = {
+  showOutsideDays: true,
+};
+
 Calendar.displayName = "Calendar"
 
 export { Calendar }
