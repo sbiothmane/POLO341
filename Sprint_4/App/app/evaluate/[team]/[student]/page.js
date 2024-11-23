@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import AnimatedBackground from '@/app/components/home/AnimatedBackground'
@@ -11,10 +11,6 @@ import Footer from '@/app/components/home/Footer'
 import {
   Star,
   Loader2,
-  User,
-  Users,
-  Clock,
-  PieChart,
 } from 'lucide-react'
 import PropTypes from 'prop-types'
 
@@ -28,8 +24,6 @@ import {
 } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import Link from 'next/link'
-
 
 
 // StarRating Component
