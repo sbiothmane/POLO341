@@ -16,16 +16,11 @@ function AnimatedSphere() {
       meshRef.current.rotation.z = Math.sin(t / 1.5) / 2
       meshRef.current.position.x = Math.sin(t / 1) / 2
       meshRef.current.position.y = Math.cos(t / 1) / 2
-      meshRef.current.scale.set(
-        1 + Math.sin(t) * 0.2,
-        1 + Math.sin(t) * 0.2,
-        1 + Math.sin(t) * 0.2
-      )
     }
   })
 
   return (
-    <Float speed={4} rotationIntensity={1} floatIntensity={2}>
+    <Float speed={3} rotationIntensity={2} floatIntensity={8}>
       <Sphere
         ref={meshRef}
         args={[1, 100, 200]}
@@ -54,13 +49,13 @@ export default function AnimatedBackground() {
         </group>
         <AnimatedSphere />
         <Stars
-          radius={100}
-          depth={50}
+          radius={30}
+          depth={30}
           count={5000}
           factor={4}
           saturation={0}
           fade
-          speed={1}
+          speed={5}
         />
       </Canvas>
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 via-purple-500/30 to-pink-500/30" />

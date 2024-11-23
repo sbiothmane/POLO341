@@ -26,7 +26,7 @@ export default function CreatePollPage() {
   const [question, setQuestion] = useState('')
   const [choices, setChoices] = useState(['', ''])
   const [loading, setLoading] = useState(false)
-  const [ setHasActivePoll] = useState(false)
+  const [hasActivePoll, setHasActivePoll] = useState(false) // Corrected useState
 
   useEffect(() => {
     if (status === 'authenticated' && session?.user?.role === 'instructor') {
@@ -51,11 +51,14 @@ export default function CreatePollPage() {
   }
 
   const updateChoice = (index, value) => {
-    setChoices((prev) => prev.map((choice, i) => (i === index ? value : choice)))
+    setChoices((prev) =>
+      prev.map((choice, i) => (i === index ? value : choice))
+    )
   }
 
   const addChoice = () => setChoices((prev) => [...prev, ''])
-  const removeChoice = (index) => setChoices((prev) => prev.filter((_, i) => i !== index))
+  const removeChoice = (index) =>
+    setChoices((prev) => prev.filter((_, i) => i !== index))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -79,6 +82,7 @@ export default function CreatePollPage() {
       router.push(`/polls/${session.user.username}`)
     } catch (error) {
       console.error('Error creating poll:', error)
+      // Optionally, you can display an error message to the user here
     } finally {
       setLoading(false)
     }
@@ -163,11 +167,16 @@ export default function CreatePollPage() {
                   disabled={loading}
                 >
                   {loading ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Creating Poll...
+                    </>
                   ) : (
-                    <ChevronRight className="mr-2 h-4 w-4" />
+                    <>
+                      <ChevronRight className="mr-2 h-4 w-4" />
+                      Create Poll
+                    </>
                   )}
-                  {loading ? 'Creating Poll...' : 'Create Poll'}
                 </Button>
               </form>
             </CardContent>
@@ -182,7 +191,11 @@ export default function CreatePollPage() {
 
 // Reusable Input Field Component
 const InputField = ({ label, value, onChange, placeholder }) => (
-  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+  <motion.div
+    initial={{ opacity: 0, x: -20 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ delay: 0.2 }}
+  >
     <label className="block text-lg font-medium mb-2">{label}</label>
     <input
       type="text"
@@ -210,17 +223,17 @@ const ChoicesField = ({ choices, onUpdate, onAdd, onRemove }) => (
     transition={{ delay: 0.3 }}
     className="space-y-4"
   >
+    <label className="block text-lg font-medium mb-2">Choices</label>
     <AnimatePresence>
       {choices.map((choice, index) => (
         <motion.div
-          key={`${choice}-${index}`}
+          key={index} // Use index as key to ensure stability
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.2 }}
           className="flex items-center space-x-2"
         >
-          <label htmlFor={`choice-${index}`} className="block text-lg font-medium">Choices</label>
           <Badge className="bg-blue-500">{index + 1}</Badge>
           <input
             type="text"

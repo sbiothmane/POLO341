@@ -1,39 +1,47 @@
-// pages/polls/[instructor].js or app/polls/[instructor]/page.js
 'use client'
 
 import { useRouter } from 'next/navigation'
-import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { motion } from 'framer-motion'
-import Navbar from '@/app/components/home/Navbar'
-import Footer from '@/app/components/home/Footer'
-import AnimatedBackground from '@/app/components/home/AnimatedBackground'
-import PollsList from '@/app/components/polls/PollsList'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Canvas } from '@react-three/fiber'
+import { Sphere, MeshDistortMaterial } from '@react-three/drei'
+import {
+  PieChart,
+  Loader2,
+  Vote,
+  XCircle,
+  AlertCircle,
+  ChevronRight,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { PieChart, Loader2, XCircle } from 'lucide-react'
-import { db } from '@/lib/firebase'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { db } from '../../../lib/firebase'
 import {
   collection,
+  getDocs,
   query,
   where,
   doc,
   updateDoc,
   arrayUnion,
-  onSnapshot,
 } from 'firebase/firestore'
+import NavBar from '@/app/components/home/Navbar' // Import the NavBar component
+import AnimatedBackground from '@/app/components/home/AnimatedBackground' // Import the AnimatedBackground component
 
-PollsPage.propTypes = {
-  params: PropTypes.shape({
-    instructor: PropTypes.string.isRequired,
-  }).isRequired,
-};
+
 
 export default function PollsPage({ params }) {
   const { instructor } = params
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const router = useRouter()
 
   const [polls, setPolls] = useState([])
@@ -46,40 +54,38 @@ export default function PollsPage({ params }) {
     session?.user?.role === 'instructor' && session.user.username === instructor
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      const unsubscribe = fetchPolls()
-      return () => unsubscribe?.();
-    } else if (status === 'unauthenticated') {
-      router.push('/login')
-    }
-  }, [instructor, session, isInstructor, status, router])
+    const fetchPolls = async () => {
+      try {
+        const pollsCollection = collection(db, 'polls')
+        const q = query(pollsCollection, where('instructor', '==', instructor))
+        const querySnapshot = await getDocs(q)
 
-  const fetchPolls = () => {
-    const pollsCollection = collection(db, 'polls')
-    const q = query(pollsCollection, where('instructor', '==', instructor))
+        const fetchedPolls = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const fetchedPolls = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }))
+        if (fetchedPolls.length > 0) {
+          const poll = fetchedPolls[0]
+          setHasVoted(poll.voters?.includes(session.user.username))
+          setShowResults(
+            isInstructor || poll.voters?.includes(session.user.username)
+          )
+        }
 
-      if (fetchedPolls.length > 0) {
-        const poll = fetchedPolls[0]
-        setHasVoted(poll.voters?.includes(session.user.username))
-        setShowResults(
-          isInstructor || poll.voters?.includes(session.user.username)
-        )
-      } else {
-        setShowResults(false)
-        setHasVoted(false)
+        setPolls(fetchedPolls)
+      } catch (error) {
+        console.error('Error fetching polls:', error)
+      } finally {
+        setLoading(false)
       }
+    }
 
-      setPolls(fetchedPolls)
-      setLoading(false)
-    })
+    fetchPolls()
+  }, [instructor, session, isInstructor])
 
-    return unsubscribe
+  const calculatePercentage = (votes, totalVotes) => {
+    return totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0
   }
 
   const handleVoteSubmit = async (pollId) => {
@@ -108,7 +114,19 @@ export default function PollsPage({ params }) {
         voters: arrayUnion(session.user.username),
       })
 
-      setSelectedChoice(null)
+      setPolls(
+        polls.map((p) =>
+          p.id === pollId
+            ? {
+                ...p,
+                choices: updatedChoices,
+                voters: [...(poll.voters || []), session.user.username],
+              }
+            : p
+        )
+      )
+      setShowResults(true)
+      setHasVoted(true)
     } catch (error) {
       console.error('Error submitting vote:', error)
       alert('Failed to submit vote. Please try again.')
@@ -137,7 +155,7 @@ export default function PollsPage({ params }) {
     }
   }
 
-  if (loading || status === 'loading') {
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
@@ -146,10 +164,11 @@ export default function PollsPage({ params }) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen relative overflow-hidden">
       <AnimatedBackground />
-      <Navbar />
-      <main className="relative z-10 container mx-auto px-6 py-24 flex-grow">
+      <NavBar />
+
+      <main className="relative z-10 container mx-auto px-6 py-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -170,15 +189,130 @@ export default function PollsPage({ params }) {
             </CardHeader>
           </Card>
 
-          <PollsList
-            polls={polls}
-            isInstructor={isInstructor}
-            hasVoted={hasVoted}
-            handleVoteSubmit={handleVoteSubmit}
-            selectedChoice={selectedChoice}
-            setSelectedChoice={setSelectedChoice}
-            showResults={showResults}
-          />
+          <AnimatePresence mode="wait">
+            {polls.length > 0 ? (
+              polls.map((poll) => {
+                const totalVotes = poll.choices.reduce(
+                  (acc, choice) => acc + choice.votes,
+                  0
+                )
+
+                return (
+                  <motion.div
+                    key={poll.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Card className="bg-white/20 backdrop-blur-lg border-none shadow-lg mb-6">
+                      <CardHeader>
+                        <CardTitle>{poll.question}</CardTitle>
+                        {totalVotes > 0 && (
+                          <CardDescription>
+                            Total votes: {totalVotes}
+                          </CardDescription>
+                        )}
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {poll.choices.map((choice, index) => {
+                          const percentage = calculatePercentage(
+                            choice.votes,
+                            totalVotes
+                          )
+
+                          return (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                            >
+                              <div
+                                className={`rounded-lg p-4 transition-all ${
+                                  !showResults && !hasVoted && !isInstructor
+                                    ? 'cursor-pointer hover:bg-blue-50'
+                                    : ''
+                                } ${
+                                  selectedChoice === index
+                                    ? 'bg-blue-50 border-blue-200'
+                                    : 'bg-white/20'
+                                }`}
+                                onClick={() =>
+                                  !showResults &&
+                                  !hasVoted &&
+                                  !isInstructor &&
+                                  setSelectedChoice(index)
+                                }
+                              >
+                                <div className="flex justify-between items-center mb-2">
+                                  <span className="font-medium">
+                                    {choice.text}
+                                  </span>
+                                  {showResults && (
+                                    <Badge variant="secondary">
+                                      {percentage}% ({choice.votes})
+                                    </Badge>
+                                  )}
+                                </div>
+                                {showResults && (
+                                  <motion.div
+                                    className="h-2 bg-gray-200 rounded-full overflow-hidden"
+                                    initial={{ width: 0 }}
+                                    animate={{ width: '100%' }}
+                                    transition={{ duration: 0.5, delay: 0.2 }}
+                                  >
+                                    <motion.div
+                                      className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                                      initial={{ width: 0 }}
+                                      animate={{ width: `${percentage}%` }}
+                                      transition={{ duration: 0.5, delay: 0.4 }}
+                                    />
+                                  </motion.div>
+                                )}
+                              </div>
+                            </motion.div>
+                          )
+                        })}
+
+                        {!showResults && !hasVoted && !isInstructor && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 }}
+                          >
+                            <Button
+                              onClick={() => handleVoteSubmit(poll.id)}
+                              className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                              disabled={selectedChoice === null}
+                            >
+                              <Vote className="mr-2 h-4 w-4" />
+                              Submit Vote
+                            </Button>
+                          </motion.div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                )
+              })
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Card className="bg-white/10 backdrop-blur-lg border-none shadow-lg">
+                  <CardContent className="flex flex-col items-center justify-center py-12">
+                    <AlertCircle className="h-12 w-12 text-blue-500 mb-4" />
+                    <p className="text-lg text-gray-600 text-center">
+                      No polls available for this instructor.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {isInstructor && polls.length > 0 && (
             <motion.div
@@ -198,7 +332,6 @@ export default function PollsPage({ params }) {
           )}
         </motion.div>
       </main>
-      <Footer />
     </div>
   )
 }
