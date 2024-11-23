@@ -19,6 +19,8 @@ const alertVariants = cva(
   }
 )
 
+import PropTypes from 'prop-types';
+
 const Alert = React.forwardRef(({ className, variant, ...props }, ref) => (
   <div
     ref={ref}
@@ -26,6 +28,12 @@ const Alert = React.forwardRef(({ className, variant, ...props }, ref) => (
     className={cn(alertVariants({ variant }), className)}
     {...props} />
 ))
+
+Alert.propTypes = {
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(['default', 'destructive']),
+};
+
 Alert.displayName = "Alert"
 
 const AlertTitle = React.forwardRef(({ className, ...props }, ref) => (
@@ -42,6 +50,11 @@ const AlertDescription = React.forwardRef(({ className, ...props }, ref) => (
     className={cn("text-sm [&_p]:leading-relaxed", className)}
     {...props} />
 ))
+
+AlertDescription.propTypes = {
+  className: PropTypes.string,
+};
+
 AlertDescription.displayName = "AlertDescription"
 
 export { Alert, AlertTitle, AlertDescription }
