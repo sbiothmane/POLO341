@@ -245,51 +245,53 @@ const ChoicesField = ({ choices, onUpdate, onAdd, onRemove }) => (
     transition={{ delay: 0.3 }}
     className="space-y-4"
   >
-    <label className="block text-lg font-medium mb-2">Choices</label>
-    <AnimatePresence>
-      {choices.map((choiceObj, index) => {
-        const inputId = `choice-${choiceObj.id}`
-        return (
-          <motion.div
-            key={choiceObj.id}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="flex items-center space-x-2"
-          >
-            <Badge className="bg-blue-500">{index + 1}</Badge>
-            <label htmlFor={inputId} className="sr-only">
-              Choice {index + 1}
-            </label>
-            <input
-              id={inputId}
-              type="text"
-              value={choiceObj.value}
-              onChange={(e) => onUpdate(choiceObj.id, e.target.value)}
-              required
-              placeholder={`Choice ${index + 1}`}
-              className="flex-1 p-4 rounded-lg bg-white/50 backdrop-blur-sm border border-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
-            />
-            {choices.length > 2 && (
-              <Button
-                type="button"
-                variant="outline"
-                size="icon"
-                onClick={() => onRemove(choiceObj.id)}
-                className="text-red-500 hover:text-red-700"
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-            )}
-          </motion.div>
-        )
-      })}
-    </AnimatePresence>
-    <Button type="button" onClick={onAdd} variant="outline" className="w-full">
-      <Plus className="mr-2 h-4 w-4" />
-      Add Choice
-    </Button>
+    <fieldset>
+      <legend className="block text-lg font-medium mb-2">Choices</legend>
+      <AnimatePresence>
+        {choices.map((choiceObj, index) => {
+          const inputId = `choice-${choiceObj.id}`
+          return (
+            <motion.div
+              key={choiceObj.id}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center space-x-2"
+            >
+              <Badge className="bg-blue-500">{index + 1}</Badge>
+              <label htmlFor={inputId} className="sr-only">
+                Choice {index + 1}
+              </label>
+              <input
+                id={inputId}
+                type="text"
+                value={choiceObj.value}
+                onChange={(e) => onUpdate(choiceObj.id, e.target.value)}
+                required
+                placeholder={`Choice ${index + 1}`}
+                className="flex-1 p-4 rounded-lg bg-white/50 backdrop-blur-sm border border-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+              />
+              {choices.length > 2 && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => onRemove(choiceObj.id)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+              )}
+            </motion.div>
+          )
+        })}
+      </AnimatePresence>
+      <Button type="button" onClick={onAdd} variant="outline" className="w-full">
+        <Plus className="mr-2 h-4 w-4" />
+        Add Choice
+      </Button>
+    </fieldset>
   </motion.div>
 )
 
