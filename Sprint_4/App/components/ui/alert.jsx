@@ -20,11 +20,14 @@ const alertVariants = cva(
 )
 
 const Alert = React.forwardRef(({ className, variant, ...props }, ref) => (
-  <div
+  <h5
     ref={ref}
     role="alert"
     className={cn(alertVariants({ variant }), className)}
     {...props} />
+    >
+    {children}
+  </h5>
 ))
 
 Alert.propTypes = {
