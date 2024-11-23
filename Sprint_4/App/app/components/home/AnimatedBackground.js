@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react'
 import { Sphere, MeshDistortMaterial, Float, Stars } from '@react-three/drei'
 import { useFrame,Canvas } from '@react-three/fiber'
-import * as THREE from 'three';
 
 function AnimatedSphere() {
   const meshRef = useRef()
