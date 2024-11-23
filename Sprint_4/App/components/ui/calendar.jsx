@@ -59,6 +59,8 @@ function Calendar({
 
        const IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" {...props} />;
        const IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" {...props} />;
+  />
+  );
 }
 
 Calendar.propTypes = {
