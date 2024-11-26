@@ -20,7 +20,7 @@ function AnimatedSphere() {
   })
 
   return (
-    <Float speed={15} rotationIntensity={6} floatIntensity={15}>
+    <Float speed={10} rotationIntensity={4} floatIntensity={9}>
       <Sphere
         ref={meshRef}
         args={[1, 100, 200]}
@@ -30,8 +30,8 @@ function AnimatedSphere() {
       >
         <MeshDistortMaterial
           color={hovered ? '#FF6B6B' : '#4834d4'}
-          distort={0.9}
-          speed={8}
+          distort={0.7}
+          speed={5}
           roughness={4}
         />
       </Sphere>
@@ -50,12 +50,12 @@ export default function AnimatedBackground() {
         <AnimatedSphere />
         <Stars
           radius={30}
-          depth={15}
+          depth={25}
           count={10000}
           factor={6}
           saturation={0}
           fade
-          speed={10}
+          speed={6}
         />
       </Canvas>
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 via-purple-500/30 to-pink-500/30" />
